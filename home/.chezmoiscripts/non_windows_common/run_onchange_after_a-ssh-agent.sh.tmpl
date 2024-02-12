@@ -1,0 +1,9 @@
+{{ if (or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") (eq .chezmoi.os "android")) -}}
+#!/bin/sh
+
+# Github ssh
+echo "Adding id_rsa to ssh agent"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+
+{{ end -}}

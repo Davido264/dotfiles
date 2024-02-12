@@ -1,0 +1,268 @@
+[
+  {
+    "__before__": {
+      "windows": [
+        "where.exe scoop *>$null",
+        "if ($LASTEXITCODE -eq 1) {",
+        "  echo \"`nInstalling scoop\"",
+        "  Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression",
+        "  $env:Path = $env:Path + \";$HOME\\scoop\\shims\"",
+        "}",
+        "scoop bucket add extras",
+        "scoop bucket add nonportable",
+        "scoop bucket add sysinternals"
+      ],
+      "linux": [
+        "NVIM_VERSION='v0.9.5'",
+        "install=true"
+      ]
+    }
+  },
+  {
+    "__after__": {
+      "windows": [
+        "[Environment]::SetEnvironmentVariable(\"FZF_DEFAULT_OPTS\", \"--delimiter=\\t --exit-0 --select-1  --bind=ctrl-z:ignore,btab:up,tab:down --cycle --keep-right --height=50% --info=inline --layout=reverse --tabstop=1 --color 16\", [EnvironmentVariableTarget]::User)",
+        "[Environment]::SetEnvironmentVariable(\"RCLONE_CONFIG\", \"$HOME\\.config\\rclone\\config.conf\", [EnvironmentVariableTarget]::User)"
+      ],
+      "linux": [
+        "[[ -d ~/.local/share/nvim-data ]] || mkdir -p ~/.local/share/nvim-data"
+      ]
+    }
+  },
+  {
+    "name": "7zip",
+    "windows": {
+      "scoop": "7zip",
+      "notwhen": "where.exe 7z",
+      "after": "reg import \"$HOME\\scoop\\apps\\7zip\\current\\install-context.reg\""
+    },
+    "linux": {
+      "apt": "7zip"
+    }
+  },
+  {
+    "name": "Pandoc",
+    "windows": {
+      "winget": "JohnMacFarlane.Pandoc"
+    },
+    "linux": {
+      "apt": "pandoc"
+    }
+  },
+  {
+    "name": "MiKTeX",
+    "windows": {
+      "winget": "MiKTeX.MiKTeX"
+    },
+    "linux": {
+      "before": "[[ -s /etc/apt/sources.list.d/miktex.list ]] || (curl -fsSL https://miktex.org/download/key | sudo tee /usr/share/keyrings/miktex-keyring.asc > /dev/null && echo 'deb [signed-by=/usr/share/keyrings/miktex-keyring.asc] https://miktex.org/download/ubuntu $(lsb_release -cs) universe' | sudo tee /etc/apt/sources.list.d/miktex.list && sudo apt update)",
+      "apt": "miktex",
+      "after": "which lualatex || sudo miktexsetup --shared=yes finish"
+    }
+  },
+  {
+    "name": "graphviz",
+    "windows": {
+      "scoop": "graphviz"
+    },
+    "linux": {
+      "apt": "graphviz"
+    }
+  },
+  {
+    "name": "fzf",
+    "windows": {
+      "winget": "junegunn.fzf"
+    },
+    "linux": {
+      "apt": "fzf"
+    }
+  },
+  {
+    "name": "fd",
+    "windows": {
+      "winget": "sharkdp.fd"
+    },
+    "linux": {
+      "apt": "fd-find",
+      "notwhen": "which fdfind"
+    }
+  },
+  {
+    "name": "scrcpy",
+    "windows": {
+      "scoop": "scrcpy"
+    },
+    "linux": {
+      "apt": "scrcpy"
+    }
+  },
+  {
+    "name": "ffmpeg",
+    "windows": {
+      "scoop": "ffmpeg"
+    },
+    "linux": {
+      "apt": "ffmpeg"
+    }
+  },
+  {
+    "name": "yt-dlp",
+    "windows": {
+      "scoop": "yt-dlp"
+    },
+    "linux": {
+      "apt": "yt-dlp"
+    }
+  },
+  {
+    "name": "WindowsTerminal",
+    "windows": {
+      "winget": "Microsoft.WindowsTerminal",
+      "after": "echo \"`nSetting windows terminal (quake) to run on start\" ; Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\" -ErrorAction SilentlyContinue -Force ; $WScriptObj = New-Object -ComObject (\"WScript.Shell\") ; $shortcut = $WscriptObj.CreateShortcut(\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\") ; $shortcut.TargetPath = \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\wt.exe\" ; $shortcut.Arguments = \"-w _quake\" ; $shortcut.Save()"
+    },
+    "linux": null
+  },
+  {
+    "name": "Neovim",
+    "windows": {
+      "winget": "Neovim.Neovim"
+    },
+    "linux": {
+      "before": "sudo apt-get install -y make ninja-build gettext cmake unzip curl",
+      "sh": "git clone --depth 1 --branch $NVIM_VERSION https://github.com/neovim/neovim /tmp/build_nvim && cd /tmp/build_nvim && make CMAKE_BUILD_TYPE=RelWithDebInfo && cd build && cpack -G DEB && sudo apt install -y /tmp/build_nvim/build/nvim-linux64.deb && cd ~",
+      "after": "rm -rf /tmp/build_nvim",
+      "notwhen": "(which nvim && [[ $(nvim --version | grep -oP 'v\\d+\\.\\d+(\\.\\d+)?') = $NVIM_VERSION ]])",
+      "notes": "built from source"
+    }
+  },
+  {
+    "name": "clink",
+    "windows": {
+      "scoop": "clink",
+      "after": "clink.cmd autorun install",
+      "notes": "not needed in linux. Its to give more features to CMD on windows"
+    },
+    "linux": null
+  },
+  {
+    "name": "dos2unix",
+    "windows": {
+      "scoop": "dos2unix",
+      "notes": "not needed in linux"
+    },
+    "linux": null
+  },
+  {
+    "name": "ripgrep",
+    "windows": {
+      "scoop": "ripgrep"
+    },
+    "linux": {
+      "apt": "ripgrep",
+      "notwhen": "which rg"
+    }
+  },
+  {
+    "name": "age",
+    "windows": {
+      "scoop": "age"
+    },
+    "linux": {
+      "apt": "age"
+    }
+  },
+  {
+    "name": "file",
+    "windows": {
+      "scoop": "file",
+      "notes": "linux built-in"
+    },
+    "linux": null
+  },
+  {
+    "name": "hexyl",
+    "windows": {
+      "scoop": "hexyl"
+    },
+    "linux": {
+      "apt": "hexyl"
+    }
+  },
+  {
+    "name": "charm-gum",
+    "windows": {
+      "scoop": "charm-gum"
+    },
+    "linux": {
+      "before": "[[ -s /etc/apt/sources.list.d/charm.list ]] || (sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg && echo 'deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *' | sudo tee /etc/apt/sources.list.d/charm.list && sudo apt update)",
+      "apt": "gum"
+    }
+  },
+  {
+    "name": "less",
+    "windows": {
+      "scoop": "less",
+      "notes": "linux built-in"
+    },
+    "linux": null
+  },
+  {
+    "name": "rammap",
+    "windows": {
+      "scoop": "rammap",
+      "notes": "not needed in linux"
+    },
+    "linux": null
+  },
+  {
+    "name": "autoruns",
+    "windows": {
+      "scoop": "autoruns",
+      "notes": "not needed in linux"
+    },
+    "linux": null
+  },
+  {
+    "name": "regjump",
+    "windows": {
+      "scoop": "regjump",
+      "notes": "not needed in linux"
+    },
+    "linux": null
+  },
+  {
+    "name": "gsudo",
+    "windows": {
+      "winget": "gerardog.gsudo",
+      "after": "gsudo config CacheMode auto ; gsudo cache on",
+      "notes": "linux built-in (sudo)"
+    },
+    "linux": null
+  },
+  {
+    "name": "PSWindowsUpdate",
+    "windows": {
+      "sh": "powershell -Command { Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser }"
+    },
+    "linux": null
+  },
+  {
+    "name": "rclone",
+    "windows": {
+      "scoop": "rclone"
+    },
+    "linux": {
+      "apt": "rclone"
+    }
+  },
+  {
+    "name": "Zsh Plugins",
+    "windows": null,
+    "linux": {
+      "before": "[[ -d /usr/share/zsh_plugins/ ]] || sudo mkdir /usr/share/zsh_plugins/",
+      "sh": "sudo git clone --depth 1 https://github.com/zdharma/fast-syntax-highlighting.git /usr/share/zsh_plugins/fast-syntax-highlighting && sudo git clone --depth 1 https://github.com/zsh-users/zsh-completions.git /usr/share/zsh_plugins/zsh-completions && sudo git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git /usr/share/zsh_plugins/zsh-autosuggestions",
+      "notwhen": "$install"
+    }
+  }
+]

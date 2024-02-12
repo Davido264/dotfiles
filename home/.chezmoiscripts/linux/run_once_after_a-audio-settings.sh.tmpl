@@ -1,0 +1,11 @@
+{{ if (and (eq .chezmoi.os "linux") (not (.chezmoi.kernel.osrelease | lower | contains "microsoft"))) -}}
+#!/bin/sh
+
+sudo adduser david audio
+sudo apt install linux-lowlatency
+
+echo '@audio - rtprio 99
+@audio - memlock unlimited
+@audio - nice -19' | sudo tee /etc/security/limits.d/audio.conf
+
+{{ end -}}

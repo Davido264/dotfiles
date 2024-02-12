@@ -1,0 +1,15 @@
+{{ $location := promptStringOnce . "location" "Workspaces default directory" }}
+{{ $justGaming := promptBoolOnce . "Just for games?" "Is this Windows machine just for games?"}}
+encryption = "age"
+mode = "symlink"
+
+[age]
+identity = {{ joinPath .chezmoi.workingTree "private_key" | quote }}
+recipient = "age1pxk303ke8xg5vepuft8nmnp5fkcc3l6930qxq9g5n9gjyg607feqcamunj"
+
+[edit]
+command = "nvim"
+
+[data]
+default_workspace_location = {{ $location | quote }}
+justGaming = $justGaming

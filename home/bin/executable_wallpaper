@@ -1,0 +1,41 @@
+#!/usr/bin/bash
+
+function show_help() {
+  echo "This is a Simple script to change and get wallpaper file path
+from GNOME DE.
+Usage:
+  wallpaper COMMAND
+
+Commands:
+  s     set wallpaper
+  g     get wallpaper
+  "
+  exit 0
+}
+
+if [[ $# -eq 0 ]]; then
+  show_help
+fi
+
+fzf_opts="--delimiter=\t --exact --exit-0 --select-1  --bind=ctrl-z:ignore,btab:up,tab:down --cycle --keep-right --height=45% --info=inline --layout=reverse --tabstop=1"
+
+case $1 in
+  g)
+    gsettings get org.gnome.desktop.background picture-uri | sed -E 's/^\x27file:\/\/(.*)\x27$/\1/'
+  ;;
+  s)
+    picture_path=$(find ~/Pictures/wallpapers -mindepth 1 -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" \) | FZF_DEFAULT_OPTS=$fzf_opts fzf)
+
+    if [[ -z $picture_path ]]; then
+        exit 0
+    fi
+
+    echo $picture_path
+    gsettings set org.gnome.desktop.background picture-uri "file://$picture_path"
+    gsettings set org.gnome.desktop.background picture-uri-dark "file://$picture_path"
+  ;;
+  *)
+    show_help
+  ;;
+esac
+    

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [[ $# -eq 0 ]]; then
+  message="current working directory copied"
+else
+  cd $1
+  message="specified working directory copied"
+fi
+
+pwd | tr -d '\n' | xclip -i -selection clipboard

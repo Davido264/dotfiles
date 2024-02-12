@@ -1,0 +1,296 @@
+import:
+  - ~/.config/alacritty/themes.yml
+
+font:
+  builtin_box_drawing: true
+  normal:
+    family: JetbrainsMonoNL Nerd Font
+key_bindings:
+- action: ToggleFullscreen
+  key: Return
+  mods: Alt
+scrolling:
+  auto_scroll: true
+window:
+  opacity: 0.98
+  padding:
+    x: 5
+    y: 5
+working_directory: ~
+
+schemes:
+  AyuDark: &AyuDark
+    # Default colors
+    primary:
+      background: '#0a0e14' # base03
+      foreground: '#b3b1ad' # base0
+
+    # Normal colors
+    normal:
+      black:   '#01060e' # base02
+      red:     '#ea6c73' # red
+      green:   '#91b362' # green
+      yellow:  '#f9af4f' # yellow
+      blue:    '#53bdfa' # blue
+      magenta: '#fae994' # magenta
+      cyan:    '#90e1c6' # cyan
+      white:   '#c7c7c7' # base2
+
+    # Bright colors
+    bright:
+      black:   '#686868' # base03
+      red:     '#f07178' # orange
+      green:   '#c2d94c' # base01
+      yellow:  '#ffb454' # base00
+      blue:    '#59c2ff' # base0
+      magenta: '#ffee99' # violet
+      cyan:    '#95e6cb' # base1
+      white:   '#ffffff' # base3
+
+  AyuLight: &AyuLight
+    # Default colors
+    primary:
+      background: '#fafafa' # base03
+      foreground: '#6c7680' # base0
+
+    # Normal colors
+    normal:
+      black:   '#000000' # base02
+      red:     '#ea6c6d' # red
+      green:   '#99bf4d' # green
+      yellow:  '#eca944' # yellow
+      blue:    '#3199e1' # blue
+      magenta: '#9e75c7' # magenta
+      cyan:    '#46ba94' # cyan
+      white:   '#c7c7c7' # base2
+
+    # Bright colors
+    bright:
+      black:   '#686868' # base03
+      red:     '#f07171' # orange
+      green:   '#86b300' # base01
+      yellow:  '#f2ae49' # base00
+      blue:    '#399ee6' # base0
+      magenta: '#a37acc' # violet
+      cyan:    '#4cbf99' # base1
+      white:   '#d1d1d1' # base3
+
+  CatppuccinMocha: &CatppuccinMocha
+    primary:
+      background: "#1E1E2E" # base
+      foreground: "#CDD6F4" # text
+      # Bright and dim foreground colors
+      dim_foreground: "#CDD6F4" # text
+      bright_foreground: "#CDD6F4" # text
+
+    # Cursor colors
+    cursor:
+      text: "#1E1E2E" # base
+      cursor: "#F5E0DC" # rosewater
+    vi_mode_cursor:
+      text: "#1E1E2E" # base
+      cursor: "#B4BEFE" # lavender
+
+    # Search colors
+    search:
+      matches:
+        foreground: "#1E1E2E" # base
+        background: "#A6ADC8" # subtext0
+      focused_match:
+        foreground: "#1E1E2E" # base
+        background: "#A6E3A1" # green
+      footer_bar:
+        foreground: "#1E1E2E" # base
+        background: "#A6ADC8" # subtext0
+
+    # Keyboard regex hints
+    hints:
+      start:
+        foreground: "#1E1E2E" # base
+        background: "#F9E2AF" # yellow
+      end:
+        foreground: "#1E1E2E" # base
+        background: "#A6ADC8" # subtext0
+
+    # Selection colors
+    selection:
+      text: "#1E1E2E" # base
+      background: "#F5E0DC" # rosewater
+
+    # Normal colors
+    normal:
+      black: "#45475A" # surface1
+      red: "#F38BA8" # red
+      green: "#A6E3A1" # green
+      yellow: "#F9E2AF" # yellow
+      blue: "#89B4FA" # blue
+      magenta: "#F5C2E7" # pink
+      cyan: "#94E2D5" # teal
+      white: "#BAC2DE" # subtext1
+
+    # Bright colors
+    bright:
+      black: "#585B70" # surface2
+      red: "#F38BA8" # red
+      green: "#A6E3A1" # green
+      yellow: "#F9E2AF" # yellow
+      blue: "#89B4FA" # blue
+      magenta: "#F5C2E7" # pink
+      cyan: "#94E2D5" # teal
+      white: "#A6ADC8" # subtext0
+
+    # Dim colors
+    dim:
+      black: "#45475A" # surface1
+      red: "#F38BA8" # red
+      green: "#A6E3A1" # green
+      yellow: "#F9E2AF" # yellow
+      blue: "#89B4FA" # blue
+      magenta: "#F5C2E7" # pink
+      cyan: "#94E2D5" # teal
+      white: "#BAC2DE" # subtext1
+
+    indexed_colors:
+      - { index: 16, color: "#FAB387" }
+      - { index: 17, color: "#F5E0DC" }
+
+  CatppuccinLatte: &CatppuccinLatte
+    # Default colors
+    primary:
+      background: "#EFF1F5" # base
+      foreground: "#4C4F69" # text
+      # Bright and dim foreground colors
+      dim_foreground: "#4C4F69" # text
+      bright_foreground: "#4C4F69" # text
+
+    # Cursor colors
+    cursor:
+      text: "#EFF1F5" # base
+      cursor: "#DC8A78" # rosewater
+    vi_mode_cursor:
+      text: "#EFF1F5" # base
+      cursor: "#7287FD" # lavender
+
+    # Search colors
+    search:
+      matches:
+        foreground: "#EFF1F5" # base
+        background: "#6C6F85" # subtext0
+      focused_match:
+        foreground: "#EFF1F5" # base
+        background: "#40A02B" # green
+      footer_bar:
+        foreground: "#EFF1F5" # base
+        background: "#6C6F85" # subtext0
+
+    # Keyboard regex hints
+    hints:
+      start:
+        foreground: "#EFF1F5" # base
+        background: "#DF8E1D" # yellow
+      end:
+        foreground: "#EFF1F5" # base
+        background: "#6C6F85" # subtext0
+
+    # Selection colors
+    selection:
+      text: "#EFF1F5" # base
+      background: "#DC8A78" # rosewater
+
+    # Normal colors
+    normal:
+      black: "#5C5F77" # subtext1
+      red: "#D20F39" # red
+      green: "#40A02B" # green
+      yellow: "#DF8E1D" # yellow
+      blue: "#1E66F5" # blue
+      magenta: "#EA76CB" # pink
+      cyan: "#179299" # teal
+      white: "#ACB0BE" # surface2
+
+    # Bright colors
+    bright:
+      black: "#6C6F85" # subtext0
+      red: "#D20F39" # red
+      green: "#40A02B" # green
+      yellow: "#DF8E1D" # yellow
+      blue: "#1E66F5" # blue
+      magenta: "#EA76CB" # pink
+      cyan: "#179299" # teal
+      white: "#BCC0CC" # surface1
+
+    # Dim colors
+    dim:
+      black: "#5C5F77" # subtext1
+      red: "#D20F39" # red
+      green: "#40A02B" # green
+      yellow: "#DF8E1D" # yellow
+      blue: "#1E66F5" # blue
+      magenta: "#EA76CB" # pink
+      cyan: "#179299" # teal
+      white: "#ACB0BE" # surface2
+
+    indexed_colors:
+      - { index: 16, color: "#FE640B" }
+      - { index: 17, color: "#DC8A78" }
+
+
+  GruvboxDark: &GruvboxDark
+      primary:
+        background: '0x1d2021'
+        foreground: '0xd4be98'
+      normal:
+        black:   '0x32302f'
+        red:     '0xea6962'
+        green:   '0xa9b665'
+        yellow:  '0xd8a657'
+        blue:    '0x7daea3'
+        magenta: '0xd3869b'
+        cyan:    '0x89b482'
+        white:   '0xd4be98'
+      bright:
+        black:   '0x32302f'
+        red:     '0xea6962'
+        green:   '0xa9b665'
+        yellow:  '0xd8a657'
+        blue:    '0x7daea3'
+        magenta: '0xd3869b'
+        cyan:    '0x89b482'
+        white:   '0xd4be98'
+
+  GruvboxLight: &GruvboxLight
+      primary:
+        background: '0xf9f5d7'
+        foreground: '0x654735'
+      normal:
+        black:   '0x654735'
+        red:     '0xc14a4a'
+        green:   '0x6c782e'
+        yellow:  '0xb47109'
+        blue:    '0x45707a'
+        magenta: '0x945e80'
+        cyan:    '0x4c7a5d'
+        white:   '0xf2e5bc'
+      bright:
+        black:   '0x654735'
+        red:     '0xc14a4a'
+        green:   '0x6c782e'
+        yellow:  '0xb47109'
+        blue:    '0x45707a'
+        magenta: '0x945e80'
+        cyan:    '0x4c7a5d'
+        white:   '0xf2e5bc'
+
+
+
+colors: *GruvboxDark
+
+{{ if (eq .chezmoi.os "windows") -}}
+shell:
+  args:
+  - -nologo
+  program: pwsh
+{{ else -}}
+shell:
+  program: /usr/bin/zsh
+{{ end -}}

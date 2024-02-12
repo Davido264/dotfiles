@@ -1,0 +1,313 @@
+({:parent "/", :name "archive", :link false, :git-remote false}
+ {:parent "/", :name "college", :link false, :git-remote false}
+ {:parent "/", :name "dev", :link false, :git-remote false}
+ {:parent "/", :name "life", :link false, :git-remote false}
+ {:parent "/", :name "music", :link false, :git-remote false}
+ {:parent "/", :name "notebook", :link false, :git-remote false}
+ {:parent "/", :name "work", :link false, :git-remote false}
+ {:parent "archive/", :name "backups", :link false, :git-remote false}
+ {:parent "archive/", :name "file_bus", :link false, :git-remote false}
+ {:parent "archive/",
+  :name "shared_files",
+  :link false,
+  :git-remote false}
+ {:parent "college/", :name "export", :link false, :git-remote false}
+ {:parent "college/", :name "projects", :link false, :git-remote false}
+ {:parent "dev/", :name "build", :link false, :git-remote false}
+ {:parent "dev/", :name "create", :link false, :git-remote false}
+ {:parent "dev/",
+  :name "dotfiles",
+  :link "C:\\Users\\david\\.local\\share\\chezmoi",
+  :git-remote false}
+ {:parent "dev/", :name "fly_db", :link false, :git-remote false}
+ {:parent "dev/", :name "linux", :link false, :git-remote false}
+ {:parent "dev/", :name "projects", :link false, :git-remote false}
+ {:parent "dev/",
+  :name "random",
+  :link false,
+  :git-remote "git@github.com:Davido264/random_scripts.git"}
+ {:parent "dev/",
+  :name "scripts",
+  :link "C:\\Users\\david\\.local\\share\\chezmoi\\home\\bin",
+  :git-remote false}
+ {:parent "life/", :name "books", :link false, :git-remote false}
+ {:parent "life/", :name "finances", :link false, :git-remote false}
+ {:parent "life/", :name "me", :link false, :git-remote false}
+ {:parent "life/", :name "projects", :link false, :git-remote false}
+ {:parent "life/", :name "wifey", :link false, :git-remote false}
+ {:parent "music/",
+  :name "Notes and Sheets",
+  :link false,
+  :git-remote false}
+ {:parent "music/", :name "packs", :link false, :git-remote false}
+ {:parent "music/", :name "projects", :link false, :git-remote false}
+ {:parent "music/", :name "sessions", :link false, :git-remote false}
+ {:parent "notebook/", :name "00-Bujo", :link false, :git-remote false}
+ {:parent "notebook/", :name "assets", :link false, :git-remote false}
+ {:parent "notebook/",
+  :name "excalidraw",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/",
+  :name "Finances",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/", :name "pages", :link false, :git-remote false}
+ {:parent "notebook/", :name "tmpl", :link false, :git-remote false}
+ {:parent "notebook/",
+  :name "z9-Old_Journals",
+  :link false,
+  :git-remote false}
+ {:parent "work/", :name "miviltech", :link false, :git-remote false}
+ {:parent "work/", :name "projects", :link false, :git-remote false}
+ {:parent "archive/backups/",
+  :name "pokemmo_roms",
+  :link false,
+  :git-remote false}
+ {:parent "college/export/",
+  :name "Emprendimiento",
+  :link false,
+  :git-remote false}
+ {:parent "college/export/",
+  :name "Inteligencia de Negocios",
+  :link false,
+  :git-remote false}
+ {:parent "college/export/",
+  :name "Redes",
+  :link false,
+  :git-remote false}
+ {:parent "college/projects/",
+  :name "42.PF01-Proyecto_Final_Taxis",
+  :link false,
+  :git-remote "git@github.com:Davido264/proyecto_bd.git"}
+ {:parent "college/projects/",
+  :name "44.PF01-Proyecto_Final_IN",
+  :link false,
+  :git-remote "git@github.com:Davido264/Proyecto_IN.git"}
+ {:parent "dev/build/",
+  :name "d.tgd00 task-graphdeps",
+  :link false,
+  :git-remote ""}
+ {:parent "dev/build/",
+  :name "d.wsf00 Workspacer Flow Plugin",
+  :link false,
+  :git-remote false}
+ {:parent "dev/build/", :name "test", :link false, :git-remote ""}
+ {:parent "dev/dotfiles/",
+  :name "helpers",
+  :link false,
+  :git-remote false}
+ {:parent "dev/dotfiles/",
+  :name "home",
+  :link false,
+  :git-remote false}
+ {:parent "dev/dotfiles/",
+  :name "vault",
+  :link false,
+  :git-remote false}
+ {:parent "dev/linux/",
+  :name "splitted",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "advent_of_code",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "algorithm_course",
+  :link false,
+  :git-remote "git@github.com:ThePrimeagen/kata-machine.git"}
+ {:parent "dev/projects/",
+  :name "david_outliner",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "david_shell_utils",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "exercism_c_linux",
+  :link "C:\\Users\\david\\Exercism\\c",
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "go_bitwarden_client",
+  :link false,
+  :git-remote "git@github.com:Davido264/bitw-go.git"}
+ {:parent "dev/projects/",
+  :name "logseq",
+  :link false,
+  :git-remote "git@github.com:logseq/logseq.git"}
+ {:parent "dev/projects/",
+  :name "lspconfig",
+  :link false,
+  :git-remote "git@github.com:Davido264/nvim-lspconfig.git"}
+ {:parent "dev/projects/",
+  :name "my_telegram_bot",
+  :link false,
+  :git-remote "git@github.com:Davido264/my_telegram_bot.git"}
+ {:parent "dev/projects/",
+  :name "obsidian_fortune_cowsay",
+  :link false,
+  :git-remote "git@github.com:Davido264/Obsidian_Fortune_Cowsay.git"}
+ {:parent "dev/projects/",
+  :name "palito_creativo",
+  :link false,
+  :git-remote "git@github.com:Davido264/palito-creativo.git"}
+ {:parent "dev/projects/",
+  :name "rustlings",
+  :link false,
+  :git-remote "https://github.com/rust-lang/rustlings.git"}
+ {:parent "dev/projects/",
+  :name "scratchpad_terminal_analysis",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "sql_course",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "terminal_player",
+  :link false,
+  :git-remote "git@github.com:Davido264/terminal-midi.git"}
+ {:parent "dev/projects/",
+  :name "wallpaper generator",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "windows_vm",
+  :link false,
+  :git-remote false}
+ {:parent "dev/projects/",
+  :name "workspacer",
+  :link false,
+  :git-remote ""}
+ {:parent "dev/random/",
+  :name "ejempo",
+  :link false,
+  :git-remote "git@github.com:Davido264/aaa.git"}
+ {:parent "dev/random/",
+  :name "poppler-23.11.0",
+  :link false,
+  :git-remote false}
+ {:parent "dev/scripts/", :name "clj", :link false, :git-remote false}
+ {:parent "life/wifey/",
+  :name "etnografia",
+  :link false,
+  :git-remote false}
+ {:parent "music/Notes and Sheets/",
+  :name "23.00_Apuntes",
+  :link false,
+  :git-remote false}
+ {:parent "music/Notes and Sheets/",
+  :name "23.01_Ideas",
+  :link false,
+  :git-remote false}
+ {:parent "music/Notes and Sheets/",
+  :name "23.02_Sheets",
+  :link false,
+  :git-remote false}
+ {:parent "music/packs/",
+  :name "MIDIS",
+  :link false,
+  :git-remote false}
+ {:parent "music/packs/",
+  :name "Presets",
+  :link false,
+  :git-remote false}
+ {:parent "music/projects/",
+  :name "20.BE01-bEAT",
+  :link false,
+  :git-remote false}
+ {:parent "music/sessions/",
+  :name "29.231117-130bmp_C",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/00-Bujo/",
+  :name "assets",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/00-Bujo/",
+  :name "excalidraw",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/00-Bujo/",
+  :name "journals",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/00-Bujo/",
+  :name "pages",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/00-Bujo/",
+  :name "tmpl",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/pages/",
+  :name "32.01 Jonnhy Decimal on my System",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/pages/",
+  :name "Bullet Journal",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/z9-Old_Journals/",
+  :name "2023_11_24-2023_12_02",
+  :link false,
+  :git-remote false}
+ {:parent "notebook/z9-Old_Journals/",
+  :name "2023_12_05-2023_12_31",
+  :link false,
+  :git-remote false}
+ {:parent "work/miviltech/",
+  :name "aws_forecast",
+  :link false,
+  :git-remote "git@github.com:aws-samples/amazon-forecast-samples.git"}
+ {:parent "work/miviltech/",
+  :name "dcrnn_test",
+  :link false,
+  :git-remote "git@github.com:chnsh/DCRNN_PyTorch.git"}
+ {:parent "work/miviltech/",
+  :name "flow_pred_gh",
+  :link false,
+  :git-remote "git@github.com:xiaochus/TrafficFlowPrediction.git"}
+ {:parent "work/miviltech/",
+  :name "fuck_rewrite",
+  :link false,
+  :git-remote ""}
+ {:parent "work/miviltech/",
+  :name "idk_what",
+  :link false,
+  :git-remote false}
+ {:parent "work/miviltech/",
+  :name "investigation_vault",
+  :link false,
+  :git-remote false}
+ {:parent "work/miviltech/",
+  :name "optimization",
+  :link false,
+  :git-remote "git@github.com:Davido264/optimization.git"}
+ {:parent "work/miviltech/",
+  :name "rt_trafic_flow",
+  :link false,
+  :git-remote
+  "git@github.com:HaDung2002/realtime-traffic-flow-prediction.git"}
+ {:parent "work/miviltech/",
+  :name "test",
+  :link false,
+  :git-remote false}
+ {:parent "work/projects/",
+  :name "arriendos_ocampo",
+  :link false,
+  :git-remote "https://github.com/GAOT539/ProyectoWEB.git"}
+ {:parent "work/projects/",
+  :name "arriendos_pico",
+  :link false,
+  :git-remote false}
+ {:parent "work/projects/",
+  :name "bd-mateo_moya",
+  :link false,
+  :git-remote "git@github.com:MateoSeb10/ProyectoBaseMateoMoya.git"}
+ {:parent "work/projects/",
+  :name "proyecto_final-flores_galarza",
+  :link false,
+  :git-remote false})

@@ -1,0 +1,12 @@
+{{ if (and (eq .chezmoi.os "windows") (not .justGames)) -}}
+
+Write-Output "`nAdding ssh key to agent"
+sudo {
+    Get-Service -Name ssh-agent | Set-Service -StartupType Manual
+    Start-Service ssh-agent
+}
+
+
+ssh-add $(Resolve-Path "$HOME/.ssh/id_rsa")
+
+{{ end -}}

@@ -1,0 +1,412 @@
+[
+  {
+    "__before__": {
+      "windows": [
+        "scoop bucket add java",
+        "scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure",
+        "if (-not $(Test-Path $HOME/.local/share/nvim-data)) { mkdir $HOME/.local/share/nvim-data }"
+      ],
+      "linux": [
+        "asdf_version='v0.14.0'",
+        "install=true"
+      ]
+    }
+  },
+  {
+    "__after__": {
+      "windows": [
+        "[Environment]::SetEnvironmentVariable(\"JAVA_HOME\", \"$HOME\\scoop\\apps\\openjdk\\current\", [EnvironmentVariableTarget]::User)"
+      ],
+      "linux": [
+        "[[ -d /etc/environment.d ]] || sudo mkdir /etc/environment.d",
+        "echo 'ASDF_DATA_DIR=\"/opt/asdf\"",
+        "ASDF_DIR=\"/opt/asdf\"' | sudo tee /etc/environment.d/10-asdf.conf",
+        "echo 'export ASDF_DATA_DIR=\"/opt/asdf\"",
+        "export ASDF_DIR=\"/opt/asdf\"",
+        ". /opt/asdf/asdf.sh",
+        "export JAVA_HOME=$(asdf where java)",
+        "export GOROOT=\"$(asdf where golang)/go\"' | sudo tee /etc/profile.d/asdf.sh",
+        "echo 'Defaults secure_path=\"/opt/asdf/shims:/opt/asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"",
+        "Defaults env_keep+=\"ASDF_DATA_DIR ASDF_DIR\"' | sudo tee /etc/sudoers.d/90-asdf",
+        "asdf reshim"
+      ]
+    }
+  },
+  {
+    "name": "make",
+    "windows": {
+      "scoop": "make"
+    },
+    "linux": {
+      "apt": "make"
+    }
+  },
+  {
+    "name": "makedeb",
+    "windows": null,
+    "linux": {
+      "apt": "makedeb"
+    }
+  },
+  {
+    "name": "Git",
+    "windows": {
+      "winget": "Git.Git"
+    },
+    "linux": {
+      "apt": "git"
+    }
+  },
+  {
+    "name": "asdf",
+    "windows": null,
+    "linux": {
+      "before": "sudo apt install -y curl git dirmngr gpg gawk",
+      "sh": "sudo mkdir /opt/asdf && sudo chown david /opt/asdf && git clone https://github.com/asdf-vm/asdf.git /opt/asdf --branch $asdf_version && export ASDF_DATA_DIR=/opt/asdf && export ASDF_DIR=/opt/asdf && . /opt/asdf/asdf.sh",
+      "notwhen": "[[ -f /opt/asdf ]]"
+    }
+  },
+  {
+    "name": "CMake",
+    "windows": {
+      "winget": "Kitware.CMake"
+    },
+    "linux": {
+      "before": "(add-apt-repository -L | grep 'apt.kitware.com/ubuntu') || (wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && sudo add-apt-repository --yes \"deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main\" && sudo apt update)",
+      "apt": "cmake"
+    }
+  },
+  {
+    "name": "pnpm",
+    "windows": {
+      "sh": "iwr https://get.pnpm.io/install.ps1 -useb | iex",
+      "notwhen": "where.exe pnpm",
+      "after": "pnpm env use --global latest && pnpm install -g vite create-vite commitizen cz-conventional-changelog yarn"
+    },
+    "linux": {
+      "sh": "curl -fsSL https://get.pnpm.io/install.sh | sh -",
+      "notwhen": "$install",
+      "after": "pnpm env use --global latest && pnpm install -g vite create-vite commitizen cz-conventional-changelog yarn"
+    }
+  },
+  {
+    "name": "PowerShell Core",
+    "windows": {
+      "before": "winget list --id gerardog.gsudo *>$null || winget install --id gerardog.gsudo",
+      "winget": "Microsoft.PowerShell",
+      "after": "gsudo { pwsh -Command \"Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted\" }"
+    },
+    "linux": null
+  },
+  {
+    "name": "VS Code",
+    "windows": {
+      "winget": "Microsoft.VisualStudioCode"
+    },
+    "linux": {
+      "sh": "curl -sSLo /tmp/code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y /tmp/code.deb",
+      "notwhen": "which code",
+      "after": "rm /tmp/code.deb"
+    }
+  },
+  {
+    "name": "VS 2022 BuildTools",
+    "windows": {
+      "winget": "Microsoft.VisualStudio.2022.BuildTools"
+    },
+    "linux": null
+  },
+  {
+    "name": "GitHub Cli",
+    "windows": {
+      "winget": "GitHub.cli"
+    },
+    "linux": {
+      "before": "[ -s /etc/apt/sources.list.d/github-cli.list ] || (curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main' | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && sudo apt update)",
+      "apt": "gh"
+    }
+  },
+  {
+    "name": "GitLab cli",
+    "windows": {
+      "winget": "GLab.GLab"
+    },
+    "linux": {
+      "sh": "git clone 'https://mpr.makedeb.org/glab' /tmp/glab && cd /tmp/glab/ && makedeb -siy && cd ~",
+      "after": "rm /tmp/glab",
+      "notwhen": "which glab"
+    }
+  },
+  {
+    "name": "Podman",
+    "windows": {
+      "winget": "RedHat.Podman"
+    },
+    "linux": {
+      "apt": "podman"
+    }
+  },
+  {
+    "name": "ImHex",
+    "windows": {
+      "winget": "WerWolv.ImHex"
+    },
+    "linux": {
+      "flatpak": "net.werwolv.ImHex"
+    }
+  },
+  {
+    "name": "Wireshark",
+    "windows": {
+      "winget": "WiresharkFoundation.Wireshark"
+    },
+    "linux": {
+      "before": "(add-apt-repository -L | grep 'wireshark-dev/stable') || (sudo add-apt-repository --yes ppa:wireshark-dev/stable && sudo apt update)",
+      "apt":"wireshark"
+    }
+  },
+  {
+    "name": "Vagrant",
+    "windows": {
+      "winget": "Hashicorp.Vagrant"
+    },
+    "linux": {
+      "before": "[ -s /etc/apt/sources.list.d/hashicorp.list ] || (wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/hashicorp.list && apt update)",
+      "apt": "vagrant"
+    }
+  },
+  {
+    "name": "cloudflared",
+    "windows": {
+      "winget": "Cloudflare.cloudflared"
+    },
+    "linux": {
+      "before": "[ -s /etc/apt/sources.list.d/cloudflared.list ] || (curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null && echo \"deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/cloudflared.list && apt update)",
+      "apt": "cloudflared"
+    }
+  },
+  {
+    "name": "jq",
+    "windows": {
+      "winget": "jqlang.jq"
+    },
+    "linux": {
+      "apt": "jq"
+    }
+  },
+  {
+    "name": "flyctl",
+    "windows": {
+      "scoop": "flyctl"
+    },
+    "linux": {
+      "sh": "curl -sSL https://fly.io/install.sh | sh",
+      "notwhen": "(export FLYCTL_INSTALL='/home/david/.fly' && export PATH=\"$FLYCTL_INSTALL/bin:$PATH\" && which flyctl)"
+    }
+  },
+  {
+    "name": "docker",
+    "windows": {
+      "scoop": "docker"
+    },
+    "linux": {
+      "apt": "docker"
+    }
+  },
+  {
+    "name": "docker-compose",
+    "windows": {
+      "scoop": "docker-compose"
+    },
+    "linux": {
+      "apt": "docker-compose"
+    }
+  },
+  {
+    "name": "docker-buildx",
+    "windows": {
+      "scoop": "docker-buildx"
+    },
+    "linux": {
+      "apt": "docker-buildx"
+    }
+  },
+  {
+    "name": "exercism",
+    "windows": {
+      "scoop": "exercism"
+    },
+    "linux": {
+      "sh": "mkdir /tmp/exercism && cd /tmp/exercism && curl -sSL https://github.com/exercism/cli/releases/download/v3.2.0/exercism-3.2.0-linux-x86_64.tar.gz | tar -xzvf - && sudo chmod +x exercism && sudo chown root exercism && sudo mv exercism /usr/bin/exercism && cd ~",
+      "after": "rm -rf /tmp/exercism",
+      "notwhen": "which exercism"
+    }
+  },
+  {
+    "name": "vcredist2022",
+    "windows": {
+      "scoop": "vcredist2022"
+    },
+    "linux": null
+  },
+  {
+    "name": "aws",
+    "windows": {
+      "scoop": "aws"
+    },
+    "linux": {
+      "apt": "awscli"
+    }
+  },
+  {
+    "name": "llvm",
+    "windows": {
+      "scoop": "llvm"
+    },
+    "linux": {
+      "sh": "yes | bash -c \"$(wget -O - https://apt.llvm.org/llvm.sh)\"",
+      "notwhen": "which clang-18"
+    }
+  },
+  {
+    "name": "rust",
+    "windows": {
+      "scoop": "rustup",
+      "after": "rustup toolchain install stable-msvc ; rustup toolchain install stable-gnu ; rustup target add x86_64-pc-windows-msvc ; rustup target add x86_64-pc-windows-gnu"
+    },
+    "linux": {
+      "before": "asdf plugin-add rust https://github.com/code-lever/asdf-rust.git",
+      "asdf": "rust latest",
+      "notwhen": "$install",
+      "after": "rustup toolchain install stable-gnu && rustup target add x86_64-pc-windows-gnu && rustup target add x86_64-unknown-linux-gnu"
+    }
+  },
+  {
+    "name": "go",
+    "windows": {
+      "scoop": "go"
+    },
+    "linux": {
+      "before": "asdf plugin add golang https://github.com/asdf-community/asdf-golang.git",
+      "asdf": "golang latest",
+      "notes": "Reshim when package install"
+    }
+  },
+  {
+    "name": "openjdk",
+    "windows": {
+      "scoop": "openjdk"
+    },
+    "linux": {
+      "before": "sudo apt install -y jq && asdf plugin-add java https://github.com/halcyon/asdf-java.git",
+      "asdf": "java latest:openjdk",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "python",
+    "windows": {
+      "scoop": "python",
+      "after": "python -m ensurepip ; python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel"
+    },
+    "linux": {
+      "before": "sudo apt install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev && sudo asdf plugin-add python https://github.com/asdf-community/asdf-python.git",
+      "sh": "sudo asdf install python latest",
+      "notwhen": "$install",
+      "after": "python -m ensurepip && python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel",
+      "notes": "Reshim when package install"
+    }
+  },
+  {
+    "name": "dotnet-sdk",
+    "windows": {
+      "scoop": "dotnet-sdk"
+    },
+    "linux": {
+      "before": "asdf plugin add dotnet https://github.com/hensou/asdf-dotnet.git",
+      "asdf": "dotnet latest",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "clj-deps",
+    "windows": {
+      "scoop": "clj-deps"
+    },
+    "linux": {
+      "before": "asdf plugin add clojure https://github.com/asdf-community/asdf-clojure.git",
+      "asdf": "clojure latest",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "babashka",
+    "windows": {
+      "scoop": "babashka"
+    },
+    "linux": {
+      "before": "asdf plugin add babashka https://github.com/pitch-io/asdf-babashka.git",
+      "asdf": "babashka latest",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "leiningen",
+    "windows": {
+      "scoop": "leiningen"
+    },
+    "linux": {
+      "before": "sudo asdf plugin add lein https://github.com/miorimmax/asdf-lein.git",
+      "asdf": "lein latest",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "gcc",
+    "windows": {
+      "scoop": "gcc"
+    },
+    "linux": {
+      "apt": "gcc"
+    }
+  },
+  {
+    "name": "android-clt",
+    "windows": {
+      "scoop": "android-clt",
+      "after": "sdkmanager 'tools' ; sdkmanager 'platform-tools' 'platforms;android-24' 'build-tools;24.0.0' 'ndk-bundle' 'add-ons;addon-google_apis-google-24' 'extras;google;google_play_services' 'emulator'"
+    },
+    "linux": {
+      "before": "sudo apt install openjdk-8-jdk-headless",
+      "sh": "mkdir -p /tmp/android ~/.local/share/android-sdk && wget -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && unzip commandlinetools-linux-6200805_latest.zip -d ~/.local/share/android-sdk && cd ~ && export ANDROID_HOME=~/.local/share/android-sdk && export PATH=\"$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH\"",
+      "after": "sed -i 's|exec \"\\$JAVACMD\" \"\\$@\"|exec \"/usr/bin/java\" \"$@\"|' $(which sdkmanager) && sdkmanager 'platform-tools' 'platforms;android-24' 'build-tools;24.0.0' 'ndk-bundle' 'add-ons;addon-google_apis-google-24' 'extras;google;google_play_services' 'emulator'",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "Treesitter for F#",
+    "windows": {
+      "before": "$src = \"$HOME/.local/share/nvim-data/tree-sitter-fsharp\"",
+      "sh": "git clone https://github.com/Nsidorenco/tree-sitter-fsharp.git $src ; cd $src ; pnpm install",
+      "notwhen": "if (-not $(Test-Path \"$HOME/.local/share/nvim-data/tree-sitter-fsharp\")) { exit 1 }"
+    },
+    "linux": {
+      "before": "src=\"~/.local/share/nvim-data/tree-sitter-fsharp\"",
+      "sh": "git clone https://github.com/Nsidorenco/tree-sitter-fsharp.git $src && cd $src && pnpm install",
+      "notwhen": "[[ -d $src ]]"
+    }
+  },
+  {
+    "name": "Treesitter for mcfunction",
+    "windows": {
+      "before": "$src = \"$HOME/.local/share/nvim-data/tree-sitter-mcfunction\"",
+      "sh": "git clone https://github.com/Davido264/tree-sitter-mcfunction.git $src ; cd $src ; pnpm install ; pnpx node-gyp configure ; pnpm run build",
+      "notwhen": "if (-not $(Test-Path \"$HOME/.local/share/nvim-data/tree-sitter-mcfunction\")) { exit 1 }"
+    },
+    "linux": {
+      "before": "src=\"$HOME/.local/share/nvim-data/tree-sitter-mcfunction\"",
+      "sh": "git clone https://github.com/Davido264/tree-sitter-mcfunction.git $src && cd $src && pnpm install && pnpx node-gyp configure && pnpm run build",
+      "notwhen": "[[ -d $src ]]"
+    }
+  }
+]

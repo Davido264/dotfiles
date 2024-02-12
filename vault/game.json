@@ -1,0 +1,31 @@
+[
+  {
+    "__before__": {
+      "linux": null
+    }
+  },
+  {
+    "name": "EpicGames Launcher",
+    "windows": {
+      "winget": "EpicGames.EpicGamesLauncher"
+    },
+    "linux": null
+  },
+  {
+    "name": "Prism Launcher",
+    "windows": {
+      "winget": "PrismLauncher.PrismLauncher"
+    },
+    "linux": {
+      "flatpak": "org.prismlauncher.PrismLauncher"
+    }
+  },
+  {
+    "name": "Super Smash Flash",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/42b2e11fb5f5d246e0899c8f5dc1f4bc/raw/e4b8cc57dcf6d0f592cf699d101a1d393d954156/ssf2.json",
+      "notwhen": "exit 0"
+    },
+    "linux": null
+  }
+]

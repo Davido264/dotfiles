@@ -1,0 +1,51 @@
+{{ if (eq .chezmoi.os "windows") -}}
+
+# registry hash: {{ include (joinPath .chezmoi.workingTree "helpers" "tweaks.reg") | sha256sum }}
+echo "`nImporting registries"
+sudo {
+  reg import {{ joinPath .chezmoi.workingTree "helpers" "tweaks.reg" | quote }}
+}
+
+echo "`nSetting Event viewer to log dropped packages"
+sudo { auditpol /set /subcategory:"{0CCE9226-69AE-11D9-BED3-505054503030}" /success:disable /failure:enable }
+
+{{ if (and (eq .chezmoi.os "windows") (not .justGames)) -}}
+
+echo "`nEnabling Group Policies"
+ls $env:SystemRoot\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum,$env:SystemRoot\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum | select -ExpandProperty FullName | sudo { $input | % { dism /online /norestart /add-package:$_ }}
+
+echo "`nEnabling Hyper-V"
+ls $env:SystemRoot\servicing\Packages\*Hyper-V*.mum | select -ExpandProperty FullName | sudo { $input | % { dism /online /norestart /add-package:$_ }}
+
+sudo { Dism /online /enable-feature /featurename:Microsoft-Hyper-V -All /LimitAccess /ALL /norestart }
+
+echo "`nEnabling SandBox"
+ls $env:SystemRoot\servicing\Packages\*Containers*.mum | select -ExpandProperty FullName | sudo { $input | % { dism /online /norestart /add-package:$_ }}
+
+sudo { Dism /online /enable-feature /featurename:Containers-DisposableClientVM /LimitAccess /ALL /norestart }
+
+{{ end -}}
+
+Write-Output "`nSetting user environment variables";
+[Environment]::SetEnvironmentVariable("WORKSPACEROOT", "{{- .default_workspace_location -}}", [EnvironmentVariableTarget]::User);
+[Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "%USERPROFILE%\.config", [EnvironmentVariableTarget]::User);
+[Environment]::SetEnvironmentVariable("XDG_DATA_HOME", "%USERPROFILE%\.local\share", [EnvironmentVariableTarget]::User);
+[Environment]::SetEnvironmentVariable("XDG_CACHE_HOME", "%USERPROFILE%\.cache", [EnvironmentVariableTarget]::User);
+[Environment]::SetEnvironmentVariable("PATH", "$Env:PATH;$HOME\bin", [EnvironmentVariableTarget]::User);
+
+Write-Output "`nCleaning duplicates";
+sudo {
+  $existingPath = [Environment]::GetEnvironmentVariable("PATH", "Machine");
+  $pathArray = $existingPath -split ";";
+  $uniquePaths = [System.Collections.Generic.HashSet[string]]::new($pathArray, [StringComparer]::OrdinalIgnoreCase);
+  $newPath = $uniquePaths -join ";";
+  [Environment]::SetEnvironmentVariable("PATH", $newPath, "Machine");
+
+  $existingPath = [Environment]::GetEnvironmentVariable("PATH", "User");
+  $pathArray = $existingPath -split ";";
+  $uniquePaths = [System.Collections.Generic.HashSet[string]]::new($pathArray, [StringComparer]::OrdinalIgnoreCase);
+  $newPath = $uniquePaths -join ";";
+  [Environment]::SetEnvironmentVariable("PATH", $newPath, "User");
+}
+
+{{ end -}}

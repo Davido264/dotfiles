@@ -1,0 +1,7 @@
+{
+  "new language server boilerplate": {
+    "prefix": "lsp_boilerplate",
+    "body": "local nvim_lsp = require(\"lspconfig\")\nlocal utils = require(\"david.utils\")\nutils.set_tabs(${1})\n\nnvim_lsp.${2}.setup({\n\ton_attach = utils.lsp_on_attach,\n\tsingle_file_support = true,\n\tcapabilities = utils.capabilities(),\n\t${0}\n})",
+    "description": "LSP configuration boilerplate"
+  }
+}

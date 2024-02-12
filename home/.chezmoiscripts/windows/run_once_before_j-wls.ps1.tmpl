@@ -1,0 +1,25 @@
+{{ if (and (eq .chezmoi.os "windows") (not .justGames)) -}}
+
+echo "`nEnabling WSL"
+sudo {
+  Enable-WindowsOptionalFeature -Online -FeatureName "HypervisorPlatform" -All -NoRestart;
+  Enable-WindowsOptionalFeature -Online -FeatureName "VirtualMachinePlatform" -All -NoRestart;
+  Enable-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux" -All -NoRestart;
+}
+
+echo "Updating WSL to v2"
+wsl --update
+wsl --set-default-version 2
+
+echo "Installing distros"
+@(
+  "Ubuntu"
+) | % { wsl --install $_ --no-launch }
+
+echo "Setting default distro (Ubuntu)"
+wsl --set-default "Ubuntu"
+
+echo "`nEnabling net forwarding"
+sudo { Get-NetIPInterface | where {$_.InterfaceAlias -eq 'vEthernet (WSL)' -or $_.InterfaceAlias -eq 'vEthernet (Default Switch)'} | Set-NetIPInterface -Forwarding Enabled }
+
+{{ end -}}

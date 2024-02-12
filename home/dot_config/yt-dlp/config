@@ -1,0 +1,14 @@
+# Lines starting with # are comments
+
+# Do not copy the mtime
+--no-mtime
+
+# Download the best video with the best extension
+# (For video, mp4 > webm > flv. For audio, m4a > aac > mp3 ...)
+-S "ext"
+
+# Use this proxy
+# --proxy 127.0.0.1:3128
+
+# Save all videos under YouTube directory in your home directory
+-o ~/Music/downloaded/%(title)s.%(ext)s

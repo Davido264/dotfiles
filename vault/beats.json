@@ -1,0 +1,160 @@
+[
+  {
+    "__before__": {
+      "windows": null,
+      "linux": [
+        "([ -d ~/.vst3 ] || mkdir -p ~/.vst3) && ([ -d ~/.clap ] || mkdir -p ~/.clap)",
+        "cardinal_version='23.10'",
+        "chow_version='2.11.4'",
+        "odin_version='2.3-4'",
+        "surge_version='1.3.1'",
+        "install=false"
+      ]
+    }
+  },
+  {
+    "name": "FL Studio",
+    "windows": {
+      "winget": "ImageLine.FLStudio"
+    },
+    "linux": null
+  },
+  {
+    "name": "VCVRack",
+    "windows": {
+      "winget": "VCVRack.VCVRack"
+    },
+    "linux": {
+      "before": "sudo apt install -y unzip git gdb curl cmake libx11-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev zlib1g-dev libasound2-dev libgtk2.0-dev libgtk-3-dev libjack-jackd2-dev jq zstd libpulse-dev pkg-config zenity",
+      "sh": "git clone https://github.com/VCVRack/Rack --depth 1 /tmp/vcv && cd /tmp/vcv && git submodule update --init --recursive && make dep -j4 && make && cd ~",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "JACK2",
+    "windows": {
+      "winget": "Jackaudio.JACK2"
+    },
+    "linux": {
+        "apt": "jackd2 qjackctl"
+    }
+  },
+  {
+    "name": "cardinal",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/cardinal.json",
+      "notwhen": "exit 0"
+    },
+    "linux": {
+      "before": "mkdir /tmp/cardinal && cd /tmp/cardinal",
+      "sh": "mkdir /tmp/cardinal && cd /tmp/cardinal && curl -sSL \"https://github.com/DISTRHO/Cardinal/releases/download/${cardinal_version}/Cardinal-linux-x86_64-${cardinal_version}.tar.gz\" | tar -xzvf - && mv ./*.vst3 ~/.vst3/ && mv ./*.clap ~/.clap/ && sudo mv CardinalNative /usr/bin/ && sudo mv CardinalJACK /usr/bin/ && mkdir -p ~/.local/share/cardinal/docs && mv docs/* ~/.local/share/cardinal/docs/ && mv LICENSE ~/.local/share/cardinal",
+      "notwhen": "$install"
+    }
+  },
+  {
+    "name": "chow-tape",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/chow-tape.json",
+      "notwhen": "exit 0"
+    },
+    "linux": {
+      "sh": "curl -sSLo /tmp/chow.deb \"https://github.com/jatinchowdhury18/AnalogTapeModel/releases/download/v${chow_version}/ChowTapeModel-Linux-x64-${chow_version}.deb\" && sudo apt install -y /tmp/chow.deb",
+      "after": "rm /tmp/chow.deb",
+      "notwhen": "((apt show chowtape 2>/dev/null | grep 'Status: install ok installed') && [[ $(apt show chowtape 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $chow_version ]])",
+      "notes": "suggests jackd1"
+    }
+  },
+  {
+    "name": "giada",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/giada.json",
+      "notwhen": "exit 0"
+
+    },
+    "linux": {
+      "flatpak": "giada"
+    }
+  },
+  {
+    "name": "odin",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/odin.json",
+      "notwhen": "exit 0"
+    },
+    "linux": {
+      "sh": "curl -sSLo /tmp/odin.deb \"https://dl.dropboxusercontent.com/s/hwgdgdxz1p2visj/Odin2-synth_${odin_version}.deb\" && sudo apt install -y /tmp/odin.deb",
+      "notwhen": "((apt show odin2-synth 2>/dev/null | grep 'Status: install ok installed') && [[ $(apt show odin2-synth 2>/dev/null | grep -oP '\\d+\\.\\d+-\\d+' | head -n1) = $odin_version ]])",
+      "after": "rm /tmp/odin.deb"
+    }
+  },
+  {
+    "name": "surge-synth",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/surge-synth.json",
+      "notwhen": "exit 0"
+    },
+    "linux": {
+      "sh": "curl -sSLo /tmp/surge.deb \"https://github.com/surge-synthesizer/releases-xt/releases/download/${surge_version}/surge-xt-linux-x64-${surge_version}.deb\" && sudo apt install -y /tmp/surge.deb",
+      "notwhen": "((apt show surge-xt 2>/dev/null | grep 'Status: install ok installed') && [[ $(apt show surge-xt 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $surge_version ]])",
+      "after": "rm /tmp/surge.deb"
+    }
+  },
+  {
+    "name": "tal-noise-maker",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/tal-noise-maker.json",
+      "notwhen": "exit 0"
+    },
+    "linux": {
+      "sh": "curl -sSLo /tmp/tal.zip https://tal-software.com/downloads/plugins/TAL-NoiseMaker_64_linux.zip && unzip /tmp/tal.zip && cd TAL-NoiseMaker && mv ./TAL-NoiseMaker.vst3 ~/.vst3/ && mv ./TAL-NoiseMaker.clap ~/.clap/ && cd ~",
+      "notwhen": "$install",
+      "after": "rm -rf /tmp/tal.zip"
+    }
+  },
+  {
+    "name": "Vital",
+    "windows": {
+      "pending": "https://account.vital.audio/"
+    },
+    "linux": {
+      "pending": "https://account.vital.audio/"
+    }
+  },
+  {
+    "name": "OTT",
+    "windows": {
+      "pending": "https://xferrecords.com/product_downloads/25/freeware"
+    },
+    "linux": null
+  },
+  {
+    "name": "youlean-meter",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/youlean-meter.json",
+      "notwhen": "exit 0"
+    },
+    "linux": null
+  },
+  {
+    "name": "labs-lm",
+    "windows": {
+      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/labs-lm.json",
+      "notwhen": "exit 0"
+    },
+    "linux": null
+  },
+  {
+    "name": "Ample Guitar Lite",
+    "windows": {
+      "pending": "https://plugins4free.com/plugin/2233/"
+    },
+    "linux": null
+  },
+  {
+    "name": "Ample Cloud Drum Lite",
+    "windows": {
+      "pending": "https://plugins4free.com/plugin/3181/"
+    },
+    "linux": null
+  }
+]

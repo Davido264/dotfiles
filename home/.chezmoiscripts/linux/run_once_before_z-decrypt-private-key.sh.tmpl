@@ -1,0 +1,10 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/sh
+
+if [ ! -f {{ joinPath .chezmoi.workingTree "private_key" | quote }} ]; then
+  echo "Descripting private key"
+  age --decrypt --output {{ joinPath .chezmoi.workingTree "private_key" | quote }} {{ joinPath .chezmoi.workingTree "private_key.age" | quote }}
+  chmod 600 {{ joinPath .chezmoi.workingTree "private_key" | quote }}
+fi
+
+{{ end -}}

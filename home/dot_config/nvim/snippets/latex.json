@@ -1,0 +1,27 @@
+{
+  "image": {
+    "prefix": "img",
+    "body": "\\begin{figure}[H]\n\t\\includegraphics[width=\\linewidth]{${1:<image_path>}}\n\t\\caption{${2:<caption>}}\n\t\\label{${3:<label>}}\n\\end{figure}",
+    "description": "image"
+  },
+  "article header": {
+    "prefix": "texh",
+    "body": "\\documentclass{${1:<document type>}}\n\\usepackage[spanish,mexico-com]{babel}\n\n\\usepackage{graphicx} % soporte para imágenes\n\\graphicspath{ {./images/} } %carpeta en donde están las imágenes\n\\usepackage{float} % forzar la posición de las figuras\n\n%\\usepackage{listings} %soporte para resaltado de sintaxis al momento de escribir código\n\n\\usepackage{hyperref} % soporte para URLS\n%\\usepackage{natbib} % cite\n%\\usepackage{apacite} % apa\n\n\\begin{document}\n\\title{${0:<Tittle>}}\n\\author{David Ballesteros}\n\\maketitle",
+    "description": "header of a latex document"
+  },
+  "code": {
+    "prefix": "code",
+    "body": "\\lstinline[language=${1:<language>}]{${0}}",
+    "description": "inline code"
+  },
+  "monospace": {
+    "prefix": "mono",
+    "body": "\\texttt{${0}}",
+    "description": "inline monospace"
+  },
+  "code block": {
+    "prefix": "codeb",
+    "body": "\\begin{verbatim}\n\t{${0}}\n\\end{verbatim}",
+    "description": "code block"
+  }
+}

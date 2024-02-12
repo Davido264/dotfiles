@@ -1,0 +1,6 @@
+{{ if (eq .chezmoi.os "windows") -}}
+if (-not (test-path {{ joinPath .chezmoi.workingTree "private_key" | quote }})) {
+  echo "`nDescripting private key"
+  age --decrypt --output {{ joinPath .chezmoi.workingTree "private_key" | quote }} {{ joinPath .chezmoi.workingTree "private_key.age" | quote }}
+}
+{{ end -}}

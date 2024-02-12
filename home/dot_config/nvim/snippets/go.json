@@ -1,0 +1,7 @@
+{
+  "most important thing in go": {
+    "prefix": "iferr",
+    "body": "if err != nil{\n\t${0}\n}",
+    "description": "check for errors"
+  }
+}

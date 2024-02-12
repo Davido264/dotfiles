@@ -1,0 +1,347 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = false
+
+scan_timeout = 50
+command_timeout = 800
+
+format = '[(\($docker_context$conda$container$python\) )](bold white)[($username$hostname@)](bold yellow)$all'
+
+[line_break]
+disabled = true
+
+[character]
+success_symbol = '[➜](bold green)'
+error_symbol = '[✗](bold red)'
+vimcmd_symbol = '[V](bold green)'
+
+[username]
+format = '[$user]($style)'
+style_user = "bold white"
+show_always = false
+disabled = false
+
+[hostname]
+format = '[$ssh_symbol$hostname]($style)'
+style = "bold white"
+ssh_symbol = " "
+ssh_only = true
+disabled = false
+
+[directory]
+truncation_length = 1
+truncation_symbol = ''
+read_only = " "
+disabled = false
+
+[git_branch]
+format = '[$symbol:\($branch\)]($style) '
+symbol = "git"
+disabled = false
+
+[aws]
+disabled = true
+
+[azure]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[conda]
+format = '[ $symbol ]($style)'
+
+[docker_context]
+format = '[$symbol](blue bold)'
+symbol = " 🐋 "
+
+
+[bun]
+format = "via [$symbol]($style)"
+symbol = "🍞 "
+disabled = true
+
+[buf]
+format = "via [$symbol]($style)"
+symbol = " "
+disabled = true
+
+[c]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#599eff"
+disabled = true
+
+[cmake]
+format = "via [$symbol]($style)"
+symbol = "△ "
+style = "#6d8086"
+disabled = true
+
+[cobol]
+format = "via [$symbol]($style)"
+symbol = "⚙️ "
+style = "#005ca5"
+disabled = true
+
+[crystal]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#c8c8c8"
+disabled = true
+
+[daml]
+format = "via [$symbol]($style)"
+symbol = "Λ "
+disabled = true
+
+[dart]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#03589C"
+disabled = true
+
+[deno]
+format = "via [$symbol]($style)"
+symbol = "🦕 "
+style = "#cbcb41"
+disabled = true
+
+[dotnet]
+format = '[$symbol(\(🎯 $tfm\)) ]($style)'
+symbol = ".NET "
+style = "#596706"
+disabled = true
+
+[elixir]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#a074c4"
+disabled = true
+
+[elm]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#519aba"
+disabled = true
+
+[erlang]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#B83998"
+disabled = true
+
+[fennel]
+format = "via [$symbol]($style)"
+symbol = "🧅 "
+style = "#fff3d7"
+disabled = true
+
+[golang]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#519aba"
+disabled = true
+
+[gradle]
+format = "via [$symbol]($style)"
+symbol = " "
+disabled = true
+
+[haskell]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#a074c4"
+disabled = true
+
+[haxe]
+format = "via [$symbol]($style)"
+symbol = "⌘ "
+disabled = true
+
+[helm]
+format = "via [$symbol]($style)"
+symbol = "⎈ "
+disabled = true
+
+[java]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#cc3e44"
+disabled = true
+
+[julia]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#a270ba"
+disabled = true
+
+[kotlin]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#7F52FF"
+disabled = true
+
+[lua]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#51a0cf"
+disabled = true
+
+[meson]
+format = "via [$symbol]($style)"
+symbol = "喝 "
+disabled = true
+
+[nim]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#f3d400"
+disabled = true
+
+[nodejs]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#cbcb41"
+disabled = true
+
+[ocaml]
+format = 'via [$symbol(\($switch_indicator$switch_name\)) ]($style)'
+symbol = " "
+style = "#e37933"
+disabled = true
+
+[opa]
+format = "via [$symbol]($style)"
+symbol = "🪖 "
+disabled = true
+
+[package]
+symbol = " "
+disabled = true
+
+[perl]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#519aba"
+disabled = true
+
+[php]
+format = "via [$symbol]($style)"
+symbol = "󰌟 "
+style = "#a074c4"
+disabled = true
+
+[pulumi]
+format = "[$symbol ]($style)"
+symbol = " "
+
+[purescript]
+format = "via [$symbol]($style)"
+symbol = " "
+disabled = true
+
+[python]
+format = '[$symbol]($style)'
+symbol = "  "
+pyenv_version_name = false
+detect_files = []
+detect_extensions = []
+style = "#ffbc03"
+
+[raku]
+format = "via [$symbol]($style)"
+symbol = "🦋 "
+disabled = true
+
+[red]
+format = "via [$symbol]($style)"
+symbol = "🔴 "
+disabled = true
+
+[rlang]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#358a5b"
+disabled = true
+
+[ruby]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#701516"
+disabled = true
+
+[rust]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#dea584"
+disabled = true
+
+[scala]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#cc3e44"
+disabled = true
+
+[solidity]
+format = "via [$symbol]($style)"
+symbol = "󰞻 "
+style = "#519aba"
+disabled = true
+
+[swift]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#e37933"
+disabled = true
+
+[vagrant]
+format = "via [$symbol]($style)"
+symbol = "vagrant "
+style = "#1563FF"
+disabled = true
+
+[zig]
+format = "via [$symbol]($style)"
+symbol = " "
+style = "#f69a1b"
+disabled = true
+
+#### Disabled modules ####
+[battery]
+disabled = true
+
+[cmd_duration]
+disabled = true
+
+[direnv]
+disabled = true
+
+[git_commit]
+disabled = true
+
+[git_state]
+disabled = true
+
+[git_status]
+disabled = true
+
+[guix_shell]
+disabled = true
+
+[jobs]
+disabled = true
+
+[nix_shell]
+style = "#7ebae4"
+disabled = true
+
+[singularity]
+disabled = true
+
+[spack]
+disabled = true
+
+[vcsh]
+disabled = true

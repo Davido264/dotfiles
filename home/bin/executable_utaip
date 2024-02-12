@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+INTERFACE_NAME="Conexión\ cableada\ 1"
+address=$(echo "$1/24,$(echo $1 | sed 's/\.[0-9]$/\.1/')")
+previous_clipboard=$(xclip -o -selection clipboard)
+
+if [[ $# -eq 0 ]]; then
+  echo "method=auto" | xclip -i -selection clipboard
+else
+  echo "address1=$address
+dns=10.102.12.2;
+ignore-auto-dns=true
+method=manual" | xclip -i -selection clipboard
+fi
+
+
+sudo nvim /etc/NetworkManager/system-connections/Conexión\ cableada\ 1.nmconnection
+
+echo $previous_clipboard | xclip -i -selection clipboard
+
+sudo systemctl restart NetworkManager
+

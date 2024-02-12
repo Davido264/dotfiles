@@ -1,0 +1,155 @@
+[
+  {
+    "__before__": {
+      "windows": null,
+      "linux": [
+        "uad_version='0.5.1'"
+      ]
+    }
+  },
+  {
+    "name": "VLC",
+    "windows": {
+      "winget": "VideoLAN.VLC"
+    },
+    "linux": {
+      "before": "(add-apt-repository -L | grep 'videolan/master-daily') || (sudo add-apt-repository --yes -P ppa:videolan/master-daily && sudo apt update)",
+      "apt": "vlc"
+    }
+  },
+  {
+    "name": "Discord",
+    "windows": {
+      "winget": "Discord.Discord"
+    },
+    "linux": {
+      "flatpak": "dev.vencord.Vesktop",
+      "notes": "client with screen and audio share"
+    }
+  },
+  {
+    "name": "Brave Browser",
+    "windows": {
+      "winget": "Brave.Brave"
+    },
+    "linux": {
+      "before": "[ -s /etc/apt/sources.list.d/brave-browser-release.list ] || (sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main'| sudo tee /etc/apt/sources.list.d/brave-browser-release.list && sudo apt update)",
+      "apt": "brave-browser"
+    }
+  },
+  {
+    "name": "Inkscape",
+    "windows": {
+      "winget": "Inkscape.Inkscape"
+    },
+    "linux": {
+      "flatpak": "org.inkscape.Inkscape"
+    }
+  },
+  {
+    "name": "Obsidian",
+    "windows": {
+      "winget": "Obsidian.Obsidian"
+    },
+    "linux": {
+      "flatpak": "md.obsidian.Obsidian"
+    }
+  },
+  {
+    "name": "UnifiedRemote",
+    "windows": {
+      "winget": "UnifiedIntents.UnifiedRemote"
+    },
+    "linux": {
+      "sh": "curl -sSLo /tmp/unifiedremote.deb https://www.unifiedremote.com/download/linux-x64-deb && sudo apt install -y /tmp/unifiedremote.deb",
+      "notwhen": "((apt show urserver 2>/dev/null | grep 'Status: install ok installed')",
+      "after": "rm /tmp/unifiedremote.deb"
+    }
+  },
+  {
+    "name": "Spotify",
+    "windows": {
+      "winget": "Spotify.Spotify"
+    },
+    "linux": {
+      "before": "[ -s /etc/apt/sources.list.d/spotify.list ] || (curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg && echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list && sudo apt update)",
+      "apt": "spotify-client"
+    }
+  },
+  {
+    "name": "TelegramDesktop",
+    "windows": {
+      "winget": "Telegram.TelegramDesktop"
+    },
+    "linux": {
+      "flatpak": "org.telegram.desktop"
+    }
+  },
+  {
+    "name": "Blender",
+    "windows": {
+      "winget": "BlenderFoundation.Blender"
+    },
+    "linux": {
+      "flatpak": "org.blender.Blender"
+    }
+  },
+  {
+    "name": "KDE.Krita",
+    "windows": {
+      "winget": "KDE.Krita"
+    },
+    "linux": {
+      "flatpak": "org.kde.krita"
+    }
+  },
+  {
+    "name": "OBSStudio",
+    "windows": {
+      "winget": "OBSProject.OBSStudio"
+    },
+    "linux": {
+      "before": "(add-apt-repository -L | grep 'obsproject/obs-studio') || (sudo add-apt-repository --yes -P ppa:obsproject/obs-studio  && sudo apt update)",
+      "apt": "obs-studio"
+    }
+  },
+  {
+    "name": "universal-android-debloater",
+    "windows": {
+      "scoop": "universal-android-debloater"
+    },
+    "linux": {
+      "before": "sudo apt install -y android-sdk-platform-tools",
+      "sh": "curl -sSL \"https://github.com/0x192/universal-android-debloater/releases/download/${uad_version}/uad_gui-linux.tar.gz\" | tar -xzvf - && sudo chmod +rx ./uad_gui-linux && sudo chown root ./uad_gui-linux && sudo mv ./uad_gui-linux /usr/bin/uad",
+      "notwhen": "which uad"
+    }
+  },
+  {
+    "name": "magicavoxel",
+    "windows": {
+      "scoop": "magicavoxel"
+    },
+    "linux": null
+  },
+  {
+    "name": "gifcam",
+    "windows": {
+      "scoop": "gifcam"
+    },
+    "linux": null
+  },
+  {
+    "name": "WhatsApp Desktop",
+    "windows": {
+      "winget": "WhatsApp.WhatsApp"
+    },
+    "linux": null
+  },
+  {
+    "name": "Carnac",
+    "windows": {
+      "winget": "code52.Carnac"
+    },
+    "linux": null
+  }
+]

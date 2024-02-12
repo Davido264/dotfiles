@@ -1,0 +1,14 @@
+autoload -U compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)
+
+source /usr/share/zsh_plugins/fast-syntax-highlighting/F-Sy-H.plugin.zsh 2> /dev/null
+fpath=(/usr/share/zsh_plugins/zsh-completions/src $fpath)
+rm -f ~/.zcompdump; compinit 2> /dev/null
+
+eval "$(starship init zsh)"
+alias ls=lsd
+alias ll="lsd -lh"
+alias la="lsd -lAh"

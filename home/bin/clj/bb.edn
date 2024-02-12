@@ -1,0 +1,2 @@
+{:paths ["src"]
+ :deps {fancy/fancy {:mvn/version "0.2.3"}}}

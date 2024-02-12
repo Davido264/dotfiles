@@ -1,0 +1,4 @@
+{{ if (or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") (eq .chezmoi.os "android")) -}}
+#!/bin/sh
+chsh -s /bin/zsh
+{{ end -}}

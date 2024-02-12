@@ -1,0 +1,18 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/sh
+
+# registry hash: {{ include (joinPath .chezmoi.workingTree "vault" "dev.json") | sha256sum }}
+
+# before
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.linux) | .linux.[]` | join "\n"}}
+
+# exec
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.apt) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "which \(.linux.apt)") || sudo apt install -y \(.linux.apt) \n\(.linux.after // "")\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "true") || flatpak install flathub \(.linux.flatpak) \n\(.linux.after // "")\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.sh) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "true") || (\(.linux.sh)) \n\(.linux.after // "")\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.asdf) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "asdf where \(.linux.asdf | split(" ") | .[0]) 2> /dev/null") || (asdf install \(.linux.asdf) && asdf global \(.linux.asdf)) \n\(.linux.after // "")\n"` | join "\n" }}
+
+# after
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.linux) | .linux.[]` | join "\n"}}
+
+{{ end -}}

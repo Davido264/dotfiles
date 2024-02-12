@@ -1,0 +1,16 @@
+{{ if (eq .chezmoi.os "windows") -}}
+$ErrorActionPreference = "Ignore"
+# registry hash: {{ include (joinPath .chezmoi.workingTree "vault" "desktop.json") | sha256sum }}
+
+# before
+{{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.windows) | .windows.[]` | join "\n"}}
+
+# exec
+{{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.windows.winget) | "echo '====[ \(.name) ]====' \n\(.windows.before // "") \npowershell -c { \(.windows.notwhen // "winget list --id \(.windows.winget) *>$null") ; exit $LASTEXITCODE } || winget install --id \(.windows.winget) --accept-source-agreements --accept-package-agreements --silent \n\(.windows.after // "")\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.windows.scoop) | "echo '====[ \(.name) ]====' \n\(.windows.before // "") \npowershell -c { \(.windows.notwhen // "if ($(scoop.ps1 list \(.windows.scoop) 6> $null) -eq $null) { exit 1 }") ; exit $LASTEXITCODE } || scoop install \(.windows.scoop) \n\(.windows.after // "")\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.windows.sh) | "echo '====[ \(.name) ]====' \n\(.windows.before // "") \npowershell -c { \(.windows.notwhen // "exit 0") ; exit $LASTEXITCODE } || \(.windows.sh) \n\(.windows.after // "")\n"` | join "\n" }}
+
+# after
+{{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.windows) | .windows.[]` | join "\n"}}
+
+{{ end -}}

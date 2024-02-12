@@ -1,0 +1,23 @@
+{
+  "js config": {
+    "prefix": "jsconf",
+    "body": "{\n\t\"compilerOptions\": {\n\t\t\"module\": \"commonjs\",\n\t\t\"target\": \"es6\",\n\t\t\"checkJs\": true,\n\t\t\"baseUrl\": \".\"\n\t},\n\t\"include\": [\n\t\t\"src/**/*\"\n\t]\n}",
+    "description": "js config options"
+  },
+  
+  "omnisharp decompiling options": {
+    "prefix": "c_sharpd",
+    "body" : "{\n\t\"RoslynExtensionsOptions\": {\n\t\t\"enableDecompilationSupport\": true\n\t}\n}",
+    "description": "omnisharp decompiling options, put on decompile.json"
+  },
+
+  "omnisharp msbuild options": {
+    "prefix": "msbuild",
+    "body": "{\n\t\"msbuild\": {\n\t\t\"enabled\": true,\n\t\t\"ToolsVersion\": null,\n\t\t\"VisualStudioVersion\": null,\n\t\t\"Configuration\": null,\n\t\t\"Platform\": null,\n\t\t\"EnablePackageAutoRestore\": false,\n\t\t\"MSBuildExtensionsPath\": null,\n\t\t\"TargetFrameworkRootPath\": null,\n\t\t\"MSBuildSDKsPath\": null,\n\t\t\"RoslynTargetsPath\": null,\n\t\t\"CscToolPath\": null,\n\t\t\"CscToolExe\": null,\n\t\t\"loadProjectsOnDemand\": false,\n\t\t\"GenerateBinaryLogs\": false\n\t}\n}",
+    "description": "msbuild settings, put on msbuild.json"
+  }
+}
+
+
+
+
