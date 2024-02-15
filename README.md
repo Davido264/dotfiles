@@ -19,4 +19,4 @@ Then `wsl --shutdown` to stop WSL vms and then enter to WSL again
 
 ## Installation guide (Linux or WSL)
 1. Update system `sudo apt update -y && sudo apt upgrade -y`
-2. `curl -sSL https://raw.githubusercontent.com/Davido264/dotfiles/main/install.sh | sh -`
+2. `curl -sSL https://raw.githubusercontent.com/Davido264/dotfiles/main/install.sh | sh`
