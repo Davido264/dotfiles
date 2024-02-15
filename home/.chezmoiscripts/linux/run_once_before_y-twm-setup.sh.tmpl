@@ -1,0 +1,31 @@
+{{ if (and (eq .chezmoi.os "linux") (not (.chezmoi.kernel.osrelease | lower | contains "microsoft"))) -}}
+#!/bin/sh
+
+echo "Install Regolith"
+# sudo apt install -y bspwm polybar rofi lxappearance picom feh
+
+if [ ! -f /usr/share/keyrings/regolith-archive-keyring.gpg ]; then
+    wget -qO - https://regolith-desktop.org/regolith.key | gpg --dearmor | sudo tee /usr/share/keyrings/regolith-archive-keyring.gpg > /dev/null
+fi
+
+if [ ! -f /etc/apt/sources.list.d/regolith.list ]; then
+    echo deb "[arch=amd64 signed-by=/usr/share/keyrings/regolith-archive-keyring.gpg] https://regolith-desktop.org/release-3_1-ubuntu-$(lsb_release -cs)-amd64 $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/regolith.list
+    sudo apt update
+fi
+
+# regolith-session-flashback -> regolith-session-sway for Wayland
+sudo apt install -y regolith-desktop\
+    regolith-session-flashback\
+    regolith-compositor-picom-glx\
+    regolith-look-default\
+    regolith-look-nord\
+    regolith-look-ayu-dark\
+    regolith-look-gruvbox\
+    regolith-look-solarized-dark\
+    i3xrocks-focused-window-name\
+    i3xrocks-rofication\
+    i3xrocks-info\
+    i3xrocks-memory\
+    i3xrocks-battery
+
+{{ end -}}

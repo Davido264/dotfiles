@@ -1,0 +1,20 @@
+{{ if (eq .chezmoi.os "windows") -}}
+
+where.exe scoop *>$null
+
+if ($LASTEXITCODE -eq 1) {
+  echo "`nInstalling scoop"
+  Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression
+  $env:Path = $env:Path + ";$HOME\scoop\shims"
+}
+
+scoop bucket add extras
+scoop bucket add nonportable
+scoop bucket add sysinternal
+
+{{ if (not .justGaming) -}}
+scoop bucket add java
+scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure
+{{ end -}}
+
+{{ end -}}

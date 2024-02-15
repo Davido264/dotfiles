@@ -12,3 +12,13 @@ eval "$(starship init zsh)"
 alias ls=lsd
 alias ll="lsd -lh"
 alias la="lsd -lAh"
+
+# pnpm
+export PNPM_HOME="/home/david/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+. /opt/asdf/asdf.sh

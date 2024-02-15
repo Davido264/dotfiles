@@ -1,0 +1,32 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/sh
+
+{{ if (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+echo "Install flatpak if its not installed"
+which flatpak || sudo apt install flatpak
+
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+{{ end -}}
+
+echo ""
+echo "Install asdf"
+asdf_version='v0.14.0'
+sudo apt install -y curl git dirmngr gpg gawk
+if [ ! -d /opt/asdf ]; then
+    sudo mkdir /opt/asdf && sudo chown david /opt/asdf
+    git clone https://github.com/asdf-vm/asdf.git /opt/asdf --branch $asdf_version
+    export ASDF_DATA_DIR=/opt/asdf
+    export ASDF_DIR=/opt/asdf
+    . /opt/asdf/asdf.sh
+else
+    export ASDF_DATA_DIR=/opt/asdf
+    export ASDF_DIR=/opt/asdf
+    . /opt/asdf/asdf.sh
+    asdf update
+fi
+
+echo '
+Defaults secure_path="/opt/asdf/shims:/opt/asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Defaults env_keep+="ASDF_DATA_DIR ASDF_DIR"' | sudo tee /etc/sudoers.d/90-asdf
+
+{{ end -}}

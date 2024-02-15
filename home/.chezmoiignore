@@ -41,11 +41,14 @@ bin/switch-to-windows
 .config/Local
 .var/app
 .config/user-dirs.dirs
+.config/bspwm
+.config/sxhkd
+.config/polybar
 {{ end }}
 
 {{ if ne .chezmoi.os "windows" }}
 komorebi.json
-application.yaml
+applications.yaml
 Documents/PowerShell
 Documents/WindowsPowerShell
 Documents/registries

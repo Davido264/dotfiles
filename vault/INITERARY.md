@@ -1,11 +1,3 @@
-- [ ] Finish configuring linux installation for my packages
-    - [x] Jack2 (see l8tr)
-    - [x] Better script to install cardinal, and only the stuff I need
-    - [ ] can I get ubuntu codename in pop_os?
-- [x] Generate chezmoi scripts for linux
-asdf install {{package}} latest && asdf global {{package}} latest
-- [ ] Upload all to github
-- [ ] Reset Windows and install Pop!_OS
 - [ ] backup all my work and generate installation scripts that get those from gh (clojure time? (next time))
     - just backup for now, recover scripts will be later
 - [ ] pasar los archivos de séptimo a Gabriel xd
@@ -24,6 +16,8 @@ create a repository on github, make it private, set (git remote origin) and use 
 idea: 
     script to download a file from here https://github.com/github/gitignore and place it (append) on .gitignore of currdirr 
     (clojure time?)
+
+    build repositories will go to other location based on OS (if its temp, to tmp dir. Otherwhise .local/share/{project name})
 
 
 # Restore web Pages:

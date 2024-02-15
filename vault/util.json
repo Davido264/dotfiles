@@ -1,20 +1,9 @@
 [
   {
     "__before__": {
-      "windows": [
-        "where.exe scoop *>$null",
-        "if ($LASTEXITCODE -eq 1) {",
-        "  echo \"`nInstalling scoop\"",
-        "  Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression",
-        "  $env:Path = $env:Path + \";$HOME\\scoop\\shims\"",
-        "}",
-        "scoop bucket add extras",
-        "scoop bucket add nonportable",
-        "scoop bucket add sysinternals"
-      ],
+      "windows": null,
       "linux": [
-        "NVIM_VERSION='v0.9.5'",
-        "install=true"
+        "NVIM_VERSION='v0.9.5'"
       ]
     }
   },
@@ -25,8 +14,16 @@
         "[Environment]::SetEnvironmentVariable(\"RCLONE_CONFIG\", \"$HOME\\.config\\rclone\\config.conf\", [EnvironmentVariableTarget]::User)"
       ],
       "linux": [
-        "[[ -d ~/.local/share/nvim-data ]] || mkdir -p ~/.local/share/nvim-data"
+        "[ -d ~/.local/share/nvim-data ] || mkdir -p ~/.local/share/nvim-data"
       ]
+    }
+  },
+  {
+    "name": "Debconf utils",
+    "windows": null,
+    "linux": {
+      "apt": "debconf-utils",
+      "notwhen": "which debconf-set-selections"
     }
   },
   {
@@ -37,7 +34,8 @@
       "after": "reg import \"$HOME\\scoop\\apps\\7zip\\current\\install-context.reg\""
     },
     "linux": {
-      "apt": "7zip"
+      "apt": "7zip",
+      "notwhen": "which 7z"
     }
   },
   {
@@ -55,7 +53,7 @@
       "winget": "MiKTeX.MiKTeX"
     },
     "linux": {
-      "before": "[[ -s /etc/apt/sources.list.d/miktex.list ]] || (curl -fsSL https://miktex.org/download/key | sudo tee /usr/share/keyrings/miktex-keyring.asc > /dev/null && echo 'deb [signed-by=/usr/share/keyrings/miktex-keyring.asc] https://miktex.org/download/ubuntu $(lsb_release -cs) universe' | sudo tee /etc/apt/sources.list.d/miktex.list && sudo apt update)",
+      "before": "[ -s /etc/apt/sources.list.d/miktex.list ] || (curl -fsSL https://miktex.org/download/key | sudo tee /usr/share/keyrings/miktex-keyring.asc > /dev/null && echo \"deb [signed-by=/usr/share/keyrings/miktex-keyring.asc] https://miktex.org/download/ubuntu $(lsb_release -cs) universe\" | sudo tee /etc/apt/sources.list.d/miktex.list && sudo apt update)",
       "apt": "miktex",
       "after": "which lualatex || sudo miktexsetup --shared=yes finish"
     }
@@ -66,7 +64,15 @@
       "scoop": "graphviz"
     },
     "linux": {
-      "apt": "graphviz"
+      "apt": "graphviz",
+      "notwhen": "which dot"
+    }
+  },
+  {
+    "name": "Zsh",
+    "windows": null,
+    "linux": {
+      "apt": "zsh"
     }
   },
   {
@@ -116,12 +122,36 @@
     }
   },
   {
-    "name": "WindowsTerminal",
+    "name": "Htop",
+    "windows": null,
+    "linux": {
+      "apt": "htop"
+    }
+  },
+  {
+    "name": "Terminal!",
     "windows": {
       "winget": "Microsoft.WindowsTerminal",
       "after": "echo \"`nSetting windows terminal (quake) to run on start\" ; Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\" -ErrorAction SilentlyContinue -Force ; $WScriptObj = New-Object -ComObject (\"WScript.Shell\") ; $shortcut = $WscriptObj.CreateShortcut(\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\") ; $shortcut.TargetPath = \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\wt.exe\" ; $shortcut.Arguments = \"-w _quake\" ; $shortcut.Save()"
     },
-    "linux": null
+    "linux": {
+      "apt": "alacritty"
+    }
+  },
+  {
+    "name": "tdrop",
+    "windows": null,
+    "linux": {
+      "sh": "git clone --depth 1 https://github.com/noctuid/tdrop.git ~/.local/share/tdrop && cd ~/.local/share/tdrop && sudo make install && cd ~",
+      "notwhen": "which tdrop"
+    }
+  },
+  {
+    "name": "tmux",
+    "windows": null,
+    "linux": {
+      "apt": "tmux"
+    }
   },
   {
     "name": "Neovim",
@@ -132,7 +162,7 @@
       "before": "sudo apt-get install -y make ninja-build gettext cmake unzip curl",
       "sh": "git clone --depth 1 --branch $NVIM_VERSION https://github.com/neovim/neovim /tmp/build_nvim && cd /tmp/build_nvim && make CMAKE_BUILD_TYPE=RelWithDebInfo && cd build && cpack -G DEB && sudo apt install -y /tmp/build_nvim/build/nvim-linux64.deb && cd ~",
       "after": "rm -rf /tmp/build_nvim",
-      "notwhen": "(which nvim && [[ $(nvim --version | grep -oP 'v\\d+\\.\\d+(\\.\\d+)?') = $NVIM_VERSION ]])",
+      "notwhen": "(which nvim && [ $(nvim --version | grep -oP 'v\\d+\\.\\d+(\\.\\d+)?') = $NVIM_VERSION ])",
       "notes": "built from source"
     }
   },
@@ -195,7 +225,7 @@
       "scoop": "charm-gum"
     },
     "linux": {
-      "before": "[[ -s /etc/apt/sources.list.d/charm.list ]] || (sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg && echo 'deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *' | sudo tee /etc/apt/sources.list.d/charm.list && sudo apt update)",
+      "before": "([ -f /etc/apt/sources.list.d/charm.list ] && [ -f /etc/apt/keyrings/charm.gpg ]) || (sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/charm.gpg && echo 'deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *' | sudo tee /etc/apt/sources.list.d/charm.list && sudo apt update)",
       "apt": "gum"
     }
   },
@@ -257,12 +287,21 @@
     }
   },
   {
+    "name": "Ubuntu Restricted Extras",
+    "windows": null,
+    "linux": {
+      "before": "(sudo debconf-get-selections | grep accepted-mscorefonts-eula *> /dev/null) || (echo 'ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true' | sudo debconf-set-selections)",
+      "apt": "ubuntu-restricted-extras",
+      "notwhen": "which unrar"
+    }
+  },
+  {
     "name": "Zsh Plugins",
     "windows": null,
     "linux": {
-      "before": "[[ -d /usr/share/zsh_plugins/ ]] || sudo mkdir /usr/share/zsh_plugins/",
+      "before": "sudo mkdir /usr/share/zsh_plugins/",
       "sh": "sudo git clone --depth 1 https://github.com/zdharma/fast-syntax-highlighting.git /usr/share/zsh_plugins/fast-syntax-highlighting && sudo git clone --depth 1 https://github.com/zsh-users/zsh-completions.git /usr/share/zsh_plugins/zsh-completions && sudo git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git /usr/share/zsh_plugins/zsh-autosuggestions",
-      "notwhen": "$install"
+      "notwhen": "[ -d /usr/share/zsh_plugins/ ]"
     }
   }
 ]

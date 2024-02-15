@@ -1,0 +1,13 @@
+{:root "/home/david/ws"
+ :parents ["1_projects/personal"
+           "1_projects/college"
+           "1_projects/work"
+           "1_projects/music"
+           "2_areas"
+           "2_areas/personal_rnd"
+           "2_areas/music_sessions"
+           "2_areas/work_tests"
+           "2_areas/my_love"
+           "3_resources"
+           "4_archive"
+           "5_notebook"]}

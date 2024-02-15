@@ -2,13 +2,7 @@
   {
     "__before__": {
       "windows": [
-        "scoop bucket add java",
-        "scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure",
         "if (-not $(Test-Path $HOME/.local/share/nvim-data)) { mkdir $HOME/.local/share/nvim-data }"
-      ],
-      "linux": [
-        "asdf_version='v0.14.0'",
-        "install=true"
       ]
     }
   },
@@ -18,7 +12,7 @@
         "[Environment]::SetEnvironmentVariable(\"JAVA_HOME\", \"$HOME\\scoop\\apps\\openjdk\\current\", [EnvironmentVariableTarget]::User)"
       ],
       "linux": [
-        "[[ -d /etc/environment.d ]] || sudo mkdir /etc/environment.d",
+        "[ -d /etc/environment.d ] || sudo mkdir /etc/environment.d",
         "echo 'ASDF_DATA_DIR=\"/opt/asdf\"",
         "ASDF_DIR=\"/opt/asdf\"' | sudo tee /etc/environment.d/10-asdf.conf",
         "echo 'export ASDF_DATA_DIR=\"/opt/asdf\"",
@@ -26,8 +20,6 @@
         ". /opt/asdf/asdf.sh",
         "export JAVA_HOME=$(asdf where java)",
         "export GOROOT=\"$(asdf where golang)/go\"' | sudo tee /etc/profile.d/asdf.sh",
-        "echo 'Defaults secure_path=\"/opt/asdf/shims:/opt/asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"",
-        "Defaults env_keep+=\"ASDF_DATA_DIR ASDF_DIR\"' | sudo tee /etc/sudoers.d/90-asdf",
         "asdf reshim"
       ]
     }
@@ -38,14 +30,16 @@
       "scoop": "make"
     },
     "linux": {
-      "apt": "make"
+      "apt": "build-essential",
+      "notwhen": "which make"
     }
   },
   {
     "name": "makedeb",
     "windows": null,
     "linux": {
-      "apt": "makedeb"
+      "before": "export MAKEDEB_RELEASE='makedeb'",
+      "sh": "bash -c \"$(wget -qO - 'https://shlink.makedeb.org/install')\""
     }
   },
   {
@@ -55,15 +49,6 @@
     },
     "linux": {
       "apt": "git"
-    }
-  },
-  {
-    "name": "asdf",
-    "windows": null,
-    "linux": {
-      "before": "sudo apt install -y curl git dirmngr gpg gawk",
-      "sh": "sudo mkdir /opt/asdf && sudo chown david /opt/asdf && git clone https://github.com/asdf-vm/asdf.git /opt/asdf --branch $asdf_version && export ASDF_DATA_DIR=/opt/asdf && export ASDF_DIR=/opt/asdf && . /opt/asdf/asdf.sh",
-      "notwhen": "[[ -f /opt/asdf ]]"
     }
   },
   {
@@ -84,8 +69,9 @@
       "after": "pnpm env use --global latest && pnpm install -g vite create-vite commitizen cz-conventional-changelog yarn"
     },
     "linux": {
+      "before": "export PNPM_HOME=~/.local/share/pnpm && export PATH=\"$PNPM_HOME:$PATH\"",
       "sh": "curl -fsSL https://get.pnpm.io/install.sh | sh -",
-      "notwhen": "$install",
+      "notwhen": "[ -d ~/.local/share/pnpm ]",
       "after": "pnpm env use --global latest && pnpm install -g vite create-vite commitizen cz-conventional-changelog yarn"
     }
   },
@@ -122,7 +108,7 @@
       "winget": "GitHub.cli"
     },
     "linux": {
-      "before": "[ -s /etc/apt/sources.list.d/github-cli.list ] || (curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main' | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && sudo apt update)",
+      "before": "[ -s /etc/apt/sources.list.d/github-cli.list ] || (curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && sudo apt update)",
       "apt": "gh"
     }
   },
@@ -161,7 +147,7 @@
       "winget": "WiresharkFoundation.Wireshark"
     },
     "linux": {
-      "before": "(add-apt-repository -L | grep 'wireshark-dev/stable') || (sudo add-apt-repository --yes ppa:wireshark-dev/stable && sudo apt update)",
+      "before": "((add-apt-repository -L | grep 'wireshark-dev/stable') || (sudo add-apt-repository --yes ppa:wireshark-dev/stable && sudo apt update)) && ((sudo debconf-get-selections | grep wireshark-common *> /dev/null) || (echo 'wireshark-common wireshark-common/install-setuid boolean true' | sudo debconf-set-selections))",
       "apt":"wireshark"
     }
   },
@@ -264,7 +250,7 @@
       "scoop": "llvm"
     },
     "linux": {
-      "sh": "yes | bash -c \"$(wget -O - https://apt.llvm.org/llvm.sh)\"",
+      "sh": "yes | sudo bash -c \"$(wget -O - https://apt.llvm.org/llvm.sh)\"",
       "notwhen": "which clang-18"
     }
   },
@@ -277,7 +263,6 @@
     "linux": {
       "before": "asdf plugin-add rust https://github.com/code-lever/asdf-rust.git",
       "asdf": "rust latest",
-      "notwhen": "$install",
       "after": "rustup toolchain install stable-gnu && rustup target add x86_64-pc-windows-gnu && rustup target add x86_64-unknown-linux-gnu"
     }
   },
@@ -299,8 +284,7 @@
     },
     "linux": {
       "before": "sudo apt install -y jq && asdf plugin-add java https://github.com/halcyon/asdf-java.git",
-      "asdf": "java latest:openjdk",
-      "notwhen": "$install"
+      "asdf": "java latest:openjdk"
     }
   },
   {
@@ -310,9 +294,8 @@
       "after": "python -m ensurepip ; python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel"
     },
     "linux": {
-      "before": "sudo apt install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev && sudo asdf plugin-add python https://github.com/asdf-community/asdf-python.git",
-      "sh": "sudo asdf install python latest",
-      "notwhen": "$install",
+      "before": "sudo apt install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev && asdf plugin-add python https://github.com/asdf-community/asdf-python.git",
+      "asdf": "python latest",
       "after": "python -m ensurepip && python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel",
       "notes": "Reshim when package install"
     }
@@ -324,8 +307,7 @@
     },
     "linux": {
       "before": "asdf plugin add dotnet https://github.com/hensou/asdf-dotnet.git",
-      "asdf": "dotnet latest",
-      "notwhen": "$install"
+      "asdf": "dotnet latest"
     }
   },
   {
@@ -335,8 +317,7 @@
     },
     "linux": {
       "before": "asdf plugin add clojure https://github.com/asdf-community/asdf-clojure.git",
-      "asdf": "clojure latest",
-      "notwhen": "$install"
+      "asdf": "clojure latest"
     }
   },
   {
@@ -346,8 +327,7 @@
     },
     "linux": {
       "before": "asdf plugin add babashka https://github.com/pitch-io/asdf-babashka.git",
-      "asdf": "babashka latest",
-      "notwhen": "$install"
+      "asdf": "babashka latest"
     }
   },
   {
@@ -356,9 +336,8 @@
       "scoop": "leiningen"
     },
     "linux": {
-      "before": "sudo asdf plugin add lein https://github.com/miorimmax/asdf-lein.git",
-      "asdf": "lein latest",
-      "notwhen": "$install"
+      "before": "asdf plugin add lein https://github.com/miorimmax/asdf-lein.git",
+      "asdf": "lein latest"
     }
   },
   {
@@ -377,10 +356,10 @@
       "after": "sdkmanager 'tools' ; sdkmanager 'platform-tools' 'platforms;android-24' 'build-tools;24.0.0' 'ndk-bundle' 'add-ons;addon-google_apis-google-24' 'extras;google;google_play_services' 'emulator'"
     },
     "linux": {
-      "before": "sudo apt install openjdk-8-jdk-headless",
-      "sh": "mkdir -p /tmp/android ~/.local/share/android-sdk && wget -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && unzip commandlinetools-linux-6200805_latest.zip -d ~/.local/share/android-sdk && cd ~ && export ANDROID_HOME=~/.local/share/android-sdk && export PATH=\"$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH\"",
+      "before": "sudo apt install -y openjdk-8-jdk-headless",
+      "sh": "mkdir -p /tmp/android ~/.local/share/android-sdk && cd /tmp/android && wget -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && unzip commandlinetools-linux-6200805_latest.zip -d ~/.local/share/android-sdk && cd ~ && export ANDROID_HOME=~/.local/share/android-sdk && export PATH=\"$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH\"",
       "after": "sed -i 's|exec \"\\$JAVACMD\" \"\\$@\"|exec \"/usr/bin/java\" \"$@\"|' $(which sdkmanager) && sdkmanager 'platform-tools' 'platforms;android-24' 'build-tools;24.0.0' 'ndk-bundle' 'add-ons;addon-google_apis-google-24' 'extras;google;google_play_services' 'emulator'",
-      "notwhen": "$install"
+      "notwhen": "[ -d ~/.local/share/android-sdk ]"
     }
   },
   {
@@ -391,9 +370,9 @@
       "notwhen": "if (-not $(Test-Path \"$HOME/.local/share/nvim-data/tree-sitter-fsharp\")) { exit 1 }"
     },
     "linux": {
-      "before": "src=\"~/.local/share/nvim-data/tree-sitter-fsharp\"",
+      "before": "src=\"$HOME/.local/share/nvim-data/tree-sitter-fsharp\"",
       "sh": "git clone https://github.com/Nsidorenco/tree-sitter-fsharp.git $src && cd $src && pnpm install",
-      "notwhen": "[[ -d $src ]]"
+      "notwhen": "[ -d $src ]"
     }
   },
   {
@@ -406,7 +385,7 @@
     "linux": {
       "before": "src=\"$HOME/.local/share/nvim-data/tree-sitter-mcfunction\"",
       "sh": "git clone https://github.com/Davido264/tree-sitter-mcfunction.git $src && cd $src && pnpm install && pnpx node-gyp configure && pnpm run build",
-      "notwhen": "[[ -d $src ]]"
+      "notwhen": "[ -d $src ]"
     }
   }
 ]

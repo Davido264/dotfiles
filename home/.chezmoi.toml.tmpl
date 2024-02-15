@@ -1,5 +1,5 @@
 {{ $location := promptStringOnce . "location" "Workspaces default directory" }}
-{{ $justGaming := promptBoolOnce . "Just for games?" "Is this Windows machine just for games?"}}
+{{ $host := promptStringOnce . "host" "Machine hostname" }}
 encryption = "age"
 mode = "symlink"
 
@@ -12,4 +12,8 @@ command = "nvim"
 
 [data]
 default_workspace_location = {{ $location | quote }}
-justGaming = $justGaming
+host = {{ $host | quote }}
+{{ if (eq .chezmoi.os "windows") -}}
+{{ $justGaming := promptBoolOnce . "justGaming" "Is this Windows machine just for games"}}
+justGaming = {{ $justGaming }}
+{{ end -}}

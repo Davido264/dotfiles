@@ -1,0 +1,2 @@
+@echo off
+bb.exe --config "{{- (joinPath .chezmoi.workingTree "bb.edn") -}}" -m workspacer %*

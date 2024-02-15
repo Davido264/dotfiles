@@ -56,17 +56,6 @@
     }
   },
   {
-    "name": "UnifiedRemote",
-    "windows": {
-      "winget": "UnifiedIntents.UnifiedRemote"
-    },
-    "linux": {
-      "sh": "curl -sSLo /tmp/unifiedremote.deb https://www.unifiedremote.com/download/linux-x64-deb && sudo apt install -y /tmp/unifiedremote.deb",
-      "notwhen": "((apt show urserver 2>/dev/null | grep 'Status: install ok installed')",
-      "after": "rm /tmp/unifiedremote.deb"
-    }
-  },
-  {
     "name": "Spotify",
     "windows": {
       "winget": "Spotify.Spotify"

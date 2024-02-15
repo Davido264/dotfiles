@@ -1,0 +1,35 @@
+{{ if (ne .chezmoi.os "windows") -}}
+#!/bin/sh
+
+WORKSPACE_ROOT={{- .default_workspace_location }}
+CHEZMOI_HOME={{- .chezmoi.workingTree }}
+SCRIPT_HOME={{- (joinPath .chezmoi.sourceDir "bin") }}
+
+
+echo $WORKSPACE_ROOT
+
+mkdir -p "$WORKSPACE_ROOT/1_projects/personal"
+mkdir -p "$WORKSPACE_ROOT/1_projects/college"
+mkdir -p "$WORKSPACE_ROOT/1_projects/work"
+mkdir -p "$WORKSPACE_ROOT/1_projects/music"
+
+mkdir -p "$WORKSPACE_ROOT/2_areas/personal_rnd"
+mkdir -p "$WORKSPACE_ROOT/2_areas/music_sessions"
+mkdir -p "$WORKSPACE_ROOT/2_areas/work_tests"
+mkdir -p "$WORKSPACE_ROOT/2_areas/my_love"
+
+mkdir -p "$WORKSPACE_ROOT/3_resources/books"
+mkdir -p "$WORKSPACE_ROOT/3_resources/"
+
+mkdir -p "$WORKSPACE_ROOT/4_archive/finances"
+mkdir -p "$WORKSPACE_ROOT/4_archive/shared_files"
+mkdir -p "$WORKSPACE_ROOT/4_archive/backups"
+mkdir -p "$WORKSPACE_ROOT/4_archive/tmp"
+
+mkdir -p "$WORKSPACE_ROOT/5_notebook"
+
+
+ln -s "$CHEZMOI_HOME" "$WORKSPACE_ROOT/2_areas/dotfiles"
+ln -s "$SCRIPT_HOME" "$WORKSPACE_ROOT/2_areas/scripts"
+
+{{ end -}}

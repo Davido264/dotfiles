@@ -8,9 +8,9 @@
 # before
 {{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.linux) | .linux.[]` | join "\n"}}
 # exec
-{{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.linux.apt) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "which \(.linux.apt)") || sudo apt install -y \(.linux.apt) \n\(.linux.after // "")\n"` | join "\n" }}
-{{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "true") || flatpak install flathub \(.linux.flatpak) \n\(.linux.after // "")\n"` | join "\n" }}
-{{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.linux.sh) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "true") || (\(.linux.sh)) \n\(.linux.after // "")\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.linux.apt) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "which \(.linux.apt)") || (_(){ \(.linux.before // "true") && sudo apt install -y \(.linux.apt) && \(.linux.after // "true"); };_)\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "flatpak info \(.linux.flatpak) 2> /beats/null") || (_(){ \(.linux.before // "true") && flatpak install -y flathub \(.linux.flatpak) && \(.linux.after // "true"); };_)"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.linux.sh) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "false") || (_(){ \(.linux.before // "true") && (\(.linux.sh)) && \(.linux.after // "true"); };_)"` | join "\n" }}
 
 # after
 {{ joinPath .chezmoi.workingTree "vault" "beats.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.linux) | .linux.[]` | join "\n"}}

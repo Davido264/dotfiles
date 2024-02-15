@@ -7,10 +7,15 @@
 {{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.linux) | .linux.[]` | join "\n"}}
 
 # exec
-{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.apt) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "which \(.linux.apt)") || sudo apt install -y \(.linux.apt) \n\(.linux.after // "")\n"` | join "\n" }}
-{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "true") || flatpak install flathub \(.linux.flatpak) \n\(.linux.after // "")\n"` | join "\n" }}
-{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.sh) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "true") || (\(.linux.sh)) \n\(.linux.after // "")\n"` | join "\n" }}
-{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.asdf) | "echo '====[ \(.name) ]====' \n\(.linux.before // "") \n\(.linux.notwhen // "asdf where \(.linux.asdf | split(" ") | .[0]) 2> /dev/null") || (asdf install \(.linux.asdf) && asdf global \(.linux.asdf)) \n\(.linux.after // "")\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.apt) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "which \(.linux.apt)") || (_(){ \(.linux.before // "true") && sudo apt install -y \(.linux.apt) && \(.linux.after // "true"); };_)\n"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "flatpak info \(.linux.flatpak) 2> /dev/null") || (_(){ \(.linux.before // "true") && flatpak install -y flathub \(.linux.flatpak) && \(.linux.after // "true"); };_)"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.sh) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "false") || (_(){ \(.linux.before // "true") && (\(.linux.sh)) && \(.linux.after // "true"); };_)"` | join "\n" }}
+
+export ASDF_DATA_DIR="/opt/asdf"
+export ASDF_DIR="/opt/asdf"
+[ -f /opt/asdf/asdf.sh ] && . /opt/asdf/asdf.sh
+
+{{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.linux.asdf) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "asdf where \(.linux.asdf | split(" ") | .[0]) 2> /dev/null") || (_(){ \(.linux.before // "true") && (asdf install \(.linux.asdf) && asdf global \(.linux.asdf)) && \(.linux.after // "true"); };_)"` | join "\n" }}
 
 # after
 {{ joinPath .chezmoi.workingTree "vault" "dev.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.linux) | .linux.[]` | join "\n"}}

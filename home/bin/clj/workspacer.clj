@@ -6,11 +6,13 @@
             [babashka.cli :as cli]
             [babashka.fs :as fs]
             [clojure.string :as string]
-            [clojure.edn :as edn]
-            [clojure.pprint :as pp]))
+            [clojure.pprint :as pp]
+            [workspacer.config-fetcher :as config-fetcher]))
+
+(def config (config-fetcher/get-config))
 
 (defn- parent-name [w]
-  (format "%s%s" (:parent w) (:name w)))
+  (format "%s/%s" (:parent w) (:name w)))
 
 (defn- to-fzf [coll]
   (->> coll
@@ -18,18 +20,18 @@
                                    :else "")))))
 
 (defn- fzf [& [coll]]
-  (let [coll (cond (nil? coll) (to-fzf (map parent-name (fetcher/query)))
+  (let [coll (cond (nil? coll) (to-fzf (map parent-name (fetcher/query config)))
                    :else (to-fzf coll))]
     (-> (process/sh {:in coll :continue true :out :string :err :inherit} "fzf --read0") :out string/trim-newline)))
 
 (defn- prompt-workspaces [& [_name]]
-  (if (string/blank? _name) (let [workspaces (fetcher/query)
+  (if (string/blank? _name) (let [workspaces (fetcher/query config)
                                          name (fzf (map parent-name workspaces))]
                                  (when (string/blank? name) (throw (ex-info "" {})))
                                  (->> workspaces
                                    (filter #(= (parent-name %) name))
                                    (first)))
-        (let [workspaces (fetcher/query _name)]
+        (let [workspaces (fetcher/query config _name)]
           (cond (= (count workspaces) 0) nil
                 (= (count workspaces) 1) (first workspaces)
                 :else (let [
@@ -41,8 +43,8 @@
 
 
 (defn ls [args]
-  (if (:edn (:opts args)) (pp/pprint (map #(dissoc % :path) (fetcher/query-full-info)))
-    (table/print-table (map #(dissoc % :path) (fetcher/query)))))
+  (if (:edn (:opts args)) (pp/pprint (map #(dissoc % :path) (fetcher/query-full-info config)))
+    (table/print-table (map #(dissoc % :path) (fetcher/query config)))))
 
 (defn open [args]
   (let [explorer (:explorer (:opts args))
@@ -54,7 +56,7 @@
     (when (nil? workspace) (throw (ex-info "No workspace found" {})))
     (cond explorer (open/explorer workspace)
           obsidian (open/obsidian workspace)
-          path (print (:path workspace))
+          path (println (:path workspace))
           :else (open/terminal workspace))))
 
 (defn rm [args]
@@ -78,7 +80,7 @@
 
 (defn create [args]
   (when (nil? (:name (:opts args))) (throw (ex-info "Name must be provided" {})))
-  (let [p (->> (fetcher/query)
+  (let [p (->> (fetcher/query config)
                (map #(:parent %))
                (distinct))
         parent (cond (some? (:parent (:opts args))) (:parent (:opts args))
@@ -86,7 +88,7 @@
         init (:init (:opts args))
         clone (:clone (:opts args))
         link (:link (:opts args))
-        parent-path (fs/path (fetcher/get-workspaceroot) parent)
+        parent-path (fs/path (:root config) parent)
         name (:name (:opts args))
         c (count (filter #(= (string/upper-case parent) (string/upper-case %)) p))]
 
@@ -94,8 +96,13 @@
     (when (zero? c) (throw (ex-info "Invalid Parent" {})))
     (create-directory name parent-path init clone link)))
 
+(defn print-config [_]
+  (pp/pprint (config-fetcher/get-config)))
+
+
 (def cmds [{:cmds ["ls"] :fn ls :alias{:e :edn}}
            {:cmds ["rm"] :fn rm :args->opts [:name]}
+           {:cmds ["print-config"] :fn print-config}
            {:cmds ["new"] :fn create :args->opts [:name] :alias {:p :parent :i :init :c :clone :l :link}}
            {:cmds [] :fn open :args->opts [:name] :alias {:e :explorer :o :obsidian :p :path}}])
 

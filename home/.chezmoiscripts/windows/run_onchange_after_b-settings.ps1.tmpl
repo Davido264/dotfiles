@@ -9,7 +9,7 @@ sudo {
 echo "`nSetting Event viewer to log dropped packages"
 sudo { auditpol /set /subcategory:"{0CCE9226-69AE-11D9-BED3-505054503030}" /success:disable /failure:enable }
 
-{{ if (and (eq .chezmoi.os "windows") (not .justGames)) -}}
+{{ if (and (eq .chezmoi.os "windows") (not .justGaming)) -}}
 
 echo "`nEnabling Group Policies"
 ls $env:SystemRoot\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~3*.mum,$env:SystemRoot\servicing\Packages\Microsoft-Windows-GroupPolicy-ClientTools-Package~3*.mum | select -ExpandProperty FullName | sudo { $input | % { dism /online /norestart /add-package:$_ }}
@@ -18,11 +18,6 @@ echo "`nEnabling Hyper-V"
 ls $env:SystemRoot\servicing\Packages\*Hyper-V*.mum | select -ExpandProperty FullName | sudo { $input | % { dism /online /norestart /add-package:$_ }}
 
 sudo { Dism /online /enable-feature /featurename:Microsoft-Hyper-V -All /LimitAccess /ALL /norestart }
-
-echo "`nEnabling SandBox"
-ls $env:SystemRoot\servicing\Packages\*Containers*.mum | select -ExpandProperty FullName | sudo { $input | % { dism /online /norestart /add-package:$_ }}
-
-sudo { Dism /online /enable-feature /featurename:Containers-DisposableClientVM /LimitAccess /ALL /norestart }
 
 {{ end -}}
 
@@ -47,5 +42,8 @@ sudo {
   $newPath = $uniquePaths -join ";";
   [Environment]::SetEnvironmentVariable("PATH", $newPath, "User");
 }
+
+Write-Output "`nCleaning duplicates";
+sudo { Rename-Computer -ComputerName {{ .host | quote }}}
 
 {{ end -}}

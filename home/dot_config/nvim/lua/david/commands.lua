@@ -4,7 +4,7 @@ if not path then
   if vim.fn.has "win32" == 1 then
     path = os.getenv "APPDATA"
   else
-    path = os.getenv "HOME" + "/.local/share"
+    path = os.getenv("HOME") .. "/.local/share"
   end
 end
 
