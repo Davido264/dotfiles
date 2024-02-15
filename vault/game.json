@@ -26,6 +26,10 @@
       "scoop": "https://gist.githubusercontent.com/Davido264/42b2e11fb5f5d246e0899c8f5dc1f4bc/raw/e4b8cc57dcf6d0f592cf699d101a1d393d954156/ssf2.json",
       "notwhen": "exit 0"
     },
-    "linux": null
+    "linux": {
+      "before": "mkdir /.local/share/ssf2 && cd /.local/share/ssf2",
+      "sh": "curl -sSL https://cdn.supersmashflash.com/ssf2/downloads/14ac5596/SSF2BetaLinux.v1.3.1.2.tar | tar -xvf - && sudo ln -s SSF2 /usr/bin/SSF2",
+      "after": "sudo chmod u+x trust-ssf2.sh && ./trust-ssf2.sh && cd ~"
+    }
   }
 ]
