@@ -8,7 +8,7 @@
 
 # exec
 {{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.linux.apt) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "which \(.linux.apt)") || (_(){ \(.linux.before // "true") && sudo apt install -y \(.linux.apt) && \(.linux.after // "true"); };_)\n"` | join "\n" }}
-{{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "flatpak info \(.linux.flatpak) 2> /desktop/null") || (_(){ \(.linux.before // "true") && flatpak install -y flathub \(.linux.flatpak) && \(.linux.after // "true"); };_)"` | join "\n" }}
+{{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "flatpak info \(.linux.flatpak) 2> /dev/null") || (_(){ \(.linux.before // "true") && flatpak install -y flathub \(.linux.flatpak) && \(.linux.after // "true"); };_)"` | join "\n" }}
 {{ joinPath .chezmoi.workingTree "vault" "desktop.json" | include | fromJson | jq `.[] | select(.linux.sh) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "false") || (_(){ \(.linux.before // "true") && (\(.linux.sh)) && \(.linux.after // "true"); };_)"` | join "\n" }}
 
 # after
