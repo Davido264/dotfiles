@@ -1,0 +1,143 @@
+@import "gruvbox.css";
+
+* {
+    font-family: FontAwesome,Jetbrains Mono, Roboto;
+    font-size: 14px;
+    min-height: 0;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+#clock,
+#custom-playerctl,
+#custom-power,
+#custom-wlsunset,
+#custom-dnd,
+#battery,
+#cpu,
+#language,
+#memory,
+#network,
+#bluetooth,
+#pulseaudio,
+#tray,
+#mode,
+#idle_inhibitor {
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 2px;
+}
+
+#battery {
+    color: @fg;
+}
+
+#battery.critical:not(.charging) {
+    animation-direction: alternate;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-name: blink;
+    animation-timing-function: linear;
+    background-color: @bg;
+    color: @red;
+}
+
+#clock {
+    background: @bg;
+    color: @fg;
+}
+
+#network {
+    color: @fg;
+    opacity: 0.7;
+}
+
+#network.disconnected {
+    color: @red;
+}
+
+#tray {
+    background: @bg;
+    color: @fg;
+}
+
+#tray>.passive {
+    -gtk-icon-effect: dim;
+    background: @bg;
+    color: @fg;
+}
+
+#tray>.needs-attention {
+    -gtk-icon-effect: highlight;
+    background: @red;
+    color: @fg;
+}
+
+window#waybar {
+    background: @bg;
+    transition-duration: .2s;
+    transition-property: background-color;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#workspaces button:hover {
+    border: 1px solid transparent;
+    color: @yellow;
+}
+
+#workspaces button {
+    color: @fg;
+    margin-left: 2px;
+    margin-right: 2px;
+    opacity: 0.7;
+}
+
+#workspaces button.focused {
+    background: @yellow;
+    color: @bg;
+    opacity: 0.8;
+}
+
+#workspaces button.urgent {
+    background-color: @red;
+    color: @fg;
+}
+
+#mode {
+    color: @gray;
+}
+
+#pulseaudio {
+    color: @fg;
+}
+
+#bluetooth {
+    color: @fg;
+}
+
+#idle_inhibitor {
+    color: @fg;
+}
+
+#idle_inhibitor.activated {
+    color: @blue;
+    color: @fg;
+}
+
+#custom-power {
+    background: @red;
+    color: @fg;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#custom-notifications {
+    color: @fg;
+}
+
+#custom-playerctl {
+    color: @fg;
+}
+

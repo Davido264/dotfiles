@@ -1,15 +1,9 @@
 [
   {
-    "__before__": {
-      "linux": null
-    }
-  },
-  {
     "name": "EpicGames Launcher",
     "windows": {
       "winget": "EpicGames.EpicGamesLauncher"
-    },
-    "linux": null
+    }
   },
   {
     "name": "Prism Launcher",
@@ -27,9 +21,10 @@
       "notwhen": "exit 0"
     },
     "linux": {
-      "before": "mkdir -p ~/.local/share/ssf2 && cd ~/.local/share/ssf2",
-      "sh": "curl -sSL https://cdn.supersmashflash.com/ssf2/downloads/14ac5596/SSF2BetaLinux.v1.3.1.2.tar | tar -xvf - && sudo ln -s SSF2 /usr/bin/SSF2",
-      "after": "sudo chmod u+x trust-ssf2.sh && ./trust-ssf2.sh && cd ~"
+      "before": "sudo mkdir /usr/share/ssf2 && cd /usr/share/ssf2",
+      "sh": "curl -sSL https://cdn.supersmashflash.com/ssf2/downloads/14ac5596/SSF2Betaubuntu.v1.3.1.2.tar | tar -xvf - && printf '#!/usr/bin/sh\\ncd /usr/share/ssf2 && ./SSF2 &\\n' | sudo tee /usr/bin/SSF2 && sudo chmod +x /usr/bin/SSF2",
+      "after": "sudo chmod +x trust-ssf2.sh && ./trust-ssf2.sh && cd ~",
+      "notwhen": "which SSF2"
     }
   }
 ]

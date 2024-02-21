@@ -1,13 +1,24 @@
+// TODO
 [
   {
     "__before__": {
       "windows": null,
-      "linux": [
-        "([ -d ~/.vst3 ] || mkdir -p ~/.vst3) && ([ -d ~/.clap ] || mkdir -p ~/.clap)",
-        "cardinal_version='23.10'",
+      "ubuntu": [
+        "echo 'Checking kxstudio-repos'",
+        "apt show kxstudio-repos 2>/dev/null | grep 'APT-Manual-Installed: yes'",
+        "if [ $? -ne 0 ]; then",
+        "   echo 'Installing kxstudio-repos'",
+        "   mkdir -p /tmp/kxstudio && cd /tmp/kxstudio",
+        "   sudo apt install -y apt-transport-https gpgv wget",
+        "   wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_11.1.0_all.deb",
+        "   sudo apt install -y /tmp/kxstudio/kxstudio-repos_11.1.0_all.deb",
+        "   cd ~ && rm /tmp/kxstudio",
+        "   sudo apt update -y",
+        "fi",
+        "sudo apt install -y build-essential git libboost-all-dev gcc g++ pkg-config libasound2-dev libgtk2.0-dev libglibmm-2.4-dev libsndfile1-dev libarchive-dev liblo-dev libtag1-dev vamp-plugin-sdk librubberband-dev libfftw3-dev libaubio-dev libxml2-dev libsamplerate-dev lv2-dev libserd-dev libsord-dev libsratom-dev liblilv-dev libgtkmm-2.4-dev libjack-jackd2-dev libogg-dev libcppunit-dev libudev-dev libwebsockets-dev libusb-dev libsuil-dev libdbus-1-dev xjadeo libusb-1.0-0-dev libreadline-dev  libarchive-dev liblo-dev libtag1-dev libvamp-sdk2v5 librubberband-dev libaubio-dev libpangomm-1.4-dev libserd-dev libsord-dev libsratom-dev liblilv-dev libgtkmm-2.4-dev libsuil-dev libcppunit-dev python3 liblrdf0-dev",
         "chow_version='2.11.4'",
         "odin_version='2.3-4'",
-        "surge_version='1.3.1'"
+        "ardour_version='8.2'"
       ]
     }
   },
@@ -15,18 +26,26 @@
     "name": "FL Studio",
     "windows": {
       "winget": "ImageLine.FLStudio"
-    },
-    "linux": null
+    }
+  },
+  {
+    "name": "Ardour",
+    "linux": {
+      "before": "sudo mkdir -p /usr/local/src/ardour && cd /usr/local/src/ardour",
+      "sh": "git clone --depth 1 --branch $ardour_version https://github.com/Ardour/ardour.git . && ./waf configure --cxx11 --optimize && ./waf -j4 && sudo ./waf install",
+      "after": "cd ~ && sudo rm -rf /usr/local/src/ardour",
+      "notwhen": "which ardour8"
+    }
   },
   {
     "name": "JACK2",
     "windows": {
       "winget": "Jackaudio.JACK2"
     },
-    "linux": {
+    "ubuntu": {
       "before": "(sudo debconf-get-selections | grep jackd2 *> /dev/null) || (echo 'jackd2 jackd/tweak_rt_limits boolean true' | sudo debconf-set-selections)",
       "apt": "jackd2 qjackctl",
-      "notwhen": "which qjackctl && (apt show jackd2 2>/dev/null | grep 'Status: install ok installed')"
+      "notwhen": "which qjackctl"
     }
   },
   {
@@ -35,10 +54,9 @@
       "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/cardinal.json",
       "notwhen": "exit 0"
     },
-    "linux": {
-      "before": "src=\"$HOME/.local/share/cardinal\"",
-      "sh": "mkdir $src && cd $src && curl -sSL \"https://github.com/DISTRHO/Cardinal/releases/download/${cardinal_version}/Cardinal-linux-x86_64-${cardinal_version}.tar.gz\" | tar -xzvf - && ln -s ~/.vst3/Cardinal.vst3 \"$src/Cardinal.vst3\" && ln -s ~/.vst3/CardinalFX.vst3 \"$src/CardinalFX.vst3\" && ln -s ~/.clap/Cardinal.clap \"$src/Cardinal.clap\" && ln -s ~/.clap/CardinalFX.clap \"$src/CardinalFX.clap\" && sudo ln -s $src/CardinalNative /usr/bin/CardinalNative && sudo ln -s $src/CardinalJACK /usr/bin/CardinalJACK && cd ~",
-      "notwhen": "[ -d ~/.local/share/cardinal ]"
+    "ubuntu": {
+      "apt": "cardinal cardinal-clap",
+      "notwhen": "(apt show cardinal 2>/dev/null | grep 'APT-Manual-Installed: yes') && (apt show cardinal-clap 2>/dev/null | grep 'APT-Manual-Installed: yes')"
     }
   },
   {
@@ -47,8 +65,8 @@
       "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/chow-tape.json",
       "notwhen": "exit 0"
     },
-    "linux": {
-      "sh": "curl -sSLo /tmp/chow.deb \"https://github.com/jatinchowdhury18/AnalogTapeModel/releases/download/v${chow_version}/ChowTapeModel-Linux-x64-${chow_version}.deb\" && sudo apt install -y /tmp/chow.deb",
+    "ubuntu": {
+      "sh": "curl -sSLo /tmp/chow.deb \"https://github.com/jatinchowdhury18/AnalogTapeModel/releases/download/v${chow_version}/ChowTapeModel-ubuntu-x64-${chow_version}.deb\" && sudo apt install -y /tmp/chow.deb",
       "after": "rm /tmp/chow.deb",
       "notwhen": "((apt show chowtape 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show chowtape 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $chow_version ])",
       "notes": "suggests jackd1"
@@ -71,7 +89,7 @@
       "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/odin.json",
       "notwhen": "exit 0"
     },
-    "linux": {
+    "ubuntu": {
       "sh": "curl -sSLo /tmp/odin.deb \"https://dl.dropboxusercontent.com/s/hwgdgdxz1p2visj/Odin2-synth_${odin_version}.deb\" && sudo apt install -y /tmp/odin.deb",
       "notwhen": "((apt show odin2-synth 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show odin2-synth 2>/dev/null | grep -oP '\\d+\\.\\d+-\\d+' | head -n1) = $odin_version ])",
       "after": "rm /tmp/odin.deb"
@@ -83,10 +101,9 @@
       "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/surge-synth.json",
       "notwhen": "exit 0"
     },
-    "linux": {
-      "sh": "curl -sSLo /tmp/surge.deb \"https://github.com/surge-synthesizer/releases-xt/releases/download/${surge_version}/surge-xt-linux-x64-${surge_version}.deb\" && sudo apt install -y /tmp/surge.deb",
-      "notwhen": "((apt show surge-xt 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show surge-xt 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $surge_version ])",
-      "after": "rm /tmp/surge.deb"
+    "ubuntu": {
+      "apt": "surge",
+      "notwhen": "apt show surge 2>/dev/null | grep 'APT-Manual-Installed: yes'"
     }
   },
   {
@@ -96,8 +113,8 @@
       "notwhen": "exit 0"
     },
     "linux": {
-      "sh": "mkdir /tmp/tal && curl -sSLo /tmp/tal/tal.zip https://tal-software.com/downloads/plugins/TAL-NoiseMaker_64_linux.zip && unzip /tmp/tal.zip && cd /tmp/tal/TAL-NoiseMaker && mv ./TAL-NoiseMaker.vst3 ~/.vst3/ && mv ./TAL-NoiseMaker.clap ~/.clap/ && cd ~",
-      "notwhen": "([ -f ~/.clap/TAL-NoiseMaker.clap ] && [ -d ~/.vst3/TAL-NoiseMaker.vst3 ])",
+      "sh": "mkdir -p /tmp/tal && cd /tmp/tal && curl -sSLo /tmp/tal/tal.zip https://tal-software.com/downloads/plugins/TAL-NoiseMaker_64_ubuntu.zip && unzip /tmp/tal/tal.zip && cd /tmp/tal/TAL-NoiseMaker && sudo mv ./TAL-NoiseMaker.vst3 /usr/lib/vst3/ && sudo mv ./TAL-NoiseMaker.clap /usr/lib/clap/ && cd ~",
+      "notwhen": "([ -f /usr/lib/clap/TAL-NoiseMaker.clap ] && [ -d /usr/lib/vst3/TAL-NoiseMaker.vst3 ])",
       "after": "rm -rf /tmp/tal"
     }
   },
@@ -114,37 +131,32 @@
     "name": "OTT",
     "windows": {
       "pending": "https://xferrecords.com/product_downloads/25/freeware"
-    },
-    "linux": null
+    }
   },
   {
     "name": "youlean-meter",
     "windows": {
       "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/youlean-meter.json",
       "notwhen": "exit 0"
-    },
-    "linux": null
+    }
   },
   {
     "name": "labs-lm",
     "windows": {
       "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/labs-lm.json",
       "notwhen": "exit 0"
-    },
-    "linux": null
+    }
   },
   {
     "name": "Ample Guitar Lite",
     "windows": {
       "pending": "https://plugins4free.com/plugin/2233/"
-    },
-    "linux": null
+    }
   },
   {
     "name": "Ample Cloud Drum Lite",
     "windows": {
       "pending": "https://plugins4free.com/plugin/3181/"
-    },
-    "linux": null
+    }
   }
 ]

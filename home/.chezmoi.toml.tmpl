@@ -17,3 +17,7 @@ host = {{ $host | quote }}
 {{ $justGaming := promptBoolOnce . "justGaming" "Is this Windows machine just for games"}}
 justGaming = {{ $justGaming }}
 {{ end -}}
+{{ if (eq .chezmoi.os "linux") -}}
+{{ $fedora := promptBoolOnce . "fedora" "Is this distro fedora?"}}
+fedora = {{ $fedora }}
+{{ end -}}

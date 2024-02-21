@@ -3,7 +3,14 @@
 
 {{ if (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 echo "Install flatpak if its not installed"
-which flatpak || sudo apt install flatpak
+# Surely it's a better way
+if ! which flatpak; then
+    if which apt; then
+        sudo apt install -y flatpak
+    else
+        sudo dnf install -y flatpak
+    fi
+fi
 
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 {{ end -}}
@@ -11,7 +18,13 @@ flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/fl
 echo ""
 echo "Install asdf"
 asdf_version='v0.14.0'
-sudo apt install -y curl git dirmngr gpg gawk
+
+if which apt; then
+    sudo apt install -y curl git dirmngr gpg gawk
+else
+    sudo dnf install -y curl git dirmngr gpg gawk
+fi
+
 if [ ! -d /opt/asdf ]; then
     sudo mkdir /opt/asdf && sudo chown david /opt/asdf
     git clone https://github.com/asdf-vm/asdf.git /opt/asdf --branch $asdf_version

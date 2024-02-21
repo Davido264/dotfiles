@@ -1,12 +1,21 @@
 #!/usr/bin/sh
 
-sudo apt update -y && sudo apt upgrade -y
-sudo apt install git
-sudo sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
+if which apt; then
+    sudo apt update -y && sudo apt upgrade -y
+    sudo apt install git curl
+    sudo sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
+else
+    sudo dnf update -y
+    sudo dnf install git curl
+fi
 chezmoi init --apply Davido264
-sudo apt autoremove -y
+
+if which apt; then
+    sudo apt autoremove -y
+fi
 
 # TODO: setup audio
+# TODO: setup fedora and ubuntu 
 
 # TODO: How can I update using chezmoi apply?
 	# Environment variable flag :D

@@ -29,15 +29,18 @@
     "windows": {
       "scoop": "make"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "build-essential",
       "notwhen": "which make"
+    },
+    "fedora": {
+      "dnf": "@development-tools",
+      "notwhen": "which gcc"
     }
   },
   {
     "name": "makedeb",
-    "windows": null,
-    "linux": {
+    "ubuntu": {
       "before": "export MAKEDEB_RELEASE='makedeb'",
       "sh": "bash -c \"$(wget -qO - 'https://shlink.makedeb.org/install')\""
     }
@@ -47,8 +50,11 @@
     "windows": {
       "winget": "Git.Git"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "git"
+    },
+    "fedora": {
+      "dnf": "git"
     }
   },
   {
@@ -56,9 +62,12 @@
     "windows": {
       "winget": "Kitware.CMake"
     },
-    "linux": {
+    "ubuntu": {
       "before": "(add-apt-repository -L | grep 'apt.kitware.com/ubuntu') || (wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && sudo add-apt-repository --yes \"deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main\" && sudo apt update)",
       "apt": "cmake"
+    },
+    "fedora": {
+      "dnf": "cmake"
     }
   },
   {
@@ -81,35 +90,40 @@
       "before": "winget list --id gerardog.gsudo *>$null || winget install --id gerardog.gsudo",
       "winget": "Microsoft.PowerShell",
       "after": "gsudo { pwsh -Command \"Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted\" }"
-    },
-    "linux": null
+    }
   },
   {
     "name": "VS Code",
     "windows": {
       "winget": "Microsoft.VisualStudioCode"
     },
-    "linux": {
+    "ubuntu": {
       "sh": "curl -sSLo /tmp/code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y /tmp/code.deb",
       "notwhen": "which code",
       "after": "rm /tmp/code.deb"
+    },
+    "fedora": {
+      "before": "[ -f /etc/yum.repos.d/vscode.repo ] || (sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && sudo sh -c 'echo -e \"[code]\\nname=Visual Studio Code\\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc\" > /etc/yum.repos.d/vscode.repo' && dnf check-update)",
+      "dnf": "code"
     }
   },
   {
     "name": "VS 2022 BuildTools",
     "windows": {
       "winget": "Microsoft.VisualStudio.2022.BuildTools"
-    },
-    "linux": null
+    }
   },
   {
     "name": "GitHub Cli",
     "windows": {
       "winget": "GitHub.cli"
     },
-    "linux": {
+    "ubuntu": {
       "before": "[ -s /etc/apt/sources.list.d/github-cli.list ] || (curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && sudo apt update)",
       "apt": "gh"
+    },
+    "fedora": {
+      "dnf": "gh"
     }
   },
   {
@@ -117,10 +131,13 @@
     "windows": {
       "winget": "GLab.GLab"
     },
-    "linux": {
+    "ubuntu": {
       "sh": "git clone 'https://mpr.makedeb.org/glab' /tmp/glab && cd /tmp/glab/ && makedeb -siy && cd ~",
       "after": "rm /tmp/glab",
       "notwhen": "which glab"
+    },
+    "fedora": {
+      "dnf": "glab"
     }
   },
   {
@@ -128,8 +145,11 @@
     "windows": {
       "winget": "RedHat.Podman"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "podman"
+    },
+    "fedora": {
+      "dnf": "podman"
     }
   },
   {
@@ -146,9 +166,12 @@
     "windows": {
       "winget": "WiresharkFoundation.Wireshark"
     },
-    "linux": {
+    "ubuntu": {
       "before": "((add-apt-repository -L | grep 'wireshark-dev/stable') || (sudo add-apt-repository --yes ppa:wireshark-dev/stable && sudo apt update)) && ((sudo debconf-get-selections | grep wireshark-common *> /dev/null) || (echo 'wireshark-common wireshark-common/install-setuid boolean true' | sudo debconf-set-selections))",
       "apt":"wireshark"
+    },
+    "fedora": {
+      "dnf": "wireshark"
     }
   },
   {
@@ -156,9 +179,12 @@
     "windows": {
       "winget": "Hashicorp.Vagrant"
     },
-    "linux": {
+    "ubuntu": {
       "before": "[ -s /etc/apt/sources.list.d/hashicorp.list ] || (wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/hashicorp.list && apt update)",
       "apt": "vagrant"
+    },
+    "fedora": {
+      "dnf": "vagrant"
     }
   },
   {
@@ -166,9 +192,13 @@
     "windows": {
       "winget": "Cloudflare.cloudflared"
     },
-    "linux": {
+    "ubuntu": {
       "before": "[ -s /etc/apt/sources.list.d/cloudflared.list ] || (curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null && echo \"deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/cloudflared.list && apt update)",
       "apt": "cloudflared"
+    },
+    "fedora": {
+      "dnf": "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-x86_64.rpm",
+      "notwhen": "which cloudflared"
     }
   },
   {
@@ -176,8 +206,11 @@
     "windows": {
       "winget": "jqlang.jq"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "jq"
+    },
+    "fedora": {
+      "dnf": "jq"
     }
   },
   {
@@ -195,8 +228,11 @@
     "windows": {
       "scoop": "docker"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "docker"
+    },
+    "fedora": {
+      "dnf": "docker"
     }
   },
   {
@@ -204,8 +240,11 @@
     "windows": {
       "scoop": "docker-compose"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "docker-compose"
+    },
+    "fedora": {
+      "dnf": "docker-compose"
     }
   },
   {
@@ -213,8 +252,11 @@
     "windows": {
       "scoop": "docker-buildx"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "docker-buildx"
+    },
+    "fedora": {
+      "dnf": "docker-buildx"
     }
   },
   {
@@ -222,26 +264,31 @@
     "windows": {
       "scoop": "exercism"
     },
-    "linux": {
-      "sh": "mkdir /tmp/exercism && cd /tmp/exercism && curl -sSL https://github.com/exercism/cli/releases/download/v3.2.0/exercism-3.2.0-linux-x86_64.tar.gz | tar -xzvf - && sudo chmod +x exercism && sudo chown root exercism && sudo mv exercism /usr/bin/exercism && cd ~",
+    "ubuntu": {
+      "sh": "mkdir /tmp/exercism && cd /tmp/exercism && curl -sSL https://github.com/exercism/cli/releases/download/v3.2.0/exercism-3.2.0-ubuntu-x86_64.tar.gz | tar -xzvf - && sudo chmod +x exercism && sudo chown root exercism && sudo mv exercism /usr/bin/exercism && cd ~",
       "after": "rm -rf /tmp/exercism",
       "notwhen": "which exercism"
+    },
+    "fedora": {
+      "dnf": "exercism"
     }
   },
   {
     "name": "vcredist2022",
     "windows": {
       "scoop": "vcredist2022"
-    },
-    "linux": null
+    }
   },
   {
     "name": "aws",
     "windows": {
       "scoop": "aws"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "awscli"
+    },
+    "fedora": {
+      "dnf": "awscli2"
     }
   },
   {
@@ -249,9 +296,13 @@
     "windows": {
       "scoop": "llvm"
     },
-    "linux": {
+    "ubuntu": {
       "sh": "yes | sudo bash -c \"$(wget -O - https://apt.llvm.org/llvm.sh)\"",
       "notwhen": "which clang-18"
+    },
+    "fedora": {
+      "dnf": "llvm",
+      "notwhen": "which clang"
     }
   },
   {
@@ -263,7 +314,7 @@
     "linux": {
       "before": "asdf plugin-add rust https://github.com/code-lever/asdf-rust.git",
       "asdf": "rust latest",
-      "after": "rustup toolchain install stable-gnu && rustup target add x86_64-pc-windows-gnu && rustup target add x86_64-unknown-linux-gnu"
+      "after": "rustup toolchain install stable-gnu && rustup target add x86_64-pc-windows-gnu && rustup target add x86_64-unknown-ubuntu-gnu"
     }
   },
   {
@@ -283,7 +334,7 @@
       "scoop": "openjdk"
     },
     "linux": {
-      "before": "sudo apt install -y jq && asdf plugin-add java https://github.com/halcyon/asdf-java.git",
+      "before": "asdf plugin-add java https://github.com/halcyon/asdf-java.git",
       "asdf": "java latest:openjdk"
     }
   },
@@ -293,11 +344,16 @@
       "scoop": "python",
       "after": "python -m ensurepip ; python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel"
     },
-    "linux": {
+    "ubuntu": {
       "before": "sudo apt install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev && asdf plugin-add python https://github.com/asdf-community/asdf-python.git",
       "asdf": "python latest",
       "after": "python -m ensurepip && python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel",
       "notes": "Reshim when package install"
+    },
+    "fedora": {
+      "before": "sudo dnf install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev && asdf plugin-add python https://github.com/asdf-community/asdf-python.git",
+      "asdf": "python latest",
+      "after": "python -m ensurepip && python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel"
     }
   },
   {
@@ -345,7 +401,7 @@
     "windows": {
       "scoop": "gcc"
     },
-    "linux": {
+    "ubuntu": {
       "apt": "gcc"
     }
   },
@@ -355,8 +411,14 @@
       "scoop": "android-clt",
       "after": "sdkmanager 'tools' ; sdkmanager 'platform-tools' 'platforms;android-24' 'build-tools;24.0.0' 'ndk-bundle' 'add-ons;addon-google_apis-google-24' 'extras;google;google_play_services' 'emulator'"
     },
-    "linux": {
+    "ubuntu": {
       "before": "sudo apt install -y openjdk-8-jdk-headless",
+      "sh": "mkdir -p /tmp/android ~/.local/share/android-sdk && cd /tmp/android && wget -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && unzip commandlinetools-linux-6200805_latest.zip -d ~/.local/share/android-sdk && cd ~ && export ANDROID_HOME=~/.local/share/android-sdk && export PATH=\"$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH\"",
+      "after": "sed -i 's|exec \"\\$JAVACMD\" \"\\$@\"|exec \"/usr/bin/java\" \"$@\"|' $(which sdkmanager) && sdkmanager 'platform-tools' 'platforms;android-24' 'build-tools;24.0.0' 'ndk-bundle' 'add-ons;addon-google_apis-google-24' 'extras;google;google_play_services' 'emulator'",
+      "notwhen": "[ -d ~/.local/share/android-sdk ]"
+    },
+    "fedora": {
+      "before": "sudo dnf install -y java-1.8.0-openjdk",
       "sh": "mkdir -p /tmp/android ~/.local/share/android-sdk && cd /tmp/android && wget -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && unzip commandlinetools-linux-6200805_latest.zip -d ~/.local/share/android-sdk && cd ~ && export ANDROID_HOME=~/.local/share/android-sdk && export PATH=\"$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH\"",
       "after": "sed -i 's|exec \"\\$JAVACMD\" \"\\$@\"|exec \"/usr/bin/java\" \"$@\"|' $(which sdkmanager) && sdkmanager 'platform-tools' 'platforms;android-24' 'build-tools;24.0.0' 'ndk-bundle' 'add-ons;addon-google_apis-google-24' 'extras;google;google_play_services' 'emulator'",
       "notwhen": "[ -d ~/.local/share/android-sdk ]"
@@ -372,7 +434,7 @@
     "linux": {
       "before": "src=\"$HOME/.local/share/nvim-data/tree-sitter-fsharp\"",
       "sh": "git clone https://github.com/Nsidorenco/tree-sitter-fsharp.git $src && cd $src && pnpm install",
-      "notwhen": "[ -d $src ]"
+      "notwhen": "[ -d \"$HOME/.local/share/nvim-data/tree-sitter-fsharp\" ]"
     }
   },
   {
@@ -385,7 +447,7 @@
     "linux": {
       "before": "src=\"$HOME/.local/share/nvim-data/tree-sitter-mcfunction\"",
       "sh": "git clone https://github.com/Davido264/tree-sitter-mcfunction.git $src && cd $src && pnpm install && pnpx node-gyp configure && pnpm run build",
-      "notwhen": "[ -d $src ]"
+      "notwhen": "[ -d \"$HOME/.local/share/nvim-data/tree-sitter-mcfunction\" ]"
     }
   }
 ]

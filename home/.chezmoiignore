@@ -29,6 +29,9 @@ bin/ws
 
 {{ if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
 bin/switch-to-windows
+.config/sway
+.config/waybar
+.config/mako
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
@@ -39,6 +42,7 @@ bin/switch-to-windows
 {{ if ne .chezmoi.os "linux" }}
 .hushlogin
 .config/Local
+.config/chromium-flags.conf
 .var/app
 .config/user-dirs.dirs
 .config/bspwm

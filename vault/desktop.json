@@ -4,6 +4,9 @@
       "windows": null,
       "linux": [
         "uad_version='0.5.1'"
+      ],
+      "fedora": [
+        "sudo dnf install dnf-plugins-core"
       ]
     }
   },
@@ -12,9 +15,12 @@
     "windows": {
       "winget": "VideoLAN.VLC"
     },
-    "linux": {
+    "ubuntu": {
       "before": "(add-apt-repository -L | grep 'videolan/master-daily') || (sudo add-apt-repository --yes -P ppa:videolan/master-daily && sudo apt update)",
       "apt": "vlc"
+    },
+    "fedora": {
+      "dnf": "vlc"
     }
   },
   {
@@ -32,9 +38,13 @@
     "windows": {
       "winget": "Brave.Brave"
     },
-    "linux": {
+    "ubuntu": {
       "before": "[ -s /etc/apt/sources.list.d/brave-browser-release.list ] || (sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main'| sudo tee /etc/apt/sources.list.d/brave-browser-release.list && sudo apt update)",
       "apt": "brave-browser"
+    },
+    "fedora": {
+      "before": "sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo && sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc",
+      "dnf": "brave-browser"
     }
   },
   {
@@ -60,9 +70,12 @@
     "windows": {
       "winget": "Spotify.Spotify"
     },
-    "linux": {
+    "ubuntu": {
       "before": "[ -s /etc/apt/sources.list.d/spotify.list ] || (curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg && echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list && sudo apt update)",
       "apt": "spotify-client"
+    },
+    "fedora": {
+      "flatpak": "com.spotify.Client"
     }
   },
   {
@@ -97,9 +110,12 @@
     "windows": {
       "winget": "OBSProject.OBSStudio"
     },
-    "linux": {
+    "ubuntu": {
       "before": "(add-apt-repository -L | grep 'obsproject/obs-studio') || (sudo add-apt-repository --yes -P ppa:obsproject/obs-studio  && sudo apt update)",
       "apt": "obs-studio"
+    },
+    "fedora": {
+      "dnf": "obs-studio"
     }
   },
   {
@@ -109,7 +125,7 @@
     },
     "linux": {
       "before": "sudo apt install -y android-sdk-platform-tools",
-      "sh": "curl -sSL \"https://github.com/0x192/universal-android-debloater/releases/download/${uad_version}/uad_gui-linux.tar.gz\" | tar -xzvf - && sudo chmod +rx ./uad_gui-linux && sudo chown root ./uad_gui-linux && sudo mv ./uad_gui-linux /usr/bin/uad",
+      "sh": "curl -sSL \"https://github.com/0x192/universal-android-debloater/releases/download/${uad_version}/uad_gui-ubuntu.tar.gz\" | tar -xzvf - && sudo chmod +rx ./uad_gui-linux && sudo chown root ./uad_gui-linux && sudo mv ./uad_gui-linux /usr/bin/uad",
       "notwhen": "which uad"
     }
   },
@@ -117,28 +133,24 @@
     "name": "magicavoxel",
     "windows": {
       "scoop": "magicavoxel"
-    },
-    "linux": null
+    }
   },
   {
     "name": "gifcam",
     "windows": {
       "scoop": "gifcam"
-    },
-    "linux": null
+    }
   },
   {
     "name": "WhatsApp Desktop",
     "windows": {
       "winget": "WhatsApp.WhatsApp"
-    },
-    "linux": null
+    }
   },
   {
     "name": "Carnac",
     "windows": {
       "winget": "code52.Carnac"
-    },
-    "linux": null
+    }
   }
 ]
