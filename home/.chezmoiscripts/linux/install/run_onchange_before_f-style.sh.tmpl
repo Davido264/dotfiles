@@ -10,7 +10,7 @@
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.ubuntu) | .ubuntu.[]` | join "\n"}}
 {{ end -}}
 
-{{ if (eq .chezmoi.osRelease.idLike "fedora") -}}
+{{ if (eq .chezmoi.osRelease.id "fedora") -}}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.fedora) | .fedora.[]` | join "\n"}}
 {{ end -}}
 
@@ -25,7 +25,7 @@
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.ubuntu.sh) | "echo '====[ \(.name) ]====' \n\(.ubuntu.notwhen // "false") || (_(){ \(.ubuntu.before // "true") && (\(.ubuntu.sh)) && \(.ubuntu.after // "true"); };_)"` | join "\n" }}
 {{ end -}}
 
-{{ if (eq .chezmoi.osRelease.idLike "fedora") -}}
+{{ if (eq .chezmoi.osRelease.id "fedora") -}}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.fedora.dnf) | "echo '====[ \(.name) ]====' \n\(.fedora.notwhen // "which \(.fedora.dnf)") || (_(){ \(.fedora.before // "true") && sudo dnf install -y \(.fedora.dnf) && \(.fedora.after // "true"); };_)\n"` | join "\n" }}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.fedora.flatpak) | "echo '====[ \(.name) ]====' \n\(.fedora.notwhen // "flatpak info \(.fedora.flatpak) 2> /dev/null") || (_(){ \(.fedora.before // "true") && flatpak install -y flathub \(.fedora.flatpak) && \(.fedora.after // "true"); };_)"` | join "\n" }}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.fedora.sh) | "echo '====[ \(.name) ]====' \n\(.fedora.notwhen // "false") || (_(){ \(.fedora.before // "true") && (\(.fedora.sh)) && \(.fedora.after // "true"); };_)"` | join "\n" }}
@@ -39,7 +39,7 @@
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.ubuntu) | .ubuntu.[]` | join "\n"}}
 {{ end -}}
 
-{{ if (eq .chezmoi.osRelease.idLike "fedora") -}}
+{{ if (eq .chezmoi.osRelease.id "fedora") -}}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.fedora) | .fedora.[]` | join "\n"}}
 {{ end -}}
 

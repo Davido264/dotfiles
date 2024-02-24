@@ -3,11 +3,18 @@
 if which apt; then
     sudo apt update -y && sudo apt upgrade -y
     sudo apt install git curl
-    sudo sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
 else
+    echo '=== [ fast dnf ] ==='
+    printf 'max_parallel_downloads=10\nfastestmirror=True\n' | sudo tee -a /etc/dnf/dnf.conf
+    sudo dnf upgrade -y --refresh
     sudo dnf update -y
+    echo '=== [rpm fusion (free and non-free)] ==='
+    sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+    sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf install git curl
 fi
+
+sudo sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
 chezmoi init --apply Davido264
 
 if [ $? -eq 0 ]; then

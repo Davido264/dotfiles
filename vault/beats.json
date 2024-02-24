@@ -1,4 +1,3 @@
-// TODO
 [
   {
     "__before__": {
@@ -19,6 +18,10 @@
         "chow_version='2.11.4'",
         "odin_version='2.3-4'",
         "ardour_version='8.2'"
+      ],
+      "fedora": [
+        "echo 'enable repositories'",
+        "sudo dnf copr enable ycollet/audinux"
       ]
     }
   },
@@ -30,11 +33,14 @@
   },
   {
     "name": "Ardour",
-    "linux": {
+    "ubuntu": {
       "before": "sudo mkdir -p /usr/local/src/ardour && cd /usr/local/src/ardour",
       "sh": "git clone --depth 1 --branch $ardour_version https://github.com/Ardour/ardour.git . && ./waf configure --cxx11 --optimize && ./waf -j4 && sudo ./waf install",
       "after": "cd ~ && sudo rm -rf /usr/local/src/ardour",
       "notwhen": "which ardour8"
+    },
+    "fedora": {
+      "dnf": "ardour8"
     }
   },
   {
@@ -46,6 +52,11 @@
       "before": "(sudo debconf-get-selections | grep jackd2 *> /dev/null) || (echo 'jackd2 jackd/tweak_rt_limits boolean true' | sudo debconf-set-selections)",
       "apt": "jackd2 qjackctl",
       "notwhen": "which qjackctl"
+    },
+    "fedora": {
+      "dnf": "jack-audio-connection-kit qjackctl",
+      "notwhen": "which qjackctl",
+      "after": "sudo usermod -a -G jackuser $(whoami) && sudo usermod -a -G audio $(whoami)"
     }
   },
   {
@@ -57,6 +68,9 @@
     "ubuntu": {
       "apt": "cardinal cardinal-clap",
       "notwhen": "(apt show cardinal 2>/dev/null | grep 'APT-Manual-Installed: yes') && (apt show cardinal-clap 2>/dev/null | grep 'APT-Manual-Installed: yes')"
+    },
+    "fedora": {
+      "dnf": "cardinal"
     }
   },
   {
@@ -68,8 +82,10 @@
     "ubuntu": {
       "sh": "curl -sSLo /tmp/chow.deb \"https://github.com/jatinchowdhury18/AnalogTapeModel/releases/download/v${chow_version}/ChowTapeModel-ubuntu-x64-${chow_version}.deb\" && sudo apt install -y /tmp/chow.deb",
       "after": "rm /tmp/chow.deb",
-      "notwhen": "((apt show chowtape 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show chowtape 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $chow_version ])",
-      "notes": "suggests jackd1"
+      "notwhen": "((apt show chowtape 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show chowtape 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $chow_version ])"
+    },
+    "fedora": {
+      "dnf": "AnalogTapeModel"
     }
   },
   {
@@ -93,6 +109,9 @@
       "sh": "curl -sSLo /tmp/odin.deb \"https://dl.dropboxusercontent.com/s/hwgdgdxz1p2visj/Odin2-synth_${odin_version}.deb\" && sudo apt install -y /tmp/odin.deb",
       "notwhen": "((apt show odin2-synth 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show odin2-synth 2>/dev/null | grep -oP '\\d+\\.\\d+-\\d+' | head -n1) = $odin_version ])",
       "after": "rm /tmp/odin.deb"
+    },
+    "fedora": {
+      "dnf": "odin2"
     }
   },
   {
@@ -104,6 +123,9 @@
     "ubuntu": {
       "apt": "surge",
       "notwhen": "apt show surge 2>/dev/null | grep 'APT-Manual-Installed: yes'"
+    },
+    "fedora": {
+      "dnf": "surge-xt"
     }
   },
   {

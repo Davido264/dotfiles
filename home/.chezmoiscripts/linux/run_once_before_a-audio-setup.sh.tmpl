@@ -1,0 +1,19 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/sh
+
+{{ if (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+{{ if (eq .chezmoi.osRelease.id "fedora") -}}
+
+echo '== [ Modify limits] =='
+
+echo '@audio - rtprio 90
+@audio - memlock unlimited' | sudo tee -a /etc/security/limits.d/audio.conf
+
+echo '== [] =='
+
+
+
+{{ end -}}
+{{ end -}}
+{{ end -}}
+
