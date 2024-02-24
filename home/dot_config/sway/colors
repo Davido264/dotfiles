@@ -1,0 +1,43 @@
+# vim: ft=swayconfig
+#
+# bg #282828;
+# fg #fbf1c7;
+
+# red #fb4934;
+# green #b8bb26;
+# yellow #fabd2f;
+# blue #83a598;
+# purple #d3869b;
+# aqua #8ec07c;
+# gray #928374;
+# orange #fe8019;
+
+# red-dim #cc2412;
+# green-dim #98971a;
+# yellow-dim #d79921;
+# blue-dim #458588;
+# purple-dim #b16286;
+# aqua-dim #689d6a;
+# gray-dim #a89984;
+# orange-dim #d65d0e;
+
+#
+#
+#
+#========================#
+# Appearance and Theming #
+#========================#
+# Declare Colors:
+set $background #282828
+set $color_urgent #fb4934
+set $text_color #fbf1c7
+set $title_bg_unfocused #a89984
+set $title_outline_active #b8bb26
+set $title_outline_unfocused #a89984
+
+# Set Colors:           Border                   Background          Text          Indicator             Child Border
+client.background       $background
+client.focused          $title_outline_active    $background         $text_color   $title_outline_active $title_outline_active
+client.focused_inactive $title_outline_unfocused $background         $text_color   $text_color           $title_outline_unfocused
+client.unfocused        $title_outline_unfocused $title_bg_unfocused $text_color   $title_outline_active
+client.urgent           $color_urgent            $color_urgent       $color_urgent $color_urgent         $color_urgent

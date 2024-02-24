@@ -1,0 +1,29 @@
+# vim: ft=swayconfig
+#
+# Display Overlay
+# set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+# exec rm -f $WOBSOCK ; mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
+exec bash -c /home/david/.config/sway/scripts/mywob
+
+# Swayidle daemon
+exec swayidle
+
+# PolicyKit agent
+exec /usr/bin/lxpolkit &
+
+
+# Notification daemon
+exec mako
+
+exec {
+    '[ -x "$(command -v dex)" ] && gdbus wait --session org.kde.StatusNotifierWatcher && dex --autostart'
+    '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch cliphist store'
+    '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch pkill -RTMIN+9 waybar'
+}
+
+exec_always {
+    '[ -x "$(command -v spice-vdagent)" ] && spice-vdagent'
+    # restart kanshi https://github.com/emersion/kanshi/issues/43#issuecomment-531679213
+    '[ -x "$(command -v kanshi)" ] && pkill kanshi; exec kanshi'
+    '[ -x "$(command -v playerctl)" ] && pkill playerctl; playerctl -a metadata --format \'{{status}} {{title}}\' --follow | while read line; do pkill -RTMIN+5 waybar; done'
+}

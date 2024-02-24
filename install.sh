@@ -10,8 +10,14 @@ else
 fi
 chezmoi init --apply Davido264
 
-if which apt; then
-    sudo apt autoremove -y
+if [ $? -eq 0 ]; then
+    if which apt; then
+        sudo apt autoremove -y
+    fi
+    echo "changing git remote for dotfiles repo"
+    cd ~/.local/share/chezmoi
+    git remote set-url origin git@github.com:Davido264/dotfiles.git
+    cd -
 fi
 
 # TODO: setup audio

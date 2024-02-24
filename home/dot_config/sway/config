@@ -1,0 +1,222 @@
+# vim: ft=swayconfig
+# Super + Shift + C == reload
+# man 5 sway for reference
+
+### Variables
+#
+# Logo key (super) for mod:
+set $mod Mod4
+# Alt key for alt:
+set $alt Mod1
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+# Alacritty as default terminal emulator
+set $term alacritty
+# Wofi as application launcher
+set $menu wofi --show drun  -i | xargs swaymsg exec --
+# Wob socket
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+# Wallpaper
+set $wallpaper ~/Pictures/wallpapers/chinatown-solarized.png
+# Workspaces
+set $ws1 "Dev"
+set $ws2 "Browsing"
+set $ws3 "Comunication"
+set $ws4 "Media"
+set $ws5 "Music"
+set $ws6 "..."
+
+### Output configuration
+#
+# Default wallpaper
+output * bg $wallpaper fill
+#
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+
+### Input configuration
+#
+# Natural scrolling and tap on touchpad
+input "type:touchpad" {
+    dwt disabled  # dwt == disable while typing
+    tap enabled
+    natural_scroll enabled
+}
+# Caps as second control, and menu as second super
+input "type:keyboard" {
+    xkb_options caps:ctrl_modifier,altwin:menu_win
+}
+
+### Key bindings
+#
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+Return exec $term
+    bindsym $alt+dead_grave exec $term
+
+    # Start a browser:
+    bindsym $mod+shift+b exec brave-browser
+
+    # Kill focused window
+    bindsym $mod+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec $menu
+
+
+    # Hold the modifier key and hold the left/right mouse button
+    # to drag or resize a window respectively. This isn't exclusive
+    # to floating windows:
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+    # Lock screen
+    bindsym $mod+Escape exec bash ~/.config/sway/lock_screen.sh
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Alternative $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    # Switch to workspace
+    bindsym $mod+1 workspace $ws1
+    bindsym $mod+2 workspace $ws2
+    bindsym $mod+3 workspace $ws3
+    bindsym $mod+4 workspace $ws4
+    bindsym $mod+5 workspace $ws5
+    bindsym $mod+6 workspace $ws6
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace $ws1
+    bindsym $mod+Shift+2 move container to workspace $ws2
+    bindsym $mod+Shift+3 move container to workspace $ws3
+    bindsym $mod+Shift+4 move container to workspace $ws4
+    bindsym $mod+Shift+5 move container to workspace $ws5
+    bindsym $mod+Shift+6 move container to workspace $ws6
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+f floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+tab focus mode_toggle
+
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+#
+# Hardware:
+#
+    # Volume up and down
+    bindsym XF86AudioRaiseVolume exec "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+; pkill -RTMIN+8 waybar"
+    bindsym XF86AudioLowerVolume exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; pkill -RTMIN+8 waybar"
+    bindsym XF86AudioMute exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; pkill -RTMIN+8 waybar"
+
+    # Brightness
+    bindsym XF86MonBrightnessDown exec "sudo brightnessctl set 10%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK"
+    bindsym XF86MonBrightnessUp exec "sudo brightnessctl set +10% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK"
+#
+# Scratchpad:
+#
+    # I dont mind this part, because I only use scratchpad for my
+    # terminal and that is handled by tdrop
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+#
+# Status Bar:
+#
+bar {
+    swaybar_command waybar
+}
+
+# Add gaps in between all application windows:
+gaps inner 8
+gaps outer 3
+
+# Don't show gaps if there's only one window on the desktop
+smart_gaps on
+
+# Hide edge borders when only one screen is available
+hide_edge_borders smart_no_gaps
+
+# Disable focusing on the window behind the cursor automatcically
+focus_follows_mouse no
+
+# Configure the default border:
+default_border pixel 2
+
+include /etc/sway/config-vars.d/*
+include /etc/sway/config.d/*
+include /home/david/.config/sway/app_rules
+include /home/david/.config/sway/auto_start
+include /home/david/.config/sway/colors
