@@ -11,7 +11,7 @@ else
     echo '=== [rpm fusion (free and non-free)] ==='
     sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-    sudo dnf install git curl
+    sudo dnf install -y git curl
 fi
 
 sudo sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
