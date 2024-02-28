@@ -1,0 +1,16 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/sh
+
+{{ if (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+{{ if (eq .chezmoi.osRelease.id "fedora") -}}
+
+which dunst && (killall dunst ; sudo dnf uninstall dunst)
+
+sudo dnf copr enable -y erikreider/SwayNotificationCenter
+sudo dnf install -y SwayNotificationCenter
+
+sudo dnf install -y system-config-printer
+
+{{ end -}}
+{{ end -}}
+{{ end -}}

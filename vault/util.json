@@ -65,7 +65,7 @@
       "after": "which lualatex || sudo miktexsetup --shared=yes finish"
     },
     "fedora": {
-      "before": "[ -f /etc/yum.repos.d/miktex.repo ] || (sudo rpm --import \"https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xD6BC243565B2087BC3F897C9277A7293F59E4889\" && sudo curl -L -o /etc/yum.repos.d/miktex.repo https://miktex.org/download/fedora/30/miktex.repo && sudo dnf update)",
+      "before": "[ -s /etc/yum.repos.d/miktex.repo ] || (sudo rpm --import 'https://miktex.org/download/key' && sudo curl -sSLo /etc/yum.repos.d/miktex.repo https://miktex.org/download/fedora/$(rpm -E %fedora)/miktex.repo && sudo dnf update)",
       "dnf": "miktex",
       "after": "which lualatex || sudo miktexsetup --shared=yes finish"
     }
@@ -116,7 +116,7 @@
     },
     "fedora": {
       "dnf": "fd-find",
-      "notwhen": "which fdfind"
+      "notwhen": "which fd"
     }
   },
   {
@@ -140,7 +140,7 @@
       "apt": "scrcpy"
     },
     "fedora": {
-      "before": "sudo dnf copr enable zeno/scrcpy ",
+      "before": "sudo dnf copr enable -y zeno/scrcpy ",
       "dnf": "scrcpy"
     }
   },
@@ -183,7 +183,8 @@
       "sh": "echo \"`nSetting windows terminal (quake) to run on start\" ; Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\" -ErrorAction SilentlyContinue -Force ; $WScriptObj = New-Object -ComObject (\"WScript.Shell\") ; $shortcut = $WscriptObj.CreateShortcut(\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\") ; $shortcut.TargetPath = \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\wt.exe\" ; $shortcut.Arguments = \"-w _quake\" ; $shortcut.Save()"
     },
     "linux": {
-      "sh": "git clone --depth 1 https://github.com/noctuid/tdrop.git ~/.local/share/tdrop && cd ~/.local/share/tdrop && sudo make install && cd ~",
+      "before": "sudo dnf install -y xprop xdotool xwininfo",
+      "sh": "sudo git clone --depth 1 https://github.com/noctuid/tdrop.git /usr/src/tdrop && cd /usr/src/tdrop && sudo make install && cd ~",
       "notwhen": "which tdrop"
     }
   },
@@ -209,6 +210,7 @@
       "notes": "built from source"
     },
     "fedora": {
+      "before": "sudo dnf install -y gcc-c++",
       "dnf": "neovim",
       "notwhen": "which nvim"
     }
@@ -344,6 +346,18 @@
     },
     "fedora": {
       "notes": "https://www.linuxcapable.com/install-microsoft-fonts-on-fedora-linux/"
+    }
+  },
+  {
+    "name": "jq",
+    "windows": {
+      "winget": "jqlang.jq"
+    },
+    "ubuntu": {
+      "apt": "jq"
+    },
+    "fedora": {
+      "dnf": "jq"
     }
   },
   {

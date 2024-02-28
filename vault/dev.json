@@ -3,6 +3,12 @@
     "__before__": {
       "windows": [
         "if (-not $(Test-Path $HOME/.local/share/nvim-data)) { mkdir $HOME/.local/share/nvim-data }"
+      ],
+      "ubuntu": [
+        "sudo apt install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev"
+      ],
+      "fedora": [
+        "sudo dnf install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev"
       ]
     }
   },
@@ -17,10 +23,9 @@
         "ASDF_DIR=\"/opt/asdf\"' | sudo tee /etc/environment.d/10-asdf.conf",
         "echo 'export ASDF_DATA_DIR=\"/opt/asdf\"",
         "export ASDF_DIR=\"/opt/asdf\"",
-        ". /opt/asdf/asdf.sh",
-        "export JAVA_HOME=$(asdf where java)",
-        "export GOROOT=\"$(asdf where golang)/go\"' | sudo tee /etc/profile.d/asdf.sh",
-        "asdf reshim"
+        ". /opt/asdf/asdf.sh' | sudo tee /etc/profile.d/asdf.sh",
+        "asdf reshim",
+        "which create-vite *>/dev/null || pnpm install -g vite create-vite commitizen cz-conventional-changelog yarn"
       ]
     }
   },
@@ -71,17 +76,24 @@
     }
   },
   {
-    "name": "pnpm",
+    "name": "pnpm + node",
     "windows": {
       "sh": "iwr https://get.pnpm.io/install.ps1 -useb | iex",
       "notwhen": "where.exe pnpm",
       "after": "pnpm env use --global latest && pnpm install -g vite create-vite commitizen cz-conventional-changelog yarn"
     },
+    "fedora": {
+      "dnf": "nodejs",
+      "notwhen": "which node"
+    },
+    "asdf": {
+      "plugin": "nodejs https://github.com/asdf-vm/asdf-nodejs.git",
+      "use": "nodejs system"
+    },
     "linux": {
       "before": "export PNPM_HOME=~/.local/share/pnpm && export PATH=\"$PNPM_HOME:$PATH\"",
       "sh": "curl -fsSL https://get.pnpm.io/install.sh | sh -",
-      "notwhen": "[ -d ~/.local/share/pnpm ]",
-      "after": "pnpm env use --global latest && pnpm install -g vite create-vite commitizen cz-conventional-changelog yarn"
+      "notwhen": "[ -d ~/.local/share/pnpm ]"
     }
   },
   {
@@ -202,18 +214,6 @@
     }
   },
   {
-    "name": "jq",
-    "windows": {
-      "winget": "jqlang.jq"
-    },
-    "ubuntu": {
-      "apt": "jq"
-    },
-    "fedora": {
-      "dnf": "jq"
-    }
-  },
-  {
     "name": "flyctl",
     "windows": {
       "scoop": "flyctl"
@@ -311,10 +311,13 @@
       "scoop": "rustup",
       "after": "rustup toolchain install stable-msvc ; rustup toolchain install stable-gnu ; rustup target add x86_64-pc-windows-msvc ; rustup target add x86_64-pc-windows-gnu"
     },
-    "linux": {
-      "before": "asdf plugin-add rust https://github.com/code-lever/asdf-rust.git",
-      "asdf": "rust latest",
-      "after": "rustup toolchain install stable-gnu && rustup target add x86_64-pc-windows-gnu && rustup target add x86_64-unknown-ubuntu-gnu"
+    "fedora": {
+      "dnf": "rust cargo",
+      "notwhen": "which cargo"
+    },
+    "asdf": {
+      "plugin": "rust https://github.com/code-lever/asdf-rust.git",
+      "use": "rust system"
     }
   },
   {
@@ -322,10 +325,13 @@
     "windows": {
       "scoop": "go"
     },
-    "linux": {
-      "before": "asdf plugin add golang https://github.com/asdf-community/asdf-golang.git",
-      "asdf": "golang latest",
-      "notes": "Reshim when package install"
+    "fedora": {
+      "dnf": "golang",
+      "notwhen": "which go"
+    },
+    "asdf": {
+      "plugin": "golang https://github.com/asdf-community/asdf-golang.git",
+      "use": "golang system"
     }
   },
   {
@@ -333,9 +339,13 @@
     "windows": {
       "scoop": "openjdk"
     },
-    "linux": {
-      "before": "asdf plugin-add java https://github.com/halcyon/asdf-java.git",
-      "asdf": "java latest:openjdk"
+    "fedora": {
+      "dnf": "java-devel java-openjdk",
+      "notwhen": "which java"
+    },
+    "asdf": {
+      "plugin": "java https://github.com/halcyon/asdf-java.git",
+      "use": "java system"
     }
   },
   {
@@ -345,15 +355,16 @@
       "after": "python -m ensurepip ; python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel"
     },
     "ubuntu": {
-      "before": "sudo apt install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev && asdf plugin-add python https://github.com/asdf-community/asdf-python.git",
-      "asdf": "python latest",
-      "after": "python -m ensurepip && python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel",
-      "notes": "Reshim when package install"
+      "apt": "python3",
+      "after": "python -m ensurepip && python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel"
     },
     "fedora": {
-      "before": "sudo dnf install -y tk-dev liblzma-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev && asdf plugin-add python https://github.com/asdf-community/asdf-python.git",
-      "asdf": "python latest",
+      "dnf": "python3",
       "after": "python -m ensurepip && python -m pip install -U requests beautifulsoup4 matplotlib pandas ipykernel"
+    },
+    "asdf": {
+      "plugin": "python https://github.com/asdf-community/asdf-python.git",
+      "use": "python system"
     }
   },
   {
@@ -361,9 +372,10 @@
     "windows": {
       "scoop": "dotnet-sdk"
     },
-    "linux": {
-      "before": "asdf plugin add dotnet https://github.com/hensou/asdf-dotnet.git",
-      "asdf": "dotnet latest"
+    "asdf": {
+      "plugin": "dotnet https://github.com/hensou/asdf-dotnet.git",
+      "install": "dotnet latest",
+      "use": "dotnet latest"
     }
   },
   {
@@ -371,9 +383,13 @@
     "windows": {
       "scoop": "clj-deps"
     },
-    "linux": {
-      "before": "asdf plugin add clojure https://github.com/asdf-community/asdf-clojure.git",
-      "asdf": "clojure latest"
+    "fedora": {
+      "dnf": "clojure rlwrap",
+      "notwhen": "which clojure"
+    },
+    "asdf": {
+      "plugin": "clojure https://github.com/asdf-community/asdf-clojure.git",
+      "use": "clojure system"
     }
   },
   {
@@ -382,8 +398,8 @@
       "scoop": "babashka"
     },
     "linux": {
-      "before": "asdf plugin add babashka https://github.com/pitch-io/asdf-babashka.git",
-      "asdf": "babashka latest"
+      "sh": "sudo bash < <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)",
+      "notwhen": "which bb"
     }
   },
   {
@@ -391,9 +407,10 @@
     "windows": {
       "scoop": "leiningen"
     },
-    "linux": {
-      "before": "asdf plugin add lein https://github.com/miorimmax/asdf-lein.git",
-      "asdf": "lein latest"
+    "asdf": {
+      "plugin": "lein https://github.com/miorimmax/asdf-lein.git",
+      "install": "lein latest",
+      "use": "lein latest"
     }
   },
   {

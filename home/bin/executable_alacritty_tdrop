@@ -1,3 +1,0 @@
-#!/usr/bin/sh
-
-tdrop -am -w 60% -y 30% -x 20% alacritty --class "floating_pane" -o window.opacity=1

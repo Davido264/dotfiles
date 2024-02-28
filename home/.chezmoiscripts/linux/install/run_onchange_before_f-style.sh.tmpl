@@ -6,7 +6,7 @@
 # before
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.linux) | .linux.[]` | join "\n"}}
 
-{{ if (eq .chezmoi.osRelease.idLike "ubuntu debian") -}}
+{{ if (and (hasKey .chezmoi.osRelease "idLike") (eq .chezmoi.osRelease.idLike "ubuntu debian")) -}}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__before__) | .__before__ | select(.ubuntu) | .ubuntu.[]` | join "\n"}}
 {{ end -}}
 
@@ -19,7 +19,7 @@
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.linux.flatpak) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "flatpak info \(.linux.flatpak) 2> /dev/null") || (_(){ \(.linux.before // "true") && flatpak install -y flathub \(.linux.flatpak) && \(.linux.after // "true"); };_)"` | join "\n" }}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.linux.sh) | "echo '====[ \(.name) ]====' \n\(.linux.notwhen // "false") || (_(){ \(.linux.before // "true") && (\(.linux.sh)) && \(.linux.after // "true"); };_)"` | join "\n" }}
 
-{{ if (eq .chezmoi.osRelease.idLike "ubuntu debian") -}}
+{{ if (and (hasKey .chezmoi.osRelease "idLike") (eq .chezmoi.osRelease.idLike "ubuntu debian")) -}}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.ubuntu.apt) | "echo '====[ \(.name) ]====' \n\(.ubuntu.notwhen // "which \(.ubuntu.apt)") || (_(){ \(.ubuntu.before // "true") && sudo apt install -y \(.ubuntu.apt) && \(.ubuntu.after // "true"); };_)\n"` | join "\n" }}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.ubuntu.flatpak) | "echo '====[ \(.name) ]====' \n\(.ubuntu.notwhen // "flatpak info \(.ubuntu.flatpak) 2> /dev/null") || (_(){ \(.ubuntu.before // "true") && flatpak install -y flathub \(.ubuntu.flatpak) && \(.ubuntu.after // "true"); };_)"` | join "\n" }}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.ubuntu.sh) | "echo '====[ \(.name) ]====' \n\(.ubuntu.notwhen // "false") || (_(){ \(.ubuntu.before // "true") && (\(.ubuntu.sh)) && \(.ubuntu.after // "true"); };_)"` | join "\n" }}
@@ -35,7 +35,7 @@
 # after
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.linux) | .linux.[]` | join "\n"}}
 
-{{ if (eq .chezmoi.osRelease.idLike "ubuntu debian") -}}
+{{ if (and (hasKey .chezmoi.osRelease "idLike") (eq .chezmoi.osRelease.idLike "ubuntu debian")) -}}
 {{ joinPath .chezmoi.workingTree "vault" "style.json" | include | fromJson | jq `.[] | select(.__after__) | .__after__ | select(.ubuntu) | .ubuntu.[]` | join "\n"}}
 {{ end -}}
 

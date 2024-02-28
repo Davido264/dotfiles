@@ -5,12 +5,12 @@
         "scoop bucket add nerd-fonts"
       ],
       "linux": [
-        "macchina_version='v6.1.8'"
+        "macchina_version='v6.1.8'",
+        "nf_version='v3.1.1'"
       ],
       "ubuntu": [
         "bat_version='0.24.0'",
         "fastfetch_version='2.7.1'",
-        "nf_version='v3.1.1'",
         "lsd_version='1.0.0'"
       ]
     }
@@ -21,10 +21,7 @@
         "[Environment]::SetEnvironmentVariable(\"BAT_CONFIG_PATH\", \"$HOME\\.config\\bat\\config\", [EnvironmentVariableTarget]::User);"
       ],
       "linux": [
-        "find /usr/share/fonts -name '*Windows Compatible*' -delete",
-        "fc-cache -fv",
-        "cp ~/.profile ~/.profile.back",
-        "cp ~/.bashrc ~/.bashrc.back"
+        "fc-cache -fv"
       ]
     }
   },
@@ -70,7 +67,7 @@
       "scoop": "macchina"
     },
     "linux": {
-      "sh": "sudo curl -sSLo /usr/bin/macchina \"https://github.com/Macchina-CLI/macchina/releases/download/${macchina_version}/macchina-ubuntu-x86_64\" && sudo chmod +rx /usr/bin/macchina",
+      "sh": "sudo curl -sSLo /usr/bin/macchina \"https://github.com/Macchina-CLI/macchina/releases/download/${macchina_version}/macchina-linux-x86_64\" && sudo chmod +rx /usr/bin/macchina",
       "notwhen": "(which macchina && [ $(macchina --version | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $(echo $macchina_version | grep -oP '\\d+\\.\\d+\\.\\d+') ])"
     }
   },
@@ -124,7 +121,8 @@
       "apt": "fortune"
     },
     "fedora": {
-      "dnf": "fortune"
+      "dnf": "fortune-mod",
+      "notwhen": "which fortune"
     }
   },
   {
@@ -155,6 +153,13 @@
     "linux": {
       "sh": "sudo mkdir -p /usr/share/fonts/mononoki-nf && cd /usr/share/fonts/mononoki-nf && curl -L \"https://github.com/ryanoasis/nerd-fonts/releases/download/${nf_version}/Mononoki.tar.xz\" | sudo tar -xJ && cd ~",
       "notwhen": "[ -d /usr/share/fonts/mononoki-nf ]"
+    }
+  },
+  {
+    "name": "Font awesome",
+    "windows": null,
+    "fedora": {
+      "dnf": "fontawesome-fonts"
     }
   }
 ]

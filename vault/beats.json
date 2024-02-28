@@ -21,7 +21,7 @@
       ],
       "fedora": [
         "echo 'enable repositories'",
-        "sudo dnf copr enable ycollet/audinux"
+        "sudo dnf copr enable -y ycollet/audinux"
       ]
     }
   },

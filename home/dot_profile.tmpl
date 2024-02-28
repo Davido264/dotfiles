@@ -6,5 +6,4 @@ export XDG_CONFIG_HOME=~/.config
 export XDG_DATA_HOME=~/.local/share
 export XDG_CACHE_HOME=~/.cache
 export WORKSPACEROOT="{{- .default_workspace_location -}}"
-export PATH="$HOME/bin:$PATH"
-xmodmap -e "remove lock = Caps_Lock" && xmodmap -e "keycode 66 = Control_L" && xmodmap -e "add control = Control_L"
+export PATH="$HOME/.local/bin:$PATH"

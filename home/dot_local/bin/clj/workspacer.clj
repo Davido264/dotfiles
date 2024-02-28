@@ -1,3 +1,4 @@
+#!/usr/bin/env bb
 (ns workspacer
   (:require [workspacer.fetcher :as fetcher]
             [workspacer.open :as open]

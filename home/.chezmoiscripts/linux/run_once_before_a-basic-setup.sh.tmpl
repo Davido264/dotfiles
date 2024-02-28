@@ -1,29 +1,47 @@
 {{ if (eq .chezmoi.os "linux") -}}
 #!/bin/sh
 
+if [ -s $HOME/.config/user-dirs.dirs ]; then
+    mv "$HOME/Escritorio" "$HOME/Desktop"
+    mv "$HOME/Descargas" "$HOME/Downloads"
+    mv "$HOME/Plantillas" "$HOME/Templates"
+    mv "$HOME/Público" "$HOME/Public"
+    mv "$HOME/Documentos" "$HOME/Documents"
+    mv "$HOME/Música" "$HOME/Music"
+    mv "$HOME/Imágenes" "$HOME/Pictures"
+    mv "$HOME/Videos" "$HOME/Videos"
+    rm -f $HOME/.config/user-dirs.dirs
+fi
+
 {{ if (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 echo "Install flatpak if its not installed"
 # Surely it's a better way
 if ! which flatpak; then
-    if which apt; then
-        sudo apt install -y flatpak
-    else
-        sudo dnf install -y flatpak
-    fi
+{{ if (eq .chezmoi.osRelease.id "fedora") -}}
+    sudo dnf install -y flatpak
+{{ end -}}
+{{ if (and (hasKey .chezmoi.osRelease "idLike") (eq .chezmoi.osRelease.idLike "ubuntu debian")) -}}
+    sudo apt install -y flatpak
+{{ end -}}
 fi
 
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 {{ end -}}
 
+echo "Dark mode"
+which gsettings *>/dev/null && gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
 echo ""
 echo "Install asdf"
 asdf_version='v0.14.0'
 
-if which apt; then
-    sudo apt install -y curl git dirmngr gpg gawk
-else
-    sudo dnf install -y curl git dirmngr gpg gawk
-fi
+{{ if (eq .chezmoi.osRelease.id "fedora") -}}
+sudo dnf install -y curl git dirmngr gpg gawk
+{{ end -}}
+
+{{ if (and (hasKey .chezmoi.osRelease "idLike") (eq .chezmoi.osRelease.idLike "ubuntu debian")) -}}
+sudo apt install -y curl git dirmngr gpg gawk
+{{ end -}}
 
 if [ ! -d /opt/asdf ]; then
     sudo mkdir /opt/asdf && sudo chown david /opt/asdf
@@ -38,8 +56,6 @@ else
     asdf update
 fi
 
-echo '
-Defaults secure_path="/opt/asdf/shims:/opt/asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-Defaults env_keep+="ASDF_DATA_DIR ASDF_DIR"' | sudo tee /etc/sudoers.d/90-asdf
+echo 'Defaults env_keep+="ASDF_DATA_DIR ASDF_DIR"' | sudo tee /etc/sudoers.d/90-asdf
 
 {{ end -}}

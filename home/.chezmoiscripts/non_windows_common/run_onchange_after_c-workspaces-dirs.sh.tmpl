@@ -3,7 +3,7 @@
 
 WORKSPACE_ROOT={{- .default_workspace_location }}
 CHEZMOI_HOME={{- .chezmoi.workingTree }}
-SCRIPT_HOME={{- (joinPath .chezmoi.sourceDir "bin") }}
+SCRIPT_HOME={{- (joinPath .chezmoi.sourceDir "dot_local" "bin") }}
 
 
 echo $WORKSPACE_ROOT

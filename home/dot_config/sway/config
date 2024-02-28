@@ -15,19 +15,23 @@ set $up k
 set $right l
 # Alacritty as default terminal emulator
 set $term alacritty
-# Wofi as application launcher
-set $menu wofi --show drun  -i | xargs swaymsg exec --
-# Wob socket
-set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+# rofi-wayland as application launcher
+set $menu rofi -terminal '$term' -show combi -combi-modes drun#run -modes combi
+# Overlay Display cmds
+set $brightness_notification_cmd  command -v notify-send >/dev/null && \
+        VALUE=$(light) && VALUE=${VALUE%%.*} && \
+        notify-send -e -h string:x-canonical-private-synchronous:brightness \
+            -h "int:value:$VALUE" -t 800 "Brightness: ${VALUE}%"
+set $volume_helper_cmd /usr/libexec/sway/volume-helper
 # Wallpaper
 set $wallpaper ~/Pictures/wallpapers/chinatown-solarized.png
 # Workspaces
-set $ws1 "Dev"
-set $ws2 "Browsing"
-set $ws3 "Comunication"
-set $ws4 "Media"
-set $ws5 "Music"
-set $ws6 "..."
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 "+"
+
 
 ### Output configuration
 #
@@ -50,6 +54,7 @@ input "type:touchpad" {
 }
 # Caps as second control, and menu as second super
 input "type:keyboard" {
+    xkb_layout us(intl)
     xkb_options caps:ctrl_modifier,altwin:menu_win
 }
 
@@ -58,8 +63,7 @@ input "type:keyboard" {
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec $term
-    bindsym $alt+dead_grave exec $term
+    include /home/david/.config/sway/scratchpad
 
     # Start a browser:
     bindsym $mod+shift+b exec brave-browser
@@ -83,7 +87,10 @@ input "type:keyboard" {
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
     # Lock screen
-    bindsym $mod+Escape exec bash ~/.config/sway/lock_screen.sh
+    bindsym $mod+Escape exec swaylock -f
+
+    # Call notification panel
+    bindsym $mod+n exec swaync-client -t -sw
 #
 # Moving around:
 #
@@ -117,14 +124,12 @@ input "type:keyboard" {
     bindsym $mod+3 workspace $ws3
     bindsym $mod+4 workspace $ws4
     bindsym $mod+5 workspace $ws5
-    bindsym $mod+6 workspace $ws6
     # Move focused container to workspace
     bindsym $mod+Shift+1 move container to workspace $ws1
     bindsym $mod+Shift+2 move container to workspace $ws2
     bindsym $mod+Shift+3 move container to workspace $ws3
     bindsym $mod+Shift+4 move container to workspace $ws4
     bindsym $mod+Shift+5 move container to workspace $ws5
-    bindsym $mod+Shift+6 move container to workspace $ws6
 #
 # Layout stuff:
 #
@@ -153,14 +158,35 @@ input "type:keyboard" {
 #
 # Hardware:
 #
-    # Volume up and down
-    bindsym XF86AudioRaiseVolume exec "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+; pkill -RTMIN+8 waybar"
-    bindsym XF86AudioLowerVolume exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; pkill -RTMIN+8 waybar"
-    bindsym XF86AudioMute exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; pkill -RTMIN+8 waybar"
+    bindsym {
+        # Brightness
+        XF86MonBrightnessDown exec 'STEP="$brightness_step" && light -U ${STEP:-5} && $brightness_notification_cmd'
+        XF86MonBrightnessUp exec 'STEP="$brightness_step" && light -A ${STEP:-5} && $brightness_notification_cmd'
 
-    # Brightness
-    bindsym XF86MonBrightnessDown exec "sudo brightnessctl set 10%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK"
-    bindsym XF86MonBrightnessUp exec "sudo brightnessctl set +10% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK"
+        # Capture the currently active output
+        Print exec grimshot save output
+        # Capture the currently active window
+        Alt+Print exec grimshot save active
+        # Select and capture a custom rectangular area
+        Ctrl+Print exec grimshot save area
+    }
+
+    # Allow volume controls even if the screen is locked
+    bindsym --locked {
+        XF86AudioRaiseVolume exec $volume_helper_cmd --limit "$volume_limit" --increase "$volume_step"
+        XF86AudioLowerVolume exec $volume_helper_cmd --limit "$volume_limit" --decrease "$volume_step"
+        XF86AudioMute    exec pactl set-sink-mute @DEFAULT_SINK@ toggle && $volume_helper_cmd
+        XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+    }
+
+#
+# A special mode for passing any keybindings to the focused application
+#
+mode "passthrough" {
+    bindsym $mod+Pause mode default
+}
+bindsym $mod+Pause mode "passthrough"
+
 #
 # Scratchpad:
 #
@@ -196,6 +222,7 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 bar {
+    position top
     swaybar_command waybar
 }
 
@@ -220,3 +247,4 @@ include /etc/sway/config.d/*
 include /home/david/.config/sway/app_rules
 include /home/david/.config/sway/auto_start
 include /home/david/.config/sway/colors
+include /home/david/.config/sway/environment

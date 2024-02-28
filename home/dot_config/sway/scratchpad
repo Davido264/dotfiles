@@ -1,0 +1,16 @@
+# vim: ft=swayconfig
+
+set $alacritty alacritty --class "dropdown" -o window.opacity=1
+
+# alacritty scratchpad
+for_window [app_id="dropdown"] {
+    floating enable
+    border pixel 5
+    resize set 70 ppt 60 ppt
+    move position center
+    move to scratchpad
+    scratchpad show
+}
+
+bindsym $mod+Return exec (swaymsg "[app_id=dropdown] scratchpad show") || exec $alacritty
+bindsym --to-code $alt+grave exec (swaymsg "[app_id=dropdown] scratchpad show") || exec $alacritty

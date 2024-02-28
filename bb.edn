@@ -1,2 +1,2 @@
-{:paths ["home/bin/clj"]
+{:paths ["home/dot_local/bin/clj"]
  :deps {fancy/fancy {:mvn/version "0.2.3"}}}
