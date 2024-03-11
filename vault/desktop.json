@@ -1,156 +1,184 @@
-[
-  {
-    "__before__": {
-      "windows": null,
-      "linux": [
-        "uad_version='0.5.1'"
-      ],
-      "fedora": [
-        "sudo dnf install dnf-plugins-core"
-      ]
-    }
+{
+  "wsl": false,
+  "promptSudoOnce": true,
+  "vars": {
+    "uad_version": "0.5.1"
   },
-  {
-    "name": "VLC",
-    "windows": {
-      "winget": "VideoLAN.VLC"
-    },
-    "ubuntu": {
-      "before": "(add-apt-repository -L | grep 'videolan/master-daily') || (sudo add-apt-repository --yes -P ppa:videolan/master-daily && sudo apt update)",
-      "apt": "vlc"
-    },
-    "fedora": {
-      "dnf": "vlc"
-    }
+  "before": {
+    "windows": null,
+    "ubuntu": [
+      "sudo apt install -y android-sdk-platform-tools"
+    ],
+    "fedora": [
+      "sudo dnf install -y dnf-plugins-core"
+    ]
   },
-  {
-    "name": "Discord",
-    "windows": {
-      "winget": "Discord.Discord"
+  "packages": [
+    {
+      "name": "VLC",
+      "windows": {
+        "winget": "VideoLAN.VLC"
+      },
+      "ubuntu": {
+        "apt": {
+          "before": "(add-apt-repository -L | grep 'videolan/master-daily') || (sudo add-apt-repository --yes -P ppa:videolan/master-daily && sudo apt update)",
+          "pkg": "vlc"
+        }
+      },
+      "fedora": {
+        "dnf": "vlc"
+      }
     },
-    "linux": {
-      "flatpak": "dev.vencord.Vesktop",
-      "notes": "client with screen and audio share"
-    }
-  },
-  {
-    "name": "Brave Browser",
-    "windows": {
-      "winget": "Brave.Brave"
+    {
+      "name": "Discord",
+      "windows": {
+        "winget": "Discord.Discord"
+      },
+      "linux": {
+        "flatpak": "dev.vencord.Vesktop"
+      }
     },
-    "ubuntu": {
-      "before": "[ -s /etc/apt/sources.list.d/brave-browser-release.list ] || (sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main'| sudo tee /etc/apt/sources.list.d/brave-browser-release.list && sudo apt update)",
-      "apt": "brave-browser"
+    {
+      "name": "Brave Browser",
+      "windows": {
+        "winget": "Brave.Brave"
+      },
+      "ubuntu": {
+        "apt": {
+          "before": "[ -s /etc/apt/sources.list.d/brave-browser-release.list ] || (sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main'| sudo tee /etc/apt/sources.list.d/brave-browser-release.list && sudo apt update)",
+          "pkg": "brave-browser"
+        }
+      },
+      "fedora": {
+        "dnf": {
+          "before": "sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo && sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc",
+          "pkg": "brave-browser"
+        }
+      }
     },
-    "fedora": {
-      "before": "sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo && sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc",
-      "dnf": "brave-browser"
-    }
-  },
-  {
-    "name": "Inkscape",
-    "windows": {
-      "winget": "Inkscape.Inkscape"
+    {
+      "name": "Libre Office Suite",
+      "fedora": {
+        "dnf": "@LibreOffice",
+        "check": "dnf list installed libreoffice-calc"
+      }
     },
-    "linux": {
-      "flatpak": "org.inkscape.Inkscape"
-    }
-  },
-  {
-    "name": "Obsidian",
-    "windows": {
-      "winget": "Obsidian.Obsidian"
+    {
+      "name": "Inkscape",
+      "windows": {
+        "winget": "Inkscape.Inkscape"
+      },
+      "linux": {
+        "flatpak": "org.inkscape.Inkscape"
+      }
     },
-    "linux": {
-      "flatpak": "md.obsidian.Obsidian"
-    }
-  },
-  {
-    "name": "Spotify",
-    "windows": {
-      "winget": "Spotify.Spotify"
+    {
+      "name": "Obsidian",
+      "windows": {
+        "winget": "Obsidian.Obsidian"
+      },
+      "linux": {
+        "flatpak": "md.obsidian.Obsidian"
+      }
     },
-    "ubuntu": {
-      "before": "[ -s /etc/apt/sources.list.d/spotify.list ] || (curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg && echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list && sudo apt update)",
-      "apt": "spotify-client"
+    {
+      "name": "Spotify",
+      "windows": {
+        "winget": "Spotify.Spotify"
+      },
+      "ubuntu": {
+        "apt": {
+          "before": "[ -s /etc/apt/sources.list.d/spotify.list ] || (curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg && echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list && sudo apt update)",
+          "pkg": "spotify-client"
+        }
+      },
+      "fedora": {
+        "flatpak": "com.spotify.Client"
+      }
     },
-    "fedora": {
-      "flatpak": "com.spotify.Client"
-    }
-  },
-  {
-    "name": "TelegramDesktop",
-    "windows": {
-      "winget": "Telegram.TelegramDesktop"
+    {
+      "name": "TelegramDesktop",
+      "windows": {
+        "winget": "Telegram.TelegramDesktop"
+      },
+      "linux": {
+        "flatpak": "org.telegram.desktop"
+      }
     },
-    "linux": {
-      "flatpak": "org.telegram.desktop"
-    }
-  },
-  {
-    "name": "Blender",
-    "windows": {
-      "winget": "BlenderFoundation.Blender"
+    {
+      "name": "Blender",
+      "windows": {
+        "winget": "BlenderFoundation.Blender"
+      },
+      "linux": {
+        "flatpak": "org.blender.Blender"
+      }
     },
-    "linux": {
-      "flatpak": "org.blender.Blender"
-    }
-  },
-  {
-    "name": "KDE.Krita",
-    "windows": {
-      "winget": "KDE.Krita"
+    {
+      "name": "KDE.Krita",
+      "windows": {
+        "winget": "KDE.Krita"
+      },
+      "linux": {
+        "flatpak": "org.kde.krita"
+      }
     },
-    "linux": {
-      "flatpak": "org.kde.krita"
-    }
-  },
-  {
-    "name": "OBSStudio",
-    "windows": {
-      "winget": "OBSProject.OBSStudio"
+    {
+      "name": "OBSStudio",
+      "windows": {
+        "winget": "OBSProject.OBSStudio"
+      },
+      "ubuntu": {
+        "apt": {
+          "before": "(add-apt-repository -L | grep 'obsproject/obs-studio') || (sudo add-apt-repository --yes -P ppa:obsproject/obs-studio  && sudo apt update)",
+          "pkg": "obs-studio"
+        }
+      },
+      "fedora": {
+        "dnf": "obs-studio"
+      }
     },
-    "ubuntu": {
-      "before": "(add-apt-repository -L | grep 'obsproject/obs-studio') || (sudo add-apt-repository --yes -P ppa:obsproject/obs-studio  && sudo apt update)",
-      "apt": "obs-studio"
+    {
+      "name": "universal-android-debloater",
+      "windows": {
+        "scoop": "universal-android-debloater"
+      },
+      "linux": {
+        "sh": {
+          "script": [
+            "curl -sSL \"https://github.com/0x192/universal-android-debloater/releases/download/${uad_version}/uad_gui-linux.tar.gz\" | tar -xzvf -",
+            "sudo chmod +rx ./uad_gui-linux",
+            "sudo chown root ./uad_gui-linux",
+            "sudo mv ./uad_gui-linux /usr/bin/uad",
+            "printf \"[Desktop Entry]\\nEncoding=UTF-8\\nType=Application\\nTerminal=false\\nExec=/usr/bin/uad\\nName=Universal Android Debloater\\n\" | sudo tee /usr/share/applications/UniversalAndroidDebloater.desktop"
+          ],
+          "check": "which uad"
+        }
+      }
     },
-    "fedora": {
-      "dnf": "obs-studio"
-    }
-  },
-  {
-    "name": "universal-android-debloater",
-    "windows": {
-      "scoop": "universal-android-debloater"
+    {
+      "name": "magicavoxel",
+      "windows": {
+        "scoop": "magicavoxel"
+      }
     },
-    "linux": {
-      "before": "sudo apt install -y android-sdk-platform-tools",
-      "sh": "curl -sSL \"https://github.com/0x192/universal-android-debloater/releases/download/${uad_version}/uad_gui-ubuntu.tar.gz\" | tar -xzvf - && sudo chmod +rx ./uad_gui-linux && sudo chown root ./uad_gui-linux && sudo mv ./uad_gui-linux /usr/bin/uad",
-      "notwhen": "which uad"
+    {
+      "name": "gifcam",
+      "windows": {
+        "scoop": "gifcam"
+      }
+    },
+    {
+      "name": "WhatsApp Desktop",
+      "windows": {
+        "winget": "WhatsApp.WhatsApp"
+      }
+    },
+    {
+      "name": "Carnac",
+      "windows": {
+        "winget": "code52.Carnac"
+      }
     }
-  },
-  {
-    "name": "magicavoxel",
-    "windows": {
-      "scoop": "magicavoxel"
-    }
-  },
-  {
-    "name": "gifcam",
-    "windows": {
-      "scoop": "gifcam"
-    }
-  },
-  {
-    "name": "WhatsApp Desktop",
-    "windows": {
-      "winget": "WhatsApp.WhatsApp"
-    }
-  },
-  {
-    "name": "Carnac",
-    "windows": {
-      "winget": "code52.Carnac"
-    }
-  }
-]
+  ]
+}

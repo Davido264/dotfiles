@@ -1,30 +1,45 @@
-[
-  {
-    "name": "EpicGames Launcher",
-    "windows": {
-      "winget": "EpicGames.EpicGamesLauncher"
-    }
-  },
-  {
-    "name": "Prism Launcher",
-    "windows": {
-      "winget": "PrismLauncher.PrismLauncher"
+{
+  "wsl": false,
+  "promptSudoOnce": true,
+  "packages": [
+    {
+      "name": "EpicGames Launcher",
+      "windows": {
+        "winget": "EpicGames.EpicGamesLauncher"
+      }
     },
-    "linux": {
-      "flatpak": "org.prismlauncher.PrismLauncher"
-    }
-  },
-  {
-    "name": "Super Smash Flash",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/42b2e11fb5f5d246e0899c8f5dc1f4bc/raw/e4b8cc57dcf6d0f592cf699d101a1d393d954156/ssf2.json",
-      "notwhen": "exit 0"
+    {
+      "name": "Prism Launcher",
+      "windows": {
+        "winget": "PrismLauncher.PrismLauncher"
+      },
+      "linux": {
+        "flatpak": "org.prismlauncher.PrismLauncher"
+      }
     },
-    "linux": {
-      "before": "sudo mkdir /usr/share/ssf2 && cd /usr/share/ssf2",
-      "sh": "curl -sSL https://cdn.supersmashflash.com/ssf2/downloads/14ac5596/SSF2BetaLinux.v1.3.1.2.tar | sudo tar -xvf - && printf '#!/usr/bin/sh\\ncd /usr/share/ssf2 && ./SSF2 &\\n' | sudo tee /usr/bin/SSF2 && sudo chmod +x /usr/bin/SSF2",
-      "after": "sudo chmod +x trust-ssf2.sh && ./trust-ssf2.sh && cd ~",
-      "notwhen": "which SSF2"
+    {
+      "name": "Super Smash Flash",
+      "windows": {
+        "scoop": {
+          "pkg":"https://gist.githubusercontent.com/Davido264/42b2e11fb5f5d246e0899c8f5dc1f4bc/raw/e4b8cc57dcf6d0f592cf699d101a1d393d954156/ssf2.json", 
+          "check": "exit 0"
+        }
+      },
+      "linux": {
+        "sh": {
+          "script": [
+            "sudo mkdir /usr/share/ssf2",
+            "cd /usr/share/ssf2",
+            "curl -sSL https://cdn.supersmashflash.com/ssf2/downloads/14ac5596/SSF2BetaLinux.v1.3.1.2.tar | sudo tar -xvf -",
+            "printf '#!/usr/bin/sh\\ncd /usr/share/ssf2 && ./SSF2 &\\n' | sudo tee /usr/bin/SSF2",
+            "sudo chmod +x /usr/bin/SSF2",
+            "sudo chmod +x trust-ssf2.sh && ./trust-ssf2.sh",
+            "sudo curl -o /usr/share/ssf2/ssf2.jpg https://pbs.twimg.com/profile_images/1457040947322163205/dpmR-CI3_400x400.jpg",
+            "printf \"[Desktop Entry]\\nEncoding=UTF-8\\nType=Application\\nTerminal=false\\nExec=/usr/bin/SSF2\\nName=Super Smash Flash 2\\nIcon=/usr/share/ssf2/ssf2.jpg\\n\" | sudo tee /usr/share/applications/SuperSmashFlash2.desktop"
+          ],
+          "check": "which SSF2"
+        }
+      }
     }
-  }
-]
+  ]
+}

@@ -1,184 +1,239 @@
-[
-  {
-    "__before__": {
-      "windows": null,
-      "ubuntu": [
-        "echo 'Checking kxstudio-repos'",
-        "apt show kxstudio-repos 2>/dev/null | grep 'APT-Manual-Installed: yes'",
-        "if [ $? -ne 0 ]; then",
-        "   echo 'Installing kxstudio-repos'",
-        "   mkdir -p /tmp/kxstudio && cd /tmp/kxstudio",
-        "   sudo apt install -y apt-transport-https gpgv wget",
-        "   wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_11.1.0_all.deb",
-        "   sudo apt install -y /tmp/kxstudio/kxstudio-repos_11.1.0_all.deb",
-        "   cd ~ && rm /tmp/kxstudio",
-        "   sudo apt update -y",
-        "fi",
-        "sudo apt install -y build-essential git libboost-all-dev gcc g++ pkg-config libasound2-dev libgtk2.0-dev libglibmm-2.4-dev libsndfile1-dev libarchive-dev liblo-dev libtag1-dev vamp-plugin-sdk librubberband-dev libfftw3-dev libaubio-dev libxml2-dev libsamplerate-dev lv2-dev libserd-dev libsord-dev libsratom-dev liblilv-dev libgtkmm-2.4-dev libjack-jackd2-dev libogg-dev libcppunit-dev libudev-dev libwebsockets-dev libusb-dev libsuil-dev libdbus-1-dev xjadeo libusb-1.0-0-dev libreadline-dev  libarchive-dev liblo-dev libtag1-dev libvamp-sdk2v5 librubberband-dev libaubio-dev libpangomm-1.4-dev libserd-dev libsord-dev libsratom-dev liblilv-dev libgtkmm-2.4-dev libsuil-dev libcppunit-dev python3 liblrdf0-dev",
-        "chow_version='2.11.4'",
-        "odin_version='2.3-4'",
-        "ardour_version='8.2'"
-      ],
-      "fedora": [
-        "echo 'enable repositories'",
-        "sudo dnf copr enable -y ycollet/audinux"
-      ]
-    }
+{
+  "wsl": false,
+  "promptSudoOnce": true,
+  "vars": {
+    "chow_version": "2.11.4",
+    "odin_version": "2.3-4",
+    "ardour_version": "8.2"
   },
-  {
-    "name": "FL Studio",
-    "windows": {
-      "winget": "ImageLine.FLStudio"
-    }
+  "before": {
+    "ubuntu": [
+      "echo 'Checking kxstudio-repos'",
+      "apt show kxstudio-repos 2>/dev/null | grep 'APT-Manual-Installed: yes'",
+      "if [ $? -ne 0 ]; then",
+      "   echo 'Installing kxstudio-repos'",
+      "   mkdir -p /tmp/kxstudio && cd /tmp/kxstudio",
+      "   sudo apt install -y apt-transport-https gpgv wget",
+      "   wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_11.1.0_all.deb",
+      "   sudo apt install -y /tmp/kxstudio/kxstudio-repos_11.1.0_all.deb",
+      "   cd ~ && rm /tmp/kxstudio",
+      "   sudo apt update -y",
+      "fi",
+      "sudo apt install -y build-essential git libboost-all-dev gcc g++ pkg-config libasound2-dev libgtk2.0-dev libglibmm-2.4-dev libsndfile1-dev libarchive-dev liblo-dev libtag1-dev vamp-plugin-sdk librubberband-dev libfftw3-dev libaubio-dev libxml2-dev libsamplerate-dev lv2-dev libserd-dev libsord-dev libsratom-dev liblilv-dev libgtkmm-2.4-dev libjack-jackd2-dev libogg-dev libcppunit-dev libudev-dev libwebsockets-dev libusb-dev libsuil-dev libdbus-1-dev xjadeo libusb-1.0-0-dev libreadline-dev  libarchive-dev liblo-dev libtag1-dev libvamp-sdk2v5 librubberband-dev libaubio-dev libpangomm-1.4-dev libserd-dev libsord-dev libsratom-dev liblilv-dev libgtkmm-2.4-dev libsuil-dev libcppunit-dev python3 liblrdf0-dev"
+    ],
+    "fedora": [
+      "echo 'enable repositories'",
+      "sudo dnf copr enable -y ycollet/audinux"
+    ]
   },
-  {
-    "name": "Ardour",
-    "ubuntu": {
-      "before": "sudo mkdir -p /usr/local/src/ardour && cd /usr/local/src/ardour",
-      "sh": "git clone --depth 1 --branch $ardour_version https://github.com/Ardour/ardour.git . && ./waf configure --cxx11 --optimize && ./waf -j4 && sudo ./waf install",
-      "after": "cd ~ && sudo rm -rf /usr/local/src/ardour",
-      "notwhen": "which ardour8"
+  "packages": [
+    {
+      "name": "FL Studio",
+      "windows": {
+        "winget": "ImageLine.FLStudio"
+      }
     },
-    "fedora": {
-      "dnf": "ardour8"
-    }
-  },
-  {
-    "name": "JACK2",
-    "windows": {
-      "winget": "Jackaudio.JACK2"
+    {
+      "name": "Ardour",
+      "ubuntu": {
+        "sh": {
+          "script": [
+            "sudo mkdir -p /usr/local/src/ardour",
+            "git clone --depth 1 --branch $ardour_version https://github.com/Ardour/ardour.git /usr/local/src/ardour",
+            "cd /usr/local/src/ardour",
+            "./waf configure --cxx11 --optimize && ./waf -j4",
+            "sudo ./waf install",
+            "cd ~",
+            "sudo rm -rf /usr/local/src/ardour"
+          ],
+          "check": "which ardour8"
+        }
+      },
+      "fedora": {
+        "dnf": "ardour8"
+      }
     },
-    "ubuntu": {
-      "before": "(sudo debconf-get-selections | grep jackd2 *> /dev/null) || (echo 'jackd2 jackd/tweak_rt_limits boolean true' | sudo debconf-set-selections)",
-      "apt": "jackd2 qjackctl",
-      "notwhen": "which qjackctl"
+    {
+      "name": "JACK2",
+      "windows": {
+        "winget": "Jackaudio.JACK2"
+      },
+      "ubuntu": {
+        "apt": {
+          "before": "(sudo debconf-get-selections | grep jackd2 *> /dev/null) || (echo 'jackd2 jackd/tweak_rt_limits boolean true' | sudo debconf-set-selections)",
+          "pkg": "jackd2 qjackctl",
+          "check": "which qjackctl"
+        }
+      },
+      "fedora": {
+        "dnf": {
+          "pkg": "jack-audio-connection-kit qjackctl",
+          "check": "which qjackctl",
+          "after": "sudo usermod -a -G jackuser $(whoami) && sudo usermod -a -G audio $(whoami)"
+        }
+      }
     },
-    "fedora": {
-      "dnf": "jack-audio-connection-kit qjackctl",
-      "notwhen": "which qjackctl",
-      "after": "sudo usermod -a -G jackuser $(whoami) && sudo usermod -a -G audio $(whoami)"
-    }
-  },
-  {
-    "name": "cardinal",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/cardinal.json",
-      "notwhen": "exit 0"
+    {
+      "name": "cardinal",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/cardinal.json",
+          "check": "exit 0"
+        }
+      },
+      "ubuntu": {
+        "apt": {
+          "pkg": "cardinal cardinal-clap",
+          "check": "(apt show cardinal 2>/dev/null | grep 'APT-Manual-Installed: yes') && (apt show cardinal-clap 2>/dev/null | grep 'APT-Manual-Installed: yes')"
+        }
+      },
+      "fedora": {
+        "dnf": "cardinal"
+      }
     },
-    "ubuntu": {
-      "apt": "cardinal cardinal-clap",
-      "notwhen": "(apt show cardinal 2>/dev/null | grep 'APT-Manual-Installed: yes') && (apt show cardinal-clap 2>/dev/null | grep 'APT-Manual-Installed: yes')"
+    {
+      "name": "chow-tape",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/chow-tape.json",
+          "check": "exit 0"
+        }
+      },
+      "ubuntu": {
+        "sh": {
+          "script": [
+            "curl -sSLo /tmp/chow.deb \"https://github.com/jatinchowdhury18/AnalogTapeModel/releases/download/v${chow_version}/ChowTapeModel-ubuntu-x64-${chow_version}.deb\"",
+            "sudo apt install -y /tmp/chow.deb",
+            "rm /tmp/chow.deb"
+          ],
+          "check": "((apt show chowtape 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show chowtape 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $chow_version ])"
+        }
+      },
+      "fedora": {
+        "dnf": "AnalogTapeModel"
+      }
     },
-    "fedora": {
-      "dnf": "cardinal"
-    }
-  },
-  {
-    "name": "chow-tape",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/chow-tape.json",
-      "notwhen": "exit 0"
+    {
+      "name": "giada",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/giada.json",
+          "check": "exit 0"
+        }
+      },
+      "linux": {
+        "flatpak": "com.giadamusic.Giada"
+      }
     },
-    "ubuntu": {
-      "sh": "curl -sSLo /tmp/chow.deb \"https://github.com/jatinchowdhury18/AnalogTapeModel/releases/download/v${chow_version}/ChowTapeModel-ubuntu-x64-${chow_version}.deb\" && sudo apt install -y /tmp/chow.deb",
-      "after": "rm /tmp/chow.deb",
-      "notwhen": "((apt show chowtape 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show chowtape 2>/dev/null | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $chow_version ])"
+    {
+      "name": "odin",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/odin.json",
+          "check": "exit 0"
+        }
+      },
+      "ubuntu": {
+        "sh": {
+          "script": [
+            "curl -sSLo /tmp/odin.deb \"https://dl.dropboxusercontent.com/s/hwgdgdxz1p2visj/Odin2-synth_${odin_version}.deb\"",
+            "sudo apt install -y /tmp/odin.deb",
+            "rm /tmp/odin.deb"
+          ],
+          "check": "((apt show odin2-synth 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show odin2-synth 2>/dev/null | grep -oP '\\d+\\.\\d+-\\d+' | head -n1) = $odin_version ])"
+        }
+      },
+      "fedora": {
+        "dnf": "odin2"
+      }
     },
-    "fedora": {
-      "dnf": "AnalogTapeModel"
-    }
-  },
-  {
-    "name": "giada",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/giada.json",
-      "notwhen": "exit 0"
-
+    {
+      "name": "surge-synth",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/surge-synth.json",
+          "check": "exit 0"
+        }
+      },
+      "ubuntu": {
+        "apt": {
+          "pkg": "surge",
+          "check": "apt show surge 2>/dev/null | grep 'APT-Manual-Installed: yes'"
+        }
+      },
+      "fedora": {
+        "dnf": "surge-xt"
+      }
     },
-    "linux": {
-      "flatpak": "com.giadamusic.Giada"
-    }
-  },
-  {
-    "name": "odin",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/odin.json",
-      "notwhen": "exit 0"
+    {
+      "name": "tal-noise-maker",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/tal-noise-maker.json",
+          "check": "exit 0"
+        }
+      },
+      "linux": {
+        "sh": {
+          "script": [
+            "mkdir -p /tmp/tal",
+            "cd /tmp/tal",
+            "curl -sSLo /tmp/tal/tal.zip https://tal-software.com/downloads/plugins/TAL-NoiseMaker_64_linux.zip",
+            "unzip /tmp/tal/tal.zip",
+            "cd /tmp/tal/TAL-NoiseMaker",
+            "sudo mv ./TAL-NoiseMaker.vst3 /usr/lib/vst3/",
+            "sudo mv ./TAL-NoiseMaker.clap /usr/lib/clap/",
+            "cd ~",
+            "rm -rf /tmp/tal"
+          ],
+          "check": "([ -f /usr/lib/clap/TAL-NoiseMaker.clap ] && [ -d /usr/lib/vst3/TAL-NoiseMaker.vst3 ])"
+        }
+      }
     },
-    "ubuntu": {
-      "sh": "curl -sSLo /tmp/odin.deb \"https://dl.dropboxusercontent.com/s/hwgdgdxz1p2visj/Odin2-synth_${odin_version}.deb\" && sudo apt install -y /tmp/odin.deb",
-      "notwhen": "((apt show odin2-synth 2>/dev/null | grep 'Status: install ok installed') && [ $(apt show odin2-synth 2>/dev/null | grep -oP '\\d+\\.\\d+-\\d+' | head -n1) = $odin_version ])",
-      "after": "rm /tmp/odin.deb"
+    {
+      "name": "Vital",
+      "windows": {
+        "pending": "https://account.vital.audio/"
+      },
+      "linux": {
+        "pending": "https://account.vital.audio/"
+      }
     },
-    "fedora": {
-      "dnf": "odin2"
-    }
-  },
-  {
-    "name": "surge-synth",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/surge-synth.json",
-      "notwhen": "exit 0"
+    {
+      "name": "OTT",
+      "windows": {
+        "pending": "https://xferrecords.com/product_downloads/25/freeware"
+      }
     },
-    "ubuntu": {
-      "apt": "surge",
-      "notwhen": "apt show surge 2>/dev/null | grep 'APT-Manual-Installed: yes'"
+    {
+      "name": "youlean-meter",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/youlean-meter.json",
+          "check": "exit 0"
+        }
+      }
     },
-    "fedora": {
-      "dnf": "surge-xt"
-    }
-  },
-  {
-    "name": "tal-noise-maker",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/tal-noise-maker.json",
-      "notwhen": "exit 0"
+    {
+      "name": "labs-lm",
+      "windows": {
+        "scoop": {
+          "pkg": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/labs-lm.json",
+          "check": "exit 0"
+        }
+      }
     },
-    "linux": {
-      "sh": "mkdir -p /tmp/tal && cd /tmp/tal && curl -sSLo /tmp/tal/tal.zip https://tal-software.com/downloads/plugins/TAL-NoiseMaker_64_ubuntu.zip && unzip /tmp/tal/tal.zip && cd /tmp/tal/TAL-NoiseMaker && sudo mv ./TAL-NoiseMaker.vst3 /usr/lib/vst3/ && sudo mv ./TAL-NoiseMaker.clap /usr/lib/clap/ && cd ~",
-      "notwhen": "([ -f /usr/lib/clap/TAL-NoiseMaker.clap ] && [ -d /usr/lib/vst3/TAL-NoiseMaker.vst3 ])",
-      "after": "rm -rf /tmp/tal"
-    }
-  },
-  {
-    "name": "Vital",
-    "windows": {
-      "pending": "https://account.vital.audio/"
+    {
+      "name": "Ample Guitar Lite",
+      "windows": {
+        "pending": "https://plugins4free.com/plugin/2233/"
+      }
     },
-    "linux": {
-      "pending": "https://account.vital.audio/"
+    {
+      "name": "Ample Cloud Drum Lite",
+      "windows": {
+        "pending": "https://plugins4free.com/plugin/3181/"
+      }
     }
-  },
-  {
-    "name": "OTT",
-    "windows": {
-      "pending": "https://xferrecords.com/product_downloads/25/freeware"
-    }
-  },
-  {
-    "name": "youlean-meter",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/youlean-meter.json",
-      "notwhen": "exit 0"
-    }
-  },
-  {
-    "name": "labs-lm",
-    "windows": {
-      "scoop": "https://gist.githubusercontent.com/Davido264/a277db84cb1914188f110255ebf2561c/raw/d0dad6536d50e3d267f55b275224a1b8e13c885e/labs-lm.json",
-      "notwhen": "exit 0"
-    }
-  },
-  {
-    "name": "Ample Guitar Lite",
-    "windows": {
-      "pending": "https://plugins4free.com/plugin/2233/"
-    }
-  },
-  {
-    "name": "Ample Cloud Drum Lite",
-    "windows": {
-      "pending": "https://plugins4free.com/plugin/3181/"
-    }
-  }
-]
+  ]
+}

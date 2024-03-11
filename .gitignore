@@ -2,3 +2,7 @@ private_key
 **/.clj-kondo/
 **/.lsp/
 **/.nrepl-port
+.log/
+.last_exec
+.tmp*
+.tmp/

@@ -2,7 +2,7 @@
 
 if which apt; then
     sudo apt update -y && sudo apt upgrade -y
-    sudo apt install git curl
+    sudo apt install git curl python3 pip
 else
     echo '=== [ fast dnf ] ==='
     printf 'max_parallel_downloads=10\nfastestmirror=True\n' | sudo tee -a /etc/dnf/dnf.conf
@@ -11,11 +11,13 @@ else
     echo '=== [rpm fusion (free and non-free)] ==='
     sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-    sudo dnf install -y git curl
+    sudo dnf install -y git curl python3 pip
 fi
 
 sudo sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
-chezmoi init --apply Davido264
+chezmoi init Davido264
+pip3 install -r ~/.local/share/chezmoi/requirements.txt
+chezmoi apply
 
 if [ $? -eq 0 ]; then
     if which apt; then
