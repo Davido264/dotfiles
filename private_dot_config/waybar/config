@@ -1,0 +1,40 @@
+// vim: ft=jsonc
+{
+  "layer": "top",
+  //"mode": "dock",
+  "gtk-layer-shell": true,
+  "position": "top",
+  "height": 15,
+  "spacing": 0,
+  "margin-top": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "exclusive": true,
+  "passthrough": false,
+  "reload_style_on_change": true,
+  "include": [
+    "~/.config/waybar/modules"
+  ],
+
+  "modules-center": [
+    "hyprland/workspaces"
+  ],
+
+  "modules-left": [
+    "custom/menu",
+    "clock",
+    "hyprland/submap",
+    "tray"
+  ],
+  "modules-right": [
+    // "custom/light_dark",
+    // "idle_inhibitor",
+    "privacy",
+    "gamemode",
+    "pulseaudio",
+    "bluetooth",
+    "network",
+    "power-profiles-daemon",
+    "battery"
+  ]
+}

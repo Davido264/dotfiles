@@ -1,0 +1,397 @@
+{
+  "wsl": true,
+  "promptSudoOnce": true,
+  "vars": {
+    "NVIM_VERSION": "v0.9.5"
+  },
+  "after": {
+    "windows": [
+      "[Environment]::SetEnvironmentVariable(\"FZF_DEFAULT_OPTS\", \"--delimiter=\\t --exit-0 --select-1  --bind=ctrl-z:ignore,btab:up,tab:down --cycle --keep-right --height=50% --info=inline --layout=reverse --tabstop=1 --color 16\", [EnvironmentVariableTarget]::User)",
+      "[Environment]::SetEnvironmentVariable(\"RCLONE_CONFIG\", \"$HOME\\.config\\rclone\\config.conf\", [EnvironmentVariableTarget]::User)"
+    ],
+    "linux": [
+      "[ -d ~/.local/share/nvim-data ] || mkdir -p ~/.local/share/nvim-data"
+    ]
+  },
+  "packages": [
+    {
+      "name": "Debconf utils",
+      "ubuntu": {
+        "apt": {
+          "pkg": "debconf-utils",
+          "check": "which debconf-set-selections"
+        }
+      }
+    },
+    {
+      "name": "7zip",
+      "windows": {
+        "scoop": {
+          "pkg": "7zip",
+          "check": "where.exe 7z",
+          "after": "reg import \"$HOME\\scoop\\apps\\7zip\\current\\install-context.reg\""
+        }
+      },
+      "ubuntu": {
+        "apt": {
+          "pkg": "7zip",
+          "check": "which 7z"
+        }
+      },
+      "fedora": {
+        "dnf": {
+          "pkg": "p7zip*",
+          "check": "which 7z"
+        }
+      }
+    },
+    {
+      "name": "Pandoc",
+      "windows": {
+        "winget": "JohnMacFarlane.Pandoc"
+      },
+      "ubuntu": {
+        "apt": "pandoc"
+      },
+      "fedora": {
+        "dnf": "pandoc"
+      }
+    },
+    {
+      "name": "MiKTeX",
+      "windows": {
+        "winget": "MiKTeX.MiKTeX"
+      },
+      "ubuntu": {
+        "apt": {
+          "before": "[ -s /etc/apt/sources.list.d/miktex.list ] || (curl -fsSL https://miktex.org/download/key | sudo tee /usr/share/keyrings/miktex-keyring.asc > /dev/null && echo \"deb [signed-by=/usr/share/keyrings/miktex-keyring.asc] https://miktex.org/download/ubuntu $(lsb_release -cs) universe\" | sudo tee /etc/apt/sources.list.d/miktex.list && sudo apt update)",
+          "pkg": "miktex",
+          "after": "which lualatex || sudo miktexsetup --shared=yes finish"
+        }
+      },
+      "fedora": {
+        "dnf": {
+          "before": "[ -s /etc/yum.repos.d/miktex.repo ] || (sudo rpm --import 'https://miktex.org/download/key' && sudo curl -sSLo /etc/yum.repos.d/miktex.repo https://miktex.org/download/fedora/$(rpm -E %fedora)/miktex.repo && sudo dnf update)",
+          "pkg": "miktex",
+          "after": "which lualatex || sudo miktexsetup --shared=yes finish"
+        }
+      }
+    },
+    {
+      "name": "graphviz",
+      "windows": {
+        "scoop": "graphviz"
+      },
+      "ubuntu": {
+        "apt": "graphviz"
+      },
+      "fedora": {
+        "dnf": "graphviz"
+      }
+    },
+    {
+      "name": "Zsh",
+      "ubuntu": {
+        "apt": "zsh"
+      },
+      "fedora": {
+        "dnf": "zsh"
+      }
+    },
+    {
+      "name": "fzf",
+      "windows": {
+        "winget": "junegunn.fzf"
+      },
+      "ubuntu": {
+        "apt": "fzf"
+      },
+      "fedora": {
+        "dnf": "fzf"
+      }
+    },
+    {
+      "name": "fd",
+      "windows": {
+        "winget": "sharkdp.fd"
+      },
+      "ubuntu": {
+        "apt": "fd-find"
+      },
+      "fedora": {
+        "dnf": "fd-find"
+      }
+    },
+    {
+      "name": "ffmpeg",
+      "windows": {
+        "scoop": "ffmpeg"
+      },
+      "ubuntu": {
+        "apt": "ffmpeg"
+      },
+      "fedora": {
+        "dnf": "ffmpeg-free"
+      }
+    },
+    {
+      "name": "scrcpy",
+      "windows": {
+        "scoop": "scrcpy"
+      },
+      "ubuntu": {
+        "apt": "scrcpy"
+      },
+      "fedora": {
+        "dnf": {
+          "before": "sudo dnf copr enable -y zeno/scrcpy",
+          "pkg": "scrcpy"
+        }
+      }
+    },
+    {
+      "name": "yt-dlp",
+      "windows": {
+        "scoop": "yt-dlp"
+      },
+      "ubuntu": {
+        "apt": "yt-dlp"
+      },
+      "fedora": {
+        "dnf": "yt-dlp"
+      }
+    },
+    {
+      "name": "Htop",
+      "ubuntu": {
+        "apt": "htop"
+      },
+      "fedora": {
+        "dnf": "htop"
+      }
+    },
+    {
+      "name": "Terminal!",
+      "windows": {
+        "winget": {
+          "pkg": "Microsoft.WindowsTerminal",
+          "after": "echo \"`nSetting windows terminal (quake) to run on start\" ; Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\" -ErrorAction SilentlyContinue -Force ; $WScriptObj = New-Object -ComObject (\"WScript.Shell\") ; $shortcut = $WscriptObj.CreateShortcut(\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\terminal.lnk\") ; $shortcut.TargetPath = \"$env:LOCALAPPDATA\\Microsoft\\WindowsApps\\wt.exe\" ; $shortcut.Arguments = \"-w _quake\" ; $shortcut.Save()"
+        }
+      },
+      "ubuntu": {
+        "apt": "alacritty"
+      },
+      "fedora": {
+        "dnf": "alacritty"
+      }
+    },
+    {
+      "name": "tmux",
+      "ubuntu": {
+        "apt": "tmux"
+      },
+      "fedora": {
+        "dnf": "tmux"
+      }
+    },
+    {
+      "name": "Neovim",
+      "windows": {
+        "winget": "Neovim.Neovim"
+      },
+      "ubuntu": {
+        "sh": {
+          "script": [
+            "sudo apt-get install -y make ninja-build gettext cmake unzip curl",
+            "git clone --depth 1 --branch $NVIM_VERSION https://github.com/neovim/neovim /tmp/build_nvim",
+            "cd /tmp/build_nvim",
+            "make CMAKE_BUILD_TYPE=RelWithDebInfo",
+            "cd build",
+            "cpack -G DEB",
+            "sudo apt install -y /tmp/build_nvim/build/nvim-ubuntu64.deb",
+            "cd ~",
+            "rm -rf /tmp/build_nvim"
+          ],
+          "check": "(which nvim && [ $(nvim --version | grep -oP 'v\\d+\\.\\d+(\\.\\d+)?') = $NVIM_VERSION ])"
+        }
+      },
+      "fedora": {
+        "dnf": {
+          "before": "sudo dnf install -y gcc-c++",
+          "pkg": "neovim"
+        }
+      }
+    },
+    {
+      "name": "clink",
+      "windows": {
+        "scoop": {
+          "pkg": "clink",
+          "after": "clink.cmd autorun install"
+        }
+      }
+    },
+    {
+      "name": "dos2unix",
+      "windows": {
+        "scoop": "dos2unix"
+      }
+    },
+    {
+      "name": "ripgrep",
+      "windows": {
+        "scoop": "ripgrep"
+      },
+      "ubuntu": {
+        "apt": "ripgrep"
+      },
+      "fedora": {
+        "dnf": "ripgrep"
+      }
+    },
+    {
+      "name": "age",
+      "windows": {
+        "scoop": "age"
+      },
+      "ubuntu": {
+        "apt": "age"
+      },
+      "fedora": {
+        "dnf": "age"
+      }
+    },
+    {
+      "name": "file",
+      "windows": {
+        "scoop": "file"
+      }
+    },
+    {
+      "name": "hexyl",
+      "windows": {
+        "scoop": "hexyl"
+      },
+      "ubuntu": {
+        "apt": "hexyl"
+      },
+      "fedora": {
+        "dnf": "hexyl"
+      }
+    },
+    {
+      "name": "charm-gum",
+      "windows": {
+        "scoop": "charm-gum"
+      },
+      "ubuntu": {
+        "apt": {
+          "before": "([ -f /etc/apt/sources.list.d/charm.list ] && [ -f /etc/apt/keyrings/charm.gpg ]) || (sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/charm.gpg && echo 'deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *' | sudo tee /etc/apt/sources.list.d/charm.list && sudo apt update)",
+          "pkg": "gum"
+        }
+      },
+      "fedora": {
+        "dnf": {
+          "before": "([ -f /etc/yum.repos.d/charm.repo ]) || (echo '[charm]\nname=Charm\nbaseurl=https://repo.charm.sh/yum/\nenabled=1\ngpgcheck=1\ngpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo)",
+          "pkg": "gum"
+        }
+      }
+    },
+    {
+      "name": "less",
+      "windows": {
+        "scoop": "less"
+      }
+    },
+    {
+      "name": "rammap",
+      "windows": {
+        "scoop": "rammap"
+      }
+    },
+    {
+      "name": "autoruns",
+      "windows": {
+        "scoop": "autoruns"
+      }
+    },
+    {
+      "name": "regjump",
+      "windows": {
+        "scoop": "regjump"
+      }
+    },
+    {
+      "name": "gsudo",
+      "windows": {
+        "winget": {
+          "pkg": "gerardog.gsudo",
+          "after": "gsudo config CacheMode auto ; gsudo cache on"
+        }
+      }
+    },
+    {
+      "name": "PSWindowsUpdate",
+      "windows": {
+        "sh": [ "powershell -Command { Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser }" ]
+      }
+    },
+    {
+      "name": "rclone",
+      "windows": {
+        "scoop": "rclone"
+      },
+      "ubuntu": {
+        "apt": "rclone"
+      },
+      "fedora": {
+        "dnf": "rclone"
+      }
+    },
+    {
+      "name": "Ubuntu Restricted Extras",
+      "ubuntu": {
+        "apt": {
+          "before": "(sudo debconf-get-selections | grep accepted-mscorefonts-eula *> /dev/null) || (echo 'ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true' | sudo debconf-set-selections)",
+          "pkg": "ubuntu-restricted-extras",
+          "check": "which unrar"
+        }
+      },
+      "fedora": {
+        "notes": "https://www.linuxcapable.com/install-microsoft-fonts-on-fedora-linux/"
+      }
+    },
+    {
+      "name": "jq",
+      "windows": {
+        "winget": "jqlang.jq"
+      },
+      "ubuntu": {
+        "apt": "jq"
+      },
+      "fedora": {
+        "dnf": "jq"
+      }
+    },
+    {
+      "name": "distrobox",
+      "fedora": {
+        "dnf": "distrobox"
+      }
+    },
+    {
+      "name": "Zsh Plugins",
+      "linux": {
+        "sh": {
+          "script": [
+            "sudo mkdir /usr/share/zsh_plugins/",
+            "sudo git clone --depth 1 https://github.com/zdharma/fast-syntax-highlighting.git /usr/share/zsh_plugins/fast-syntax-highlighting",
+            "sudo git clone --depth 1 https://github.com/zsh-users/zsh-completions.git /usr/share/zsh_plugins/zsh-completions",
+            "sudo git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git /usr/share/zsh_plugins/zsh-autosuggestions"
+          ],
+          "check": "[ -d /usr/share/zsh_plugins/ ]"
+        }
+      }
+    }
+  ]
+}

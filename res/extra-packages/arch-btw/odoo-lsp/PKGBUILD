@@ -1,0 +1,26 @@
+# Maintainer: David Ballesteros <davidaugustoballesteros67@gmail.com>
+pkgname='odoo-lsp'
+pkgver='0.4.1'
+pkgrel=1
+pkgdesc="Language server for Odoo Python/JS/XML"
+arch=('any')
+url="https://github.com/Desdaemon/odoo-lsp"
+license=('MIT')
+groups=()
+depends=()
+makedepends=('tar')
+source=("$pkgname-$pkgver.tgz::https://github.com/Desdaemon/odoo-lsp/releases/download/v${pkgver}/${pkgname}-${CARCH}-unknown-linux-gnu.tgz")
+noextract=("$pkgname-$pkgver.tgz")
+sha256sums=("96777dd15b044556774aa00a94ff64cd5e53660aa3bf3994ad321bc1bfec6ec7")
+
+prepare() {
+	mkdir "$pkgname-$pkgver"
+	mv "$pkgname-$pkgver.tgz" "$pkgname-$pkgver"
+	cd "$pkgname-$pkgver"
+	tar -xzf "$pkgname-$pkgver.tgz"
+}
+
+package() {
+	cd "$pkgname-$pkgver"
+	install -Dm755 ./odoo-lsp "$pkgdir/usr/bin/odoo-lsp"
+}

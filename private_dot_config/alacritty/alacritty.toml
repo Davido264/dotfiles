@@ -1,0 +1,24 @@
+general.import = ["~/.config/alacritty/colors.toml"]
+
+[font]
+builtin_box_drawing = true
+size = 13
+
+[font.normal]
+family = "JetbrainsMono Nerd Font"
+
+[[keyboard.bindings]]
+action = "ToggleFullscreen"
+key = "Return"
+mods = "Alt"
+
+[window]
+opacity = 0.95
+
+[window.padding]
+x = 5
+y = 5
+
+[terminal.shell]
+program = "tmux"
+# args = ["-l","welcome"]

@@ -1,0 +1,19 @@
+evdev:input:b0005v04E8p7021*
+evdev:input:b0011v0001p0001*
+evdev:atkbd:dmi:bvn*:bvr*:bd*:svnCompaq*:pn*E500*:*
+evdev:atkbd:dmi:bvn*:bvr*:bd*:svnCompaq*:pn*Evo*N*:*
+evdev:atkbd:*
+ KEYBOARD_KEY_9f=esc
+
+evdev:input:b0003v046Dp0066*
+ KEYBOARD_KEY_c1045=esc
+
+evdev:input:b0003v05A4p9735*
+ KEYBOARD_KEY_c00a8=esc
+
+evdev:input:b0003v046DpC529*
+evdev:input:b0011v0001p0001*
+evdev:input:b0011v0001p0001*
+evdev:input:b0005v04E8p7021*
+evdev:atkbd:*
+ KEYBOARD_KEY_0c0223=esc

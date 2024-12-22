@@ -1,0 +1,28 @@
+#!/bin/sh
+
+for i in "libvirtd" "libvirtd.socket"; do
+    if [ "$(systemctl is-active "$i")" = "inactive" ]; then
+        echo "error: service $i isn't active" >&2
+        exit 1
+    fi
+done
+
+sudo -v
+
+selected=$(sudo virsh list --all --name | head -n-1 | fzf)
+
+if [ -z "$selected" ]; then
+    exit 1
+fi
+
+state=$(LC_ALL=C.UTF-8 sudo virsh domstate "$selected")
+if [ "$state" = "running" ]; then
+    if gum confirm "Machine running, shut down?"; then
+        sudo virsh destroy "$selected"
+    else
+        exit 1
+    fi
+fi
+
+sudo virsh undefine "$selected"
+sudo rm -rf "/var/lib/libvirt/images/${selected}.qcow2"

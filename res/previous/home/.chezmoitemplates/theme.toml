@@ -1,0 +1,53 @@
+spacing         = 1
+padding         = 1
+separator       = ""
+prefer_small_ascii = true
+key_color       = "Yellow"
+separator_color = "Yellow"
+
+
+[palette]
+type = "Dark"
+glyph = " "
+visible = true
+
+[bar]
+glyph           = ""
+symbol_open     = '['
+symbol_close    = ']'
+visible         = true
+
+[box]
+border          = "rounded"
+visible         = true
+
+[box.inner_margin]
+x               = 0
+y               = 0
+
+[randomize]
+key_color       = false
+separator_color = false
+
+[custom_ascii]
+color = "White"
+
+[keys]
+host            = "Host"
+kernel          = "Kernel"
+battery         = "Battery"
+os              = "OS"
+de              = "DE"
+wm              = "WM"
+distro          = "Distro"
+terminal        = "Terminal"
+shell           = "Shell"
+packages        = "Packages"
+uptime          = "Uptime"
+memory          = "Memory"
+machine         = "Machine"
+local_ip        = "Local IP"
+backlight       = "Brightness"
+resolution      = "Resolution"
+cpu_load        = "CPU Load"
+cpu             = "CPU"

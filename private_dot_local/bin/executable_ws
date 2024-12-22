@@ -1,0 +1,66 @@
+#!/bin/sh
+
+# Took inspiration from
+# https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer
+# and
+# https://arthurjordao.dev/posts/tmux-tmuxinator-fzf-workflow/
+
+tmp=$(mktemp)
+
+find -L ~/Source \
+	~/Source/personal \
+	~/Source/UTA \
+	~/Source/Mivilsoft \
+	~/Documents \
+	~/Documents/personal \
+	~/Documents/UTA \
+	~/Documents/UTA/seguridad_ti \
+	~/Documents/UTA/auditoria_ti \
+	~/Documents/UTA/servidores \
+	~/Documents/Mivilsoft \
+	~/Documents/archived \
+	~/Documents/tmp \
+	~/Documents/notebook \
+	~/Music \
+	~/Music/Sessions \
+	~/Music/projects \
+	~/Music/Library \
+	~/Pictures/tmp \
+	~/Pictures \
+	~/Videos/tmp \
+	~/Documents/personal/backups \
+	~/Documents/archived \
+	~/Documents/tmp \
+	-mindepth 1 -maxdepth 1 -type d >>"$tmp" 2>/dev/null &
+
+zoxide query -l >>"$tmp" &
+
+wait
+
+selected=$(sort -u "$tmp" | fzf +m -1 -q "$1")
+rm "$tmp"
+
+if [ -z "$selected" ]; then
+	exit 0
+fi
+
+if [ "$(basename "$(dirname "$selected")")" = "branches" ]; then
+    selected_name=$(basename "$(dirname "$(dirname "$(dirname "$selected")" | tr . _)")")
+	selected_name=$selected_name/$(basename "$(dirname "$(dirname "$selected")" | tr . _)")
+	selected_name="$selected_name ($(basename "$selected" | tr . _))"
+else
+	selected_name=$(basename "$(dirname "$selected")" | tr . _)/$(basename "$selected" | tr . _)
+fi
+
+tmux_running=$(pgrep tmux)
+
+if [ -z "$TMUX" ] && [ -z "$tmux_running" ]; then
+	tmux new-session -s "$selected_name" -c "$selected"
+	exit 0
+fi
+
+if ! tmux has-session -t="$selected_name" 2>/dev/null; then
+	tmux new-session -ds "$selected_name" -c "$selected"
+fi
+
+tmux switch-client -t "$selected_name"

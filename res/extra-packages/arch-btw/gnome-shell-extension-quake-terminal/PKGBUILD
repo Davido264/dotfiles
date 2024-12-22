@@ -1,0 +1,30 @@
+# Maintainer: David Ballesteros <davidaugustoballesteros67@gmail.com>
+pkgname='gnome-shell-extension-quake-terminal'
+pkgver='1.6.3'
+pkgrel=1
+pkgdesc="Gnome Shell extesion to launch a terminal in quake mode"
+arch=('any')
+url="https://github.com/diegodario88/quake-terminal"
+license=('GPL3')
+depends=('gnome-shell>=3.38')
+source=("git+https://github.com/diegodario88/quake-terminal.git")
+sha256sums=(SKIP)
+provides=("gnome-shell-extension-quake-terminal")
+conflicts=("gnome-shell-extension-quake-terminal")
+
+_pkgname=quake-terminal
+
+package() {
+	cd "${srcdir}/${_pkgname}"
+
+	# Set the ID of your GNOME extension
+	extension_id="quake-terminal@diegodario88.github.io"
+	install_dir="${pkgdir}/usr/share/gnome-shell/extensions/${extension_id}"
+
+	install -d "${install_dir}"
+
+	cp -r "quake-terminal@diegodario88.github.io/"* -t "${install_dir}/"
+
+	install -Dm644 "quake-terminal@diegodario88.github.io/schemas/org.gnome.shell.extensions.quake-terminal.gschema.xml" -t "${pkgdir}/usr/share/glib-2.0/schemas/"
+	install -Dm644 "LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
+}

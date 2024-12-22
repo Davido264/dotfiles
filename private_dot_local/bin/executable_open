@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ $# -ne 1 ]; then
+  echo "Wrapper needs to be called with just one argument" >&2
+  exit 1
+fi
+xdg-open "$1" 2>/dev/null 1>&2 & disown

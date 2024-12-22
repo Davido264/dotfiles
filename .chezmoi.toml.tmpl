@@ -1,0 +1,69 @@
+{{- $codespaces:= env "CODESPACES" | not | not -}}
+
+# laptop or desktop?
+{{- $chassisType := "desktop" }}
+{{- if (not $codespaces) -}}
+{{- if eq .chezmoi.os "darwin" }}
+{{-   if contains "MacBook" (output "sysctl" "-n" "hw.model") }}
+{{-     $chassisType = "laptop" }}
+{{-   else }}
+{{-     $chassisType = "desktop" }}
+{{-   end }}
+{{- else if eq .chezmoi.os "linux" }}
+{{-   $chassisType = (output "hostnamectl" "--json=short" | mustFromJson).Chassis }}
+{{- else if eq .chezmoi.os "windows" }}
+{{-   $chassisType = (output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "if ((Get-CimInstance -Class Win32_Battery | Measure-Object).Count -gt 0) { Write-Output 'laptop' } else { Write-Output 'desktop' }") | trim }}
+{{- end }}
+{{- else -}}
+{{- $chassisType = "container" }}
+{{- end -}}
+
+sourceDir = {{ .chezmoi.sourceDir | quote }}
+
+encryption = "age"
+# mode = "symlink" dudo
+
+[edit]
+command = "nvim"
+
+[diff]
+# exclude scripts from diff
+exclude = ["scripts"]
+
+# nvim as diff
+command = "nvim"
+args = ["-d", "{{ .Destination }}", "{{ .Target }}"]
+
+[merge]
+command = "nvim"
+args = ["-d", "{{ .Destination }}", "{{ .Source }}", "{{ .Target }}"]
+
+
+[data]
+codespaces = {{ $codespaces }}
+chassisType = {{ $chassisType }}
+
+[scriptEnv]
+{{ if (and (eq .chezmoi.os "windows") (not $codespaces)) -}}
+{{ $windev := promptBoolOnce . "development" "Windows development?"}}
+{{ if $windev -}}
+WINDOWS_DEV = 1
+{{ else -}}
+WINDOWS_DEV = 0
+{{ end -}}
+{{ $winmusic := promptBoolOnce . "musicProduction" "Windows Music Production?"}}
+{{ if $winmusic -}}
+WINDOWS_MUSIC = 1
+{{ else -}}
+WINDOWS_MUSIC = 0
+{{ end -}}
+{{ end -}}
+{{ if (not $codespaces) -}}
+CHASSIS = $chassisType
+{{ end -}}
+# WSL?
+{{ if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+WSL = 1
+{{ else -}}
+WSL = 0
+{{ end -}}

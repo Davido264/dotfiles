@@ -1,0 +1,40 @@
+set number
+set relativenumber
+set signcolumn = "yes"
+
+set nohlsearch
+set ignorecase
+set smartcase
+set incsearch
+set wrapscan
+set mouse=a
+set inccommand=split
+set nowrap
+set gdefault
+set scrolloff=8
+set clipboard=unnamedplus,unnamed,ideaput
+set fileformat = "unix"
+
+set commentary
+set surround
+set ideajoin
+
+let mapleader = " "
+
+nmap <F1> <Esc>
+imap <F1> <Esc>
+vmap J :m '>+1<CR>gv=gv
+vmap K :m '<-2<CR>gv=gv
+nmap Q <nop>
+map <leader>pwd <cmd>let @*=expand(\"%\")<CR>
+map <leader>ff :action GotoFile<CR>
+" map <leader>FF <cmd>Lex<CR>
+
+nmap <leader>vfm :action ReformatCode<CR>
+nmap <leader>vrn :action RenameElement<CR>
+nmap gD :action GotoDeclaration<CR>
+nmap gi :action GotoImplementation<CR>
+nmap go :action GotoTypeDeclaration<CR>
+nmap <leader>vcd :action ActivateProblemsViewToolWindow<CR>
+nmap <leader>vca :action ShowIntentionActions<CR>
+nmap <C-y> :action EditorChooseLookupItemReplace<CR>

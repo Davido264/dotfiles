@@ -1,0 +1,9 @@
+#!/bin/sh
+json=$(gum spin --show-output -- gh repo list Davido264 --json name)
+repo=$(echo "$json" | jq '.[].name' -r | fzf +m -q "$1")
+
+if [ -z "$repo" ]; then
+    exit 0
+fi
+
+xdg-open "https://github.com/Davido264/${repo}" 2> /dev/null 1>&2 & disown

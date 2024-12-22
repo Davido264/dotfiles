@@ -1,0 +1,110 @@
+@import "colors.rasi"
+* {
+    font: "Figtree 13";
+    b-radius: 8px;
+    g-spacing: 10px;
+    g-margin: 0;
+    g-padding: 8px;
+}
+
+configuration {
+    modi: "drun";
+    show-icons: true;
+    display-drun: "";
+    steal-focus: true;
+    hover-select: true;
+    me-select-entry: "MouseSecondary";
+    ml-row-down: "ScrollDown";
+    me-accept-entry: "MousePrimary";
+}
+
+window {
+    transparency: "real";
+    fullscreen: true;
+    border-radius: 0;
+    background-color: @background;
+    border: none;
+    padding: 30%;
+    cursor: "default";
+}
+
+listview {
+    columns: 1;
+    dynamic: true;
+    /* lines: 7; */
+    /* fixed-height: true; */
+    fixed-columns: true;
+    cycle: false;
+    scrollbar: false;
+    border: 0px solid;
+    cursor: "default";
+}
+
+prompt {
+    text-color: @foreground;
+}
+
+inputbar {
+    children: ["prompt", "entry"];
+    spacing: @g-spacing;
+}
+
+entry {
+    placeholder: "Search Apps";
+    text-color: @foreground;
+    cursor: text;
+}
+
+mainbox {
+    spacing: @g-spacing;
+    margin: @g-margin;
+    padding: @g-padding;
+    children: ["inputbar", "listview", "message"];
+}
+
+element {
+    spacing: @g-spacing;
+    margin: @g-margin;
+    padding: 8px;
+    border: 0px solid;
+    border-radius: @b-radius;
+    border-color: @foreground;
+    background-color: transparent;
+    text-color: @foreground;
+    cursor: pointer;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+element alternate.normal {
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+element selected.active {
+    text-color: @accentfg;
+    background-color: @accent;
+}
+
+element selected.normal {
+    text-color: @accentfg;
+    background-color: @accent;
+}
+
+message {
+    background-color: red;
+    border: 0px solid;
+}
+
+element-icon  {
+    size: 1em;
+    cursor: pointer;
+}
+
+element-text {
+    vertical-align: 0.5;
+    cursor: pointer;
+}

@@ -1,0 +1,17 @@
+#!/bin/sh
+if [ $# -ne 1 ]; then
+	echo "create-gitignore <option>"
+	exit 1
+fi
+
+if [ "$1" = "list" ]; then
+	option=$(curl -sL "https://www.toptal.com/developers/gitignore/api/$@" | fzf)
+
+	if [[ -z $option ]]; then
+		exit 0
+	fi
+
+	curl -sL "https://www.toptal.com/developers/gitignore/api/$option"
+	exit 0
+fi
+curl -sL "https://www.toptal.com/developers/gitignore/api/$@"

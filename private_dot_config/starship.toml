@@ -1,0 +1,58 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = false
+
+scan_timeout = 50
+command_timeout = 800
+
+
+# Single Line. No Split
+format = '($container$nix_shell$python)[($username$hostname:)](bold yellow)$directory( $git_branch) $character'
+
+[line_break]
+disabled = true
+
+[character]
+success_symbol = '[\$](bold white)'
+error_symbol = '[\$](bold red)'
+vimcmd_symbol = '[:](bold yellow)'
+
+[username]
+format = '[$user]($style)'
+style_user = "bold white"
+show_always = false
+
+[hostname]
+format = '[$ssh_symbol$hostname]($style)'
+style = "bold white"
+ssh_symbol = "@"
+ssh_only = true
+
+[directory]
+format = '[$path]($style)[$read_only]($read_only_style)'
+truncation_length = 1
+truncation_symbol = ''
+truncate_to_repo = true
+read_only = "!"
+
+[nix_shell]
+format = '[$symbol]($style)'
+symbol = "*"
+style = "#7ebae4"
+
+[container]
+format = '[$symbol]($style)'
+symbol = "*"
+
+[git_branch]
+format = '[\($branch\)]($style)'
+symbol = ""
+
+[python]
+format = '[$symbol]($style)'
+symbol = "*"
+pyenv_version_name = false
+detect_files = []
+detect_extensions = []
+style = "#ffbc03"

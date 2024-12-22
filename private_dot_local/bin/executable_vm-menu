@@ -1,0 +1,113 @@
+#!/bin/sh
+
+TERM=xterm-256color
+
+connect()
+{
+    sudo virsh console --force "$1"
+    case $(get_vm_state "$1") in
+        "running")
+            if gum confirm "Apagar la máquina?"; then
+                sudo virsh shutdown "$1"
+            fi
+        ;;
+    esac
+    return 0
+}
+
+choose_vm()
+{
+    gum style "[↓/Ctrl-n] [↑/Ctrl-p]" --bold --border="rounded" >&2
+    sudo virsh list --all --name | grep -v "^$" | fzf
+}
+
+get_vm_state()
+{
+    sudo virsh domstate "$1" | tr -d "\n"
+}
+
+start_connect()
+{
+    gum spin sudo virsh start "$1" && connect "$1"
+}
+
+login()
+{
+    vm="$(choose_vm)"
+    state="$(get_vm_state "$vm")"
+
+    if [ -z "$vm" ]; then
+        return 0
+    fi
+
+    case "$state" in
+        "running") connect "$vm";;
+        "shut off") start_connect "$vm";;
+        *)
+            echo "Error desconocido" >&2
+            exit 1
+        ;;
+    esac
+}
+
+create()
+{
+    template="$TEMPLATE_PATH/$(find "$TEMPLATE_PATH" -type f -name "*.vm.xml" | fzf)"
+    sudo virsh define "$template"
+
+    mac=$(sudo virsh dumpxml almalinux-8 | grep -oP "mac address=\'\K[0-9a-f:]{17}\b")
+
+    if gum confirm "Máquina nombrada con almalinux-8. Renombrar?"; then
+        newname=$(gum input --placeholder="Nuevo nombre...")
+        sudo virsh domrename almalinux-8 "$newname"
+    fi
+}
+
+edit()
+{
+    vm=$(choose_vm)
+
+    if [ -z "$vm" ]; then
+        return 0
+    fi
+
+    editor=$(gum choose nano neovim)
+    EDITOR=$(which "$editor")
+    export EDITOR
+
+    if sudo -E virsh edit "$vm"; then
+        if gum confirm "Reiniciar máquina virtual?"; then
+            sudo virsh reboot "$vm"
+        fi
+    fi
+}
+
+nets=$(sudo virsh net-list --all --name | grep -v "^$" )
+if [ -z "$nets" ]; then
+    sudo virsh net-define "$TEMPLATE_PATH/default.net.tmpl"
+fi
+netstate=$(sudo virsh net-info default | grep Active | awk '{print $2}')
+if [ "$netstate" != "yes" ]; then
+    sudo virsh net-start default
+fi
+
+gum style "[↓/j/Ctrl-n] [↑/k/Ctrl-p]" --bold --border="rounded" >&2
+
+while :; do
+    choice=$(gum choose\
+                "Usar máquina virtual (iniciar si está apagada)"\
+                "Crear nueva instancia a partir de una plantilla"\
+                "Editar XML de máquina virtual"\
+                "Acceder a Bash"\
+                "Salir"
+            )
+
+    clear
+    case $choice in
+        "Usar máquina virtual (iniciar si está apagada)") login;;
+        "Crear nueva instancia a partir de una plantilla") create;;
+        "Editar XML de máquina virtual") edit;;
+        "Acceder a Bash") exit 127;;
+        "Salir") exit 0;;
+    esac
+done

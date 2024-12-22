@@ -1,0 +1,44 @@
+[alias]
+	a = "!git status --short"
+	ca = "commit -a"
+	ci = "commit"
+	co = "checkout"
+	d = "diff"
+	hist = "log --pretty=format:\\\"%Cgreen%h %Creset%cd %Cblue[%cn] %Creset%s%C(yellow)%d%C(reset)\\\" --graph --date=relative --decorate --all"
+	llog = "log --graph --name-status --pretty=format:\\\"%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset\\\" --date=relative"
+	pl = "!git pull origin $(git rev-parse --abbrev-ref HEAD)"
+	ps = "!git push origin $(git rev-parse --abbrev-ref HEAD)"
+	st = "status"
+	subup = "submodule update --remote --merge;"
+	wta = "worktree add"
+
+[color]
+	ui = "auto"
+
+[commit]
+	template = "~/.config/git/commit.tmpl"
+
+[core]
+	editor = "nvim"
+
+[github]
+	user = "Davido264"
+
+[hub]
+	protocol = "https"
+
+[init]
+	defaultBranch = "main"
+
+[push]
+	autoSetupRemote = true
+
+[safe]
+	directory = "*"
+
+[status]
+	submoduleSummary = true
+
+[user]
+	email = "67966122+Davido264@users.noreply.github.com"
+	name = "Davido264"

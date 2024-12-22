@@ -1,0 +1,73 @@
+# [templates.ags]
+# input_path = '~/.config/matugen/templates/ags.scss'
+# output_path = '~/.config/ags/colors.scss'
+
+[templates.gtk4]
+input_path = '~/.config/matugen/templates/gtk.css'
+output_path = '~/.config/gtk-4.0/gtk.css'
+
+[templates.gtk3]
+input_path = '~/.config/matugen/templates/gtk.css'
+output_path = '~/.config/gtk-3.0/gtk.css'
+
+# [templates.hypr]
+# input_path = '~/.config/matugen/templates/hypr.conf'
+# output_path = '~/.config/hypr/colors.conf'
+
+# [templates.hyprlock]
+# input_path = '~/.config/matugen/templates/hyprlock.conf'
+# output_path = '~/.config/hypr/hyprlock.conf'
+
+# [templates.rofi]
+# input_path = '~/.config/matugen/templates/rofi.mustache'
+# output_path = '~/.config/rofi/colors.rasi'
+
+# [templates.kitty]
+# input_path = '~/.config/matugen/templates/kitty.conf'
+# output_path = '~/.config/kitty/colors.conf'
+
+[templates.alacritty]
+input_path = '~/.config/matugen/templates/alacritty.toml'
+output_path = '~/.config/alacritty/colors.toml'
+
+# [templates.mako]
+# input_path = '~/.config/matugen/templates/mako.mustache'
+# output_path = '~/.config/mako/config'
+
+[templates.nvim]
+input_path = '~/.config/matugen/templates/nvim.lua'
+output_path = '~/.config/nvim/lua/plugins/ui/astrotheme.lua'
+
+[templates.tmux]
+input_path = '~/.config/matugen/templates/tmux.conf'
+output_path = '~/.config/tmux/colors.conf'
+
+# [templates.cava]
+# input_path = '~/.config/matugen/templates/cava.conf'
+# output_path = '~/.config/cava/config'
+
+# [templates.foot]
+# input_path = '~/.config/matugen/templates/foot.ini'
+# output_path = '~/.config/foot/colors.ini'
+
+# [templates.zellij]
+# input_path = '~/.config/matugen/templates/zellij.kdl'
+# output_path = '~/.config/zellij/themes/david.kdl'
+
+[config]
+reload_apps = true
+set_wallpaper = false
+
+[config.custom_colors]
+red = "#fb4934"
+orange = "#fe8019"
+yellow = "#fabd2f"
+green = "#b8bb26"
+blue = "#83a598"
+cyan = "#94e2d5"
+magenta = "#d3869b"
+
+[config.reload_apps_list]
+kitty = true
+gtk_theme = true
+waybar = true

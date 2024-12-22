@@ -1,0 +1,94 @@
+#!/bin/sh
+
+print_help()
+{
+    echo "cloud-drive [COMMAND]
+        Commands:
+        - get-remote        gets the remote repository for the current directory
+        - sync              bisync local and remote repositories
+        - pull              copy all remote changes into local
+        - push              copy all local changes into remote
+
+        Options:
+        --help              prints this help information
+
+        sync, pull and push accept all flags that rclone sync and bisync do
+    " >&2
+}
+
+get_remote_dir()
+{
+    expr="$(echo "$HOME" | sed 's/\//\\\//g')\\/"
+    dir="$(eval "pwd | sed 's/$expr//'")"
+    rclone ls "gdrive:$dir" 2>/dev/null 1>&2
+    if [ $? -eq 1 ]; then
+        echo ""
+    else
+        echo "gdrive:$dir"
+    fi
+}
+
+get_remote()
+{
+    rclone about gdrive:
+    remote=$(get_remote_dir)
+    if [ -z "$remote" ]; then
+        echo "There is NO replica of this directory on remote"
+    else
+        echo "There IS a replica of this directory on remote"
+    fi
+}
+
+sync_remote()
+{
+    remote=$(get_remote_dir)
+
+    if [ -z "$remote" ]; then
+        echo "This directory has no remote replica">&2
+        exit 1
+    fi
+
+    cmd="rclone bisync --progress $(pwd) $remote --create-empty-src-dirs --compare size,modtime,checksum --slow-hash-sync-only --resilient -MP --fix-case --resync $*"
+    eval "$cmd"
+}
+
+pull_remote()
+{
+    remote=$(get_remote_dir)
+
+    if [ -z "$remote" ]; then
+        echo "This directory has no remote replica">&2
+        exit 1
+    fi
+
+    cmd="rclone sync --progress $remote $(pwd) $*"
+    eval "$cmd"
+}
+
+push_remote()
+{
+    remote=$(get_remote_dir)
+
+    if [ -z "$remote" ]; then
+        echo "This directory has no remote replica">&2
+        exit 1
+    fi
+
+    cmd="rclone sync --progress $(pwd) $remote $*"
+    eval "$cmd"
+}
+
+if [ $# -eq 0 ]; then
+    print_help
+    exit 1
+fi
+
+case $1 in
+    "get-remote") get_remote;;
+    "sync") shift; sync_remote "$@";;
+    "push") shift; push_remote "$@";;
+    "pull") shift; pull_remote "$@";;
+    "--help") print_help;;
+    *) print_help ; exit 1;;
+esac
+

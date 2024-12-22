@@ -1,0 +1,8 @@
+#!/bin/sh
+
+TPM_HOME="${XDG_DATA_HOME:-${HOME}/.local/share/}/tmux/tpm.git"
+
+if [ ! -d "$TPM_HOME" ]; then
+    mkdir -p "$TPM_HOME"
+    git clone --depth 1 git@github.com:tmux-plugins/tpm.git "$TPM_HOME"
+fi

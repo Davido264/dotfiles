@@ -1,0 +1,166 @@
+/*
+ * vim: ft=less
+ */
+@import "/home/david/.config/gtk-4.0/gtk.css";
+
+* {
+    font-family: 'Cantarell', 'FontAwesome','JetBrainsMono Nerd Font', 'Noto Serif JP Bold';
+    font-size: 13px;
+}
+
+tooltip {
+    background: @window_bg_color;
+}
+
+tooltip label {
+    color: @window_fg_color;
+    font-family: 'Cantarell';
+}
+
+window#waybar {
+    background: @window_bg_color;
+    color: @window_fg_color;
+    /* border-radius: 8px; */
+    border-radius: 0;
+    font-weight: 500;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.modules-left,
+.modules-right,
+.modules-center {
+    padding: 8px 24px;
+}
+
+#workspaces button {
+    transition: background-color 0.3s ease-out;
+    padding: 1px 4px;
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 100%;
+    margin-left: 4px;
+    margin-right: 4px;
+    font-size: 9px;
+    color: @scrollbar_outline_color;
+    background: transparent;
+}
+
+#workspaces button:first-child {
+    margin-left: 0;
+}
+
+#workspaces button:last-child {
+    margin-right: 0;
+}
+
+#workspaces button.empty {
+    opacity: 0.4;
+}
+
+#workspaces button.active {
+    background: @accent_color;
+    color: @window_bg_color;
+    opacity: 1;
+}
+
+#workspaces button.urgent {
+    opacity: 1;
+    animation: blinkfg 1s linear infinite;
+}
+
+#clock,
+#battery {
+    font-family: 'Cantarell';
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#backlight,
+#temperature,
+#backlight,
+#network,
+#bluetooth,
+#pulseaudio,
+#wireplumber,
+#custom-power,
+#custom-menu,
+#tray,
+#mode,
+#cpu,
+#window,
+#custom-swaync,
+#custom-light_dark,
+#mpris {
+    color: @window_fg_color;
+}
+
+#gamemode,
+#power-profiles-daemon,
+#privacy,
+#pulseaudio,
+#bluetooth,
+#network {
+    margin: 0 2px;
+}
+
+#battery {
+    margin-left: 10px;
+}
+
+#clock {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+#battery.critical:not(.charging) {
+    color: @error_bg_color;
+}
+
+#network.disconnected {
+    color: @window_fg_color;
+    opacity: 0.2;
+}
+
+#tray {
+    margin: 0;
+    padding: 0 4px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+    background: @window_bg_color;
+    color: @window_fg_color;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background: @warning_bg_color;
+    color: @warning_fg_color;
+}
+
+#mode {
+    color: @window_fg_color;
+    opacity: 0.4;
+}
+
+#idle_inhibitor.activated {
+    color: @accent_color;
+}
+
+@keyframes blink {
+    50% {
+        background: @error_bg_color;
+        color: @error_fg_color;
+    }
+}
+
+@keyframes blinkfg {
+    50% {
+        color: @error_bg_color;
+    }
+}
+

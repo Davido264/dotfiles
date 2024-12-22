@@ -1,0 +1,157 @@
+// vim: ft=jsonc
+{
+  "custom/menu": {
+    "format": "󱓟 ",
+    "interval" : 86400, // once every day
+    "tooltip": true,
+    "on-click": "pkill rofi || rofi -show drun"
+  },
+
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 25
+    },
+    "format": "{icon}   {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-alt": "{capacity}% {timeTo}",
+    "format-icons": [" ", " ", " ", " ", " "]
+  },
+
+  "bluetooth": {
+    "format": " ",
+    "format-off": "",
+    "format-disabled": "",
+    "format-connected": "󰂱 {num_connections}",
+    "tooltip-format": " {device_alias}",
+    "tooltip-format-connected": " {device_enumerate}",
+    "tooltip-format-enumerate-connected": " {device_alias}\t󰂄{device_battery_percentage}%"
+    // "on-click": "blueman-manager"
+  },
+
+  "clock": {
+    // "format-alt": "{:%a %d %b, %H:%M}", tue 26 mar, 09:19
+    "format": "{:%H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "on-scroll": 1,
+      "on-click-right": "mode",
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b>{}</b></span>"
+      }
+    }
+  },
+
+  "gamemode": {
+    "format": "{glyph}",
+    "glyph": " ",
+    "hide-not-running": true,
+    "use-icon": false,
+    "icon-name": "input-gaming-symbolic",
+    "icon-spacing": 4,
+    "icon-size": 15,
+    "tooltip-format": "Games running: {count}"
+  },
+
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{icon}",
+    "on-click": "activate",
+    "move-to-monitor": true,
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    },
+    "format-icons": {
+      "1": "一",
+      "2": "二",
+      "3": "三",
+      "4": "四",
+      "5": "五"
+    }
+  },
+
+  "hyprland/submap": {
+    "format": "<span style=\"italic\">  {}</span>", // Icon: expand-arrows-alt
+    "tooltip": false
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " "
+    }
+  },
+
+  "custom/light_dark": {
+    "format": "󰠠 ",
+    "on-click": "$HOME/.config/waybar/scripts/baraction light",
+    "tooltip": false
+  },
+
+  "network": {
+    "format": "{icon}",
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰌘 ",
+    "format-disconnected": "",
+    "tooltip-format": "{ifname}\t{ipaddr}\t {bandwidthUpBytes}  {bandwidthDownBytes}",
+    "tooltip-format-wifi": "{icon}\t {bandwidthUpBytes}  {bandwidthDownBytes}",
+    "format-linked": "󰈁 {ifname} (No IP)",
+    "tooltip-format-ethernet": "󰌘 {ifname} \t{ipaddr}",
+    "max-length": 20,
+    "interval": 2,
+    "format-icons": ["󰤯 ","󰤟 ","󰤢 ","󰤥 ","󰤨 "],
+    "on-click": "foot -F sh -c 'sleep 2 && nmtui'"
+  },
+
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}",
+    "format-icons": {
+      "default": "",
+      "performance": " ",
+      "balanced": " ",
+      "power-saver": " "
+    }
+  },
+
+  "pulseaudio": {
+    "format": "",
+    "format-muted": "󰖁 "
+  },
+
+  "privacy": {
+    "icon-spacing": 4,
+    "icon-size": 15,
+    "transition-duration": 250,
+    "modules": [
+      {
+        "type": "screenshare",
+        "tooltip-icon-size": 24
+      },
+      {
+        "type": "audio-in",
+        "tooltip-icon-size": 24
+      }
+    ]
+  },
+
+  "tray": {
+    "icon-size": 15,
+    "spacing": 4
+  },
+
+  "wireplumber": {
+    "format": "",
+    "format-muted": " "
+  }
+}

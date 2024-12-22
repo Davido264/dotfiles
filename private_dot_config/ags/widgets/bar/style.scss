@@ -1,0 +1,105 @@
+.bar {
+  margin: 0;
+  background: $surface;
+
+  >.horizontal {
+    padding: 3px 20px;
+  }
+
+  * {
+    color: $on_surface;
+  }
+
+  .workspaces {
+    min-height: 25px;
+    button {
+      padding: 0;
+      margin-left: 2px;
+      margin-right: 2px;
+      min-height: 14px;
+      min-width: 14px;
+      border-radius: 14px;
+      background: transparentize($on_surface, 0.9);
+
+      &:hover {
+        background: transparentize($on_surface, 0.8);
+      }
+
+      &.occupied {
+        background: transparentize($on_surface, 0.7);
+
+        &:hover {
+          background: transparentize($on_surface, 0.6);
+        }
+      }
+
+      &:active,
+      &.active {
+        min-width: 30px;
+        background: $primary;
+
+        &:hover { 
+          background: $primary;
+          box-shadow: 0px 0 2px 2px transparentize($primary, 0.5);
+        }
+      }
+
+      &.urgent {
+        animation: blink-workspace 0.75s cubic-bezier(0, 0, 0.2, 1) infinite alternate-reverse;
+        &:hover { 
+          background: $error;
+          box-shadow: 0px 0 2px 2px transparentize($primary, 0.5);
+        }
+      }
+    }
+  }
+
+  .indicator {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .battery-indicator {
+    label {
+      margin-left: 5px;
+      font-weight: bolder;
+      font-size: 13px;
+    }
+  }
+
+  .clock {
+    font-weight: bold;
+  }
+
+  .notifications-indicator {
+    padding: 0 5px;
+    min-width: 25px;
+  }
+
+  .systemtray {
+    padding: 0;
+  }
+
+  .tray-icon {
+    padding: 0;
+    margin: 0;
+    min-width: 20px;
+    min-height: 20px;
+    background: $surface;
+    border-radius: 20px;
+
+    &:hover {
+      background: transparentize($on_surface, 0.9);
+    }
+  }
+
+  @keyframes blink-workspace {
+    from {
+      background: initial;
+    }
+
+    to {
+      background: $error;
+    }
+  }
+}

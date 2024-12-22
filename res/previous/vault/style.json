@@ -1,0 +1,216 @@
+{
+  "wsl": true,
+  "promptSudoOnce": true,
+  "vars": {
+    "macchina_version": "v6.1.8",
+    "nf_version": "v3.1.1",
+    "bat_version": "0.24.0",
+    "fastfetch_version": "2.7.1",
+    "lsd_version": "1.0.0"
+  },
+  "before": {
+    "windows": [
+      "scoop bucket add nerd-fonts"
+    ]
+  },
+  "after": {
+    "windows": [
+      "[Environment]::SetEnvironmentVariable(\"BAT_CONFIG_PATH\", \"$HOME\\.config\\bat\\config\", [EnvironmentVariableTarget]::User);"
+    ],
+    "linux": [
+      "fc-cache -fv"
+    ]
+  },
+  "packages": [
+    {
+      "name": "Starship",
+      "windows": {
+        "winget": "Starship.Starship"
+      },
+      "linux": {
+        "sh": {
+          "script": ["curl -sS https://starship.rs/install.sh | sh -s -- --yes"],
+          "check": "which starship"
+        }
+      }
+    },
+    {
+      "name": "bat",
+      "windows": {
+        "winget": "sharkdp.bat"
+      },
+      "ubuntu": {
+        "sh": {
+          "script": [
+            "curl -sSLo /tmp/bat.deb \"https://github.com/sharkdp/bat/releases/download/v${bat_version}/bat_${bat_version}_amd64.deb\"",
+            "sudo apt install -y /tmp/bat.deb",
+            "rm /tmp/bat.deb"
+          ],
+          "check": "(which bat && [ $(bat --version | grep -oP '\\d+\\.\\d+\\.\\d+') = $bat_version ])"
+        }
+      },
+      "fedora": {
+        "dnf": "bat"
+      }
+    },
+    {
+      "name": "cowsay",
+      "windows": {
+        "scoop": "neo-cowsay"
+      },
+      "ubuntu": {
+        "apt": "cowsay"
+      },
+      "fedora": {
+        "dnf": "cowsay"
+      }
+    },
+    {
+      "name": "macchina",
+      "windows": {
+        "scoop": "macchina"
+      },
+      "linux": {
+        "sh": {
+          "script": [
+            "sudo curl -sSLo /usr/bin/macchina \"https://github.com/Macchina-CLI/macchina/releases/download/${macchina_version}/macchina-linux-x86_64\"",
+            "sudo chmod +rx /usr/bin/macchina"
+          ],
+          "check": "(which macchina && [ $(macchina --version | grep -oP '\\d+\\.\\d+\\.\\d+' | head -n1) = $(echo $macchina_version | grep -oP '\\d+\\.\\d+\\.\\d+') ])"
+        }
+      }
+    },
+    {
+      "name": "lsd",
+      "ubuntu": {
+        "sh": {
+          "script": [
+            "curl -sSLo /tmp/lsd.deb \"https://github.com/lsd-rs/lsd/releases/download/v$lsd_version/lsd-musl_${lsd_version}_amd64.deb\"",
+            "sudo apt install /tmp/lsd.deb",
+            "rm /tmp/lsd.deb"
+          ],
+          "check": "(which lsd && [ $(lsd --version | grep -oP '\\d+\\.\\d+\\.\\d+') = $(echo $lsd_version) ])"
+        }
+      },
+      "fedora": {
+        "dnf": "lsd"
+      }
+    },
+    {
+      "name": "fastfetch",
+      "windows": {
+        "scoop": "fastfetch"
+      },
+      "ubuntu": {
+        "sh": {
+          "script": [
+            "curl -sSLo /tmp/fastfetch.deb \"https://github.com/fastfetch-cli/fastfetch/releases/download/${fastfetch_version}/fastfetch-${fastfetch_version}-ubuntu.deb\"",
+            "sudo apt install -y /tmp/fastfetch.deb",
+            "rm /tmp/fastfetch.deb"
+          ],
+          "check": "(which fastfetch && [ $(fastfetch --version | grep -oP '\\d+\\.\\d+\\.\\d+') = $fastfetch_version ])"
+        }
+      },
+      "fedora": {
+        "dnf": "fastfetch"
+      }
+    },
+    {
+      "name": "cmatrix",
+      "windows": {
+        "sh": {
+          "script": [
+            "if (-not $(Test-Path \"$HOME\\Documents\\PowerShell\\Modules\\\")) {",
+            "   mkdir \"$HOME\\Documents\\PowerShell\\Modules\"",
+            "}",
+            "iwr https://raw.githubusercontent.com/matriex/cmatrix/master/cmatrix.psm1 -OutFile \"$HOME\\Documents\\PowerShell\\Modules\\cmatrix.psm1\""
+          ],
+          "check": "if (-not $(Test-Path \"$HOME\\Documents\\Powershell\\Modules\\cmatrix.psm1\")) { exit 1 }"
+        }
+      },
+      "ubuntu": {
+        "apt": "cmatrix"
+      },
+      "fedora": {
+        "dnf": "cmatrix"
+      }
+    },
+    {
+      "name": "fortune",
+      "windows": {
+        "sh": {
+          "script": [
+            "if (-not $(Test-Path \"$HOME\\Documents\\PowerShell\\\")) {",
+            "   mkdir \"$HOME\\Documents\\PowerShell\"",
+            "}",
+            "iwr https://www.bgreco.net/fortune.txt -OutFile \"$HOME\\Documents\\Powershell\\fortune.txt\""
+          ],
+          "check": "if (-not $(Test-Path \"$HOME\\Documents\\Powershell\\fortune.txt\")) { exit 1 }"
+        }
+      },
+      "ubuntu": {
+        "apt": "fortune"
+      },
+      "fedora": {
+        "dnf": {
+          "pkg": "fortune-mod",
+          "check": "which fortune"
+        }
+      }
+    },
+    {
+      "name": "Jetbrains Mono NF",
+      "windows": {
+        "scoop": "JetBrainsMono-NF"
+      },
+      "linux": {
+        "sh": {
+          "script": [
+            "sudo mkdir -p /usr/share/fonts/jetbrains-mono-nf",
+            "cd /usr/share/fonts/jetbrains-mono-nf",
+            "curl -L \"https://github.com/ryanoasis/nerd-fonts/releases/download/${nf_version}/JetBrainsMono.tar.xz\" | sudo tar -xJ"
+          ],
+          "check": "[ -d /usr/share/fonts/jetbrains-mono-nf ]"
+        }
+      }
+    },
+    {
+      "name": "SourceCodePro NF",
+      "windows": {
+        "scoop": "SourceCodePro-NF"
+      },
+      "linux": {
+        "sh": {
+          "script": [
+            "sudo mkdir -p /usr/share/fonts/sourcecodepro-nf",
+            "cd /usr/share/fonts/sourcecodepro-nf",
+            "curl -L \"https://github.com/ryanoasis/nerd-fonts/releases/download/${nf_version}/SourceCodePro.tar.xz\" | sudo tar -xJ"
+          ],
+          "check": "[ -d /usr/share/fonts/sourcecodepro-nf ]"
+        }
+      }
+    },
+    {
+      "name": "Mononoki NF",
+      "windows": {
+        "scoop": "Mononoki-NF"
+      },
+      "linux": {
+        "sh": {
+          "script": [
+            "sudo mkdir -p /usr/share/fonts/mononoki-nf",
+            "cd /usr/share/fonts/mononoki-nf",
+            "curl -L \"https://github.com/ryanoasis/nerd-fonts/releases/download/${nf_version}/Mononoki.tar.xz\" | sudo tar -xJ"
+          ],
+          "check": "[ -d /usr/share/fonts/sourcecodepro-nf ]"
+        }
+      }
+    },
+    {
+      "name": "Font awesome",
+      "fedora": {
+        "dnf": "fontawesome-fonts"
+      }
+    }
+  ]
+}

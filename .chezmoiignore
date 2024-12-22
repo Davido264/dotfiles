@@ -1,0 +1,37 @@
+install.sh
+scripts/
+res/
+selene.toml
+stylua.toml
+vim.toml
+
+{{  if ne .chezmoi.os "windows"  -}}
+AppData/
+Documents/
+applications.yaml
+.wslconfig
+komorebi.json
+{{- end -}}
+
+{{- if eq .chezmoi.os "windows" -}}
+.config/asdf/
+.config/btop/
+.config/zellij/
+.local/cloud-imgs.json
+.local/bin
+{{- end -}}
+
+{{- if ne .chezmoi.os "linux" -}}
+.config/ags/
+.config/hypr/
+.config/rofi/
+.config/environment.d/
+.config/gtk-4.0/
+.local/hyprland/
+.local/icons/
+.local/bin/delete-vm
+.local/bin/new-vm
+.local/search-osinfo
+.local/open           # TODO: be able to remove this
+.local/wal            # TODO: be able to remove this
+{{- end -}}

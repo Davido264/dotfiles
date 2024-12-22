@@ -1,0 +1,3 @@
+#!/bin/sh
+
+osinfo-query os --fields=short-id,vendor | tail -n+3 | fzf | awk '{print $1}'

@@ -1,0 +1,30 @@
+.osd-indicator {
+  background: transparent;
+
+  .osd-progress {
+    .progress {
+      border: 2px solid $primary;
+
+      background: $surface;
+      min-width: 30px;
+      min-height: 200px;
+      border-radius: 16px;
+
+      .fill {
+        background: $secondary;
+        color: $on_secondary;
+        border-radius: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+        min-width: 30px;
+        min-height: 200px;
+
+        .icon {
+          padding: 0;
+          margin: 3px;
+        }
+      }
+
+    }
+  }
+}

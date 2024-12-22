@@ -1,0 +1,18 @@
+return {
+  ["clangd"] = { expand = true, size = 2 },
+  ["dartls"] = { expand = true, size = 2 },
+  ["lua_ls"] = { expand = true, size = 2 },
+  ["ts_ls"] = { expand = true, size = 2 },
+  ["typescript-tools"] = { expand = true, size = 2 },
+  ["texlab"] = { expand = true, size = 2 },
+  ["jsonls"] = { expand = true, size = 2 },
+  ["yamlls"] = { expand = true, size = 2 },
+  ["fsautocomplete"] = { expand = true, size = 4 },
+  ["omnisharp"] = { expand = true, size = 4 },
+  ["powershell_es"] = { expand = true, size = 4 },
+  ["gopls"] = { expand = false, size = 4 },
+  ["rust_analyzer"] = { expand = true, size = 4 },
+  ["jdtls"] = { expand = true, size = 4 },
+  ["pyright"] = { expand = true, size = 4 },
+  ["nixd"] = { expand = true, size = 2 },
+}

@@ -1,0 +1,240 @@
+#!/bin/sh
+
+for i in "libvirtd" "libvirtd.socket"; do
+    if [ "$(systemctl is-active "$i")" = "inactive" ]; then
+        echo "error: service $i isn't active" >&2
+        exit 1
+    fi
+done
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+    "--help")
+        echo "the options are: 
+        --help:     print help
+        --ask:      ask for custom values
+
+    default values are:
+        - 2 cores
+        - 20GiB storage
+        - 2GiB ram
+        - default network"
+        exit
+        ;;
+    "--ask")
+        ask=true
+        ;;
+    "--ansible")
+        ansible=true
+        ;;
+    "--count")
+        if [ "$2" -ge '0' ] 2>/dev/null; then
+            count="$2"
+        else
+            count=1
+        fi
+        ;;
+    *)
+        echo "Option not valid
+    the options are: 
+        --help:     print help
+        --ask:      ask for custom values
+
+    default values are: 
+        - 2 cores
+        - 20GiB storage
+        - 2GiB ram
+        - default network"
+        exit 1
+        ;;
+    esac
+    shift
+done
+
+sudo -vp "Need to be an admin to execute script. Enter sudo password: "
+
+input=$(gum input --prompt="Name > " --placeholder="Required. A name for your vm..." --char-limit=0)
+if [ -z "$input" ]; then
+    echo "Error: Name has to be provided" >&2
+    exit 1
+fi
+name=$input
+
+echo "The vm name(s) will be:"
+count=${count:-1}
+carr=1
+while [ "$carr" -le "$count" ]; do
+    if [ "$carr" -eq 1 ]; then
+        echo "$name"
+    else
+        echo "$name-$carr"
+    fi
+    carr=$((carr + 1))
+done
+
+if sudo virsh list --all --name | grep -q "$name"; then
+    sudo virsh domifaddr "$name" | tail -n+3 | head -n 1
+    exit 0
+fi
+
+selection=$(jq -r '.[].name' <~/.local/share/cloud-imgs.json | fzf)
+
+if [ -z "$selection" ]; then
+    exit 0
+fi
+
+location=$(jq -r ".[] | select(.name == \"$selection\") | .url" <~/.local/share/cloud-imgs.json)
+dest=$(jq -r ".[] | select(.name == \"$selection\") | .path" <~/.local/share/cloud-imgs.json)
+sha=$(jq -r ".[] | select(.name == \"$selection\") | .sha" <~/.local/share/cloud-imgs.json)
+
+vcpus=2
+storage=20
+ram=2048
+net="default"
+
+if [ "$ask" ]; then
+    input=$(gum input --prompt="VCpus (max 4) > " --placeholder="2" --char-limit=1)
+    if [ -n "$input" ]; then
+        vcpus=$input
+    fi
+
+    input=$(gum input --prompt="Storage (in GiB) > " --placeholder="20" --char-limit=0)
+    if [ -n "$input" ]; then
+        storage=$input
+    fi
+
+    input=$(gum input --prompt="RAM (in MiB) > " --placeholder="2048" --char-limit=0)
+    if [ -n "$input" ]; then
+        ram=$input
+    fi
+
+    input=$(sudo virsh net-list --all --name | head -n+1 | fzf)
+    if [ -n "$input" ]; then
+        net=$input
+    fi
+
+    if [ "$ansible" ]; then
+        roles=""
+        for role in $(gum choose --no-limit \
+            base_os \
+            zsh \
+            cli/core \
+            devel \
+            cli/neovim \
+            cli/tmux \
+            desktop/apps \
+            desktop/desktop_environment \
+            devel/gui \
+            gaming \
+            music \
+            stow \
+            virtualization/containers \
+            virtualization/vms); do
+            roles="$roles$role,"
+        done
+        roles=$(echo "$roles" | sed 's/\,$//')
+        echo "$roles"
+    fi
+fi
+
+sudo -v
+
+tmpdir=$(mktemp -d)
+
+cat >"$tmpdir/$(basename "$dest").sha256" <<EOF
+$sha $dest
+EOF
+
+if ! sha256sum -c "$tmpdir/$(basename "$dest").sha256"; then
+    sudo wget "$location" -t 3 -O "$dest"
+fi
+
+if ! sha256sum -c "$tmpdir/$(basename "$dest").sha256"; then
+    echo "Error: Wrong sha256" >&2
+    exit 1
+fi
+
+cat >"$tmpdir/user-data" <<EOF
+#cloud-config
+
+ssh_pwauth: True
+password: root
+disable_root: False
+
+chpasswd:
+  expire: False
+
+groups:
+- vm
+
+users:
+- default
+- name: root
+  ssh_pwauth: False
+  lock_passwd: False
+  ssh_authorized_keys:
+    - '$(cat ~/.ssh/id_rsa.pub)'
+EOF
+
+cat >"$tmpdir/meta-data" <<EOF
+EOF
+
+cat >"$tmpdir/network-config" <<EOF
+EOF
+
+inactive_net=$(sudo virsh net-list --name --inactive | head -n+1)
+if [ "$inactive_net" = "$net" ]; then
+    echo "starting network '$net'"
+    sudo virsh net-start "$net"
+fi
+
+count=${count:-1}
+carr=1
+while [ "$carr" -le "$count" ]; do
+    if [ "$carr" -gt 1 ]; then
+        name="$name-$carr"
+    fi
+
+    sudo virt-install \
+        --connect qemu:///system \
+        --name "$name" \
+        --memory "$ram" \
+        --vcpus "$vcpus",maxvcpus=4 \
+        --osinfo "$selection" \
+        --disk size="$storage",backing_store="$dest" \
+        --network "$net" \
+        --graphics vnc \
+        --virt-type kvm \
+        --import \
+        --cloud-init user-data="$tmpdir/user-data" \
+        --noautoconsole \
+        --wait 2
+
+    ip=$(sudo virsh domifaddr "$name" | tail -n+3 | head -n 1 | awk '{print $4}' | sed 's/\/[0-9][0-9]//g')
+
+    if [ -n "$ip" ]; then
+        echo "$ip"
+        if grep -q "$ip" ~/.ssh/known_hosts; then
+            ssh-add -d "$ip"
+        fi
+        ssh-keyscan "$ip" >>~/.ssh/known_hosts
+
+        if [ "$ansible" ]; then
+            roles=${roles:-"base_os"}
+            cat >"$HOME/Src/personal/dotfiles/tmp-${name}-${selection}.yml" <<EOF
+- name: Provisioning $name
+  hosts: $ip
+  become: true
+  roles: [$roles]
+  vars:
+    base_os_hostname: '$name'
+EOF
+            cd "$HOME/Src/personal/dotfiles"
+            ansible-playbook -K "$HOME/Src/personal/dotfiles/tmp-${name}-${selection}.yml"
+            cd -
+            rm "$HOME/Src/personal/dotfiles/tmp-${name}-${selection}.yml"
+        fi
+    fi
+    carr=$((carr + 1))
+done
+rm -rf "$tmpdir"

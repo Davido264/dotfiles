@@ -1,0 +1,7 @@
+Section "InputClass"
+  Identifier "Keyboard Altgr Caps:Ctrl"
+  MatchIsKeyboard "on"
+  Option "XkbLayout" "us"
+  Option "XkbOptions" "caps:ctrl"
+  Option "XkbVariant" "altgr-intl"
+EndSection

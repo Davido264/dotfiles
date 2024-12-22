@@ -1,0 +1,56 @@
+Windows Registry Editor Version 5.00
+
+
+; Open files on VSCode
+[HKEY_CURRENT_USER\Software\Classes\*\shell\Open with VS Code]
+@="Edit with VS Code"
+"Icon"="C:\\Users\\david\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"
+[HKEY_CURRENT_USER\Software\Classes\*\shell\Open with VS Code\command]
+@="\"C:\\Users\\david\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%1\""
+
+
+; This will make it appear when you right click ON a folder
+; The "Icon" line can be removed if you don't want the icon to appear
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\vscode]
+@="Open Folder with VS Code"
+"Icon"="C:\\Users\\david\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\vscode\command]
+@="\"C:\\Users\\david\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%1\""
+
+
+; This will make it appear when you right click INSIDE a folder
+; The "Icon" line can be removed if you don't want the icon to appear
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\vscode]
+@="Open Folder with VS Code"
+"Icon"="C:\\Users\\david\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\vscode\command]
+@="\"C:\\Users\\david\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+
+
+
+
+; Open files on Neovide 
+[HKEY_CURRENT_USER\Software\Classes\*\shell\Open with Neovide]
+@="Edit with Neovide"
+"Icon"="C:\\Users\\david\\scoop\\apps\\neovide\\current\\neovide.exe,0"
+[HKEY_CURRENT_USER\Software\Classes\*\shell\Open with Neovide\command]
+@="\"C:\\Users\\david\\scoop\\apps\\neovide\\current\\neovide.exe\" \"%1\""
+
+
+; This will make it appear when you right click ON a folder
+; The "Icon" line can be removed if you don't want the icon to appear
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\neovide]
+@="Open Folder with Neovide"
+"Icon"="C:\\Users\\david\\scoop\\apps\\neovide\\current\\neovide.exe,0"
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\neovide\command]
+@="\"C:\\Users\\david\\scoop\\apps\\neovide\\current\\neovide.exe\" \"%1\""
+
+
+; This will make it appear when you right click INSIDE a folder
+; The "Icon" line can be removed if you don't want the icon to appear
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\neovide]
+@="Open Folder with Neovide"
+"Icon"="C:\\Users\\david\\scoop\\apps\\neovide\\current\\neovide.exe,0"
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\neovide\command]
+@="\"C:\\Users\\david\\scoop\\apps\\neovide\\current\\neovide.exe\" \"%V\""
+
