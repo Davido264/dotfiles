@@ -1,0 +1,18 @@
+{
+  "version": "1.3.2",
+  "desciption": "Synthesizer plug-in (previously released as Vember Audio Surge) ",
+  "homepage": "https://surge-synthesizer.github.io/",
+  "license": "GPL-3.0",
+  "url": "https://github.com/surge-synthesizer/releases-xt/releases/download/1.3.2/surge-xt-win64-1.3.2-setup.exe",
+  "installer": {
+    "script": [
+      "Start-Process -Wait \"$dir\\surge-xt-win64-1.3.2-setup.exe\" -ArgumentList @('/VERYSILENT','/COMPONENTS=vst3,effectsvst3,sa,effectssa,data,patches,wavetables','/CLOSEAPPLICATIONS','/FORCECLOSEAPPLICATIONS') -Verb RunAs | Out-Null"
+    ]
+  },
+  "uninstaller": {
+    "script": [
+      "Start-Process -Wait \"C:\\Program Files\\Common Files\\VST3\\Surge Synth Team\\SurgeXTData\\uninstall\\unins000.exe\" -ArgumentList '/VERYSILENT' -Verb RunAs | Out-Null"
+    ]
+  },
+  "checkver": "github"
+}

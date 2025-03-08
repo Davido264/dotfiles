@@ -4,9 +4,8 @@ set -euo pipefail
 [ "${CHEZMOI:-0}" -eq 1 ] || source "${SROOT}/vars.sh"
 [ "${VERBOSE}" -eq 1 ] && set -x
 
-paru -S --needed --noconfirm --noupgrade --skipreview \
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
     baobab \
-    gdm \
     gnome-backgrounds \
     gnome-calendar \
     gnome-characters \
@@ -19,33 +18,40 @@ paru -S --needed --noconfirm --noupgrade --skipreview \
     gnome-menus \
     gnome-session \
     gnome-settings-daemon \
+    gnome-system-monitor \
     gnome-shell \
     gnome-user-share \
+    libgnome-keyring \
+    simple-scan \
+    snapshot \
+    gnome-tweaks \
+    xdg-desktop-portal-gnome \
+    gnome-shell-extension-fullscreen-to-new-workspace-git \
+    gnome-shell-extension-caffeine-git
+
+echo '== [ Nautilus packages ] =='
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
+    nautilus \
+    loupe \
+    sushi \
     gvfs \
     gvfs-afc \
     gvfs-mtp \
     gvfs-nfs \
     gvfs-smb \
-    libgnome-keyring \
-    loupe \
-    nautilus \
-    simple-scan \
-    sushi \
-    snapshot \
-    xdg-desktop-portal-gnome \
-    xdg-user-dirs-gtk \
-    sound-theme-freedesktop \
-    vlc \
-    nvtop \
-    gnome-tweaks \
-    gnome-shell-extension-fullscreen-to-new-workspace-git \
-    gnome-shell-extension-caffeine-git
+    gvfs-dnssd \
+    gvfs-wsdd
 
-# TODO: Install caffeine and fullscreen-to-new-workspace extensions on fedora
+if ! command -v gdm sddm >/dev/null; then
+    paru -S --needed --noconfirm --noupgrademenu --skipreview gdm
+    sudo systemctl enable --now gdm
+fi
 
-sudo systemctl enable --now gdm
 
 # Not Included
+# - decibels (audio player)
+# - evince (pdf viewer)
+# - gnome-software
 # - gnome-calculator
 # - gnome-clocks
 # - gnome-connections
@@ -55,14 +61,11 @@ sudo systemctl enable --now gdm
 # - gnome-music
 # - gnome-remote-desktop
 # - gnome-software
-# - gnome-system-monitor
 # - gnome-text-editor
 # - gnome-tour
 # - gnome-user-docs
 # - gnome-weather
 # - grilo-plugins
-# - gvfs-goa
-# - gvfs-gphoto2
 # - malcontent
 # - tecla
 # - orca

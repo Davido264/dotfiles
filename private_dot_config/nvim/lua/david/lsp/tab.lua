@@ -1,5 +1,5 @@
 return {
-  ["clangd"] = { expand = true, size = 2 },
+  ["clangd"] = { expand = true, size = 4 },
   ["dartls"] = { expand = true, size = 2 },
   ["lua_ls"] = { expand = true, size = 2 },
   ["ts_ls"] = { expand = true, size = 2 },
@@ -14,5 +14,4 @@ return {
   ["rust_analyzer"] = { expand = true, size = 4 },
   ["jdtls"] = { expand = true, size = 4 },
   ["pyright"] = { expand = true, size = 4 },
-  ["nixd"] = { expand = true, size = 2 },
 }

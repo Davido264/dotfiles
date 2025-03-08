@@ -36,9 +36,11 @@ return {
       "luadoc",
       "luap",
       "luau",
+      "fennel",
 
-      -- C#
+      -- Dotnet
       "c_sharp",
+      "fsharp",
 
       -- Python
       "python",
@@ -53,6 +55,8 @@ return {
       "javascript",
       "jsdoc",
       "typescript",
+      "typespec",
+      "typoscript",
 
       -- Web Frameworks
       "svelte",
@@ -116,6 +120,9 @@ return {
       "vim",
       "vimdoc",
       "xml",
+      "editorconfig",
+      "printf",
+      "ssh_config",
     },
     highlight = {
       enable = true,
@@ -138,15 +145,6 @@ return {
 
     local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
     parser_config.tsx.filetype_to_parsername = { "javascript", "typescript.tsx" }
-
-    -- local fsharp = vim.fn.stdpath "data" .. "/tree-sitter-fsharp"
-    -- parser_config.fsharp = {
-    --   install_info = {
-    --     url = fsharp,
-    --     files = { "src/scanner.cc", "src/parser.c" },
-    --   },
-    --   filetype = "fsharp",
-    -- }
 
     -- local mcfunction = vim.fn.stdpath "data" .. "/tree-sitter-mcfunction"
     -- parser_config.mcfunction = {

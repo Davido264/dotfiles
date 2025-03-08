@@ -110,9 +110,11 @@ else
 end
 
 -- native file browser
-gset.netrw_browse_split = 0
-gset.netrw_banner = 0
-gset.netrw_winsize = 25
+gset.loaded_netrw = 1
+gset.loaded_netrwPlugin = 1
+-- gset.netrw_browse_split = 0
+-- gset.netrw_banner = 0
+-- gset.netrw_winsize = 25
 
 -- neovide
 gset.neovide_cursor_vfx_mode = "wireframe"

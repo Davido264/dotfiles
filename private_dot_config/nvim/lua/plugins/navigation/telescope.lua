@@ -14,6 +14,9 @@ return {
     {
       "nvim-telescope/telescope-ui-select.nvim",
     },
+    {
+      "debugloop/telescope-undo.nvim",
+    },
   },
   cmd = "Telescope",
   keys = {
@@ -68,6 +71,11 @@ return {
       desc = "Help Tags",
       silent = true,
     },
+    { -- lazy style key map
+      "<leader>u",
+      "<cmd>Telescope undo<cr>",
+      desc = "undo history",
+    }
   },
   config = function()
     local actions = require "telescope.actions"
@@ -106,33 +114,32 @@ return {
           case_mode = "smart_case",
         },
       },
+      undo = {
+        side_by_side = true,
+        layout_strategy = "vertical",
+        layout_config = {
+          preview_height = 0.8,
+        },
+      },
       defaults = {
         preview = { hide_on_startup = true },
         prompt_prefix = "> ",
         color_devicons = true,
         file_ignore_patterns = {
-          "*.pyc",
-          "*_build/*",
-          "*_build\\*",
-          "**/coverage/*",
-          "**\\coverage\\*",
-          "**/node_modules/*",
-          "**\\node_modules\\*",
-          "**/android/*",
-          "**\\android\\*",
-          "**/ios/*",
-          "**\\ios\\*",
-          "**/.git/*",
-          "**\\.git\\*",
-          "*.exe",
-          "**/__pycache__/*",
-          "**\\__pycache__\\*",
-          "*build/*",
-          "*build\\*",
-          "*/obj/*",
-          "*\\obj\\*",
-          "**/.env/*",
-          "**\\.env\\*",
+          "%.pyc$",
+          "[/\\]_build[/\\]",
+          "[/\\]coverage[/\\]",
+          "[/\\]node_modules[/\\]",
+          "[/\\]android[/\\]",
+          "[/\\]ios[/\\]",
+          "[/\\]%.git[/\\]",
+          "%.exe$",
+          "[/\\]__pycache__[/\\]",
+          "[/\\]build[/\\]",
+          "[/\\]obj[/\\]",
+          "[/\\]%.env[/\\]",
+          "[/\\]%.direnv[/\\]",
+          "[/\\]%.venv[/\\]",
         },
         file_previewer = require("telescope.previewers").vim_buffer_cat.new,
         grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
@@ -153,22 +160,23 @@ return {
         },
 
         -- theme
-        -- layout_strategy = "bottom_pane",
-        -- layout_config = {
-        --   height = 15,
-        --   prompt_position = "bottom",
-        -- },
-        -- sorting_strategy = "descending",
-        -- border = true,
-        -- borderchars = {
-        --   results = { "─", " ", " ", " ", "─", "─", " ", " " },
-        --   prompt = { " " },
-        --   preview = { "─", " ", " ", " ", "─", "─", " ", " " },
-        -- },
+        layout_strategy = "bottom_pane",
+        layout_config = {
+          height = 15,
+          prompt_position = "bottom",
+        },
+        sorting_strategy = "descending",
+        border = true,
+        borderchars = {
+          results = { "─", " ", " ", " ", "─", "─", " ", " " },
+          prompt = { " " },
+          preview = { "─", " ", " ", " ", "─", "─", " ", " " },
+        },
       },
     }
 
     require("telescope").load_extension "fzf"
     require("telescope").load_extension "ui-select"
+    require("telescope").load_extension "undo"
   end,
 }

@@ -4,8 +4,12 @@ set -euo pipefail
 [ "${CHEZMOI:-0}" -eq 1 ] || source "${SROOT}/vars.sh"
 [ "${VERBOSE}" -eq 1 ] && set -x
 
+#
+# TODO: Instalar las herramientas de línea de comandos mediante la forma oficial (sdkmanager) sale muchísimo mejor y 
+# me evito todo tipo de problemas, sólo debo definir las variables de entorno y asegurarme de que sdkmanager las respeta
+#
 echo '== [ Base packages ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview \
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
     coreutils \
     curl \
     jq \
@@ -23,57 +27,66 @@ paru -S --needed --noconfirm --noupgrademenu --skippreview \
     neovim \
     tmux
 
-echo '== [ C ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview \
-  base-devel \
-  gcc \
-  glibc \
-  clang \
-  llvm \
-  make \
-  cmake \
-  autoconf \
-  automake \
-  gdb
+echo '== [ asdf ] =='
+paru -S --needed --noconfirm --noupgrademenu --skipreview curl git gnupg gawk
+source "${SROOT}/asdf.sh"
+
+echo '== [ C/C++ ] =='
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
+    base-devel \
+    gcc \
+    glibc \
+    clang \
+    llvm \
+    make \
+    cmake \
+    vcpkg \
+    autoconf \
+    automake \
+    gdb
+
+VCPKG_ROOT="${VCPKG_ROOT:-"$XDG_DATA_HOME/vcpkg"}"
+[ -d "$VCPKG_ROOT" ] || mkdir "$VCPKG_ROOT"
+(
+    cd "$VCPKG_ROOT"
+    if git rev-parse --is-inside-work-tree; then
+        git -C "$VCPKG_ROOT" pull
+    else
+        git clone https://github.com/microsoft/vcpkg $VCPKG_ROOT
+    fi
+)
 
 echo '== [ Java ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview jdk21-openjdk jdk8-openjdk
+paru -S --needed --noconfirm --noupgrademenu --skipreview jdk21-openjdk jdk8-openjdk
 source "${SROOT}/asdf_java.sh"
 
-
 # echo '== [ .NET ] =='
-# paru -S --needed --noconfirm --noupgrademenu --skippreview dotnet-sdk
+# paru -S --needed --noconfirm --noupgrademenu --skipreview dotnet-sdk
 # source "${SROOT}/asdf_dotnet.sh"
 
-
 echo '== [ Flutter ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview \
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
     flutter-bin \
-    android-emulator \
+    android-sdk-build-tools \
     android-sdk-cmdline-tools-latest \
-    android-build-tools \
     android-ndk
-yes | sdkmanager 'platform-tools' --sdk_root "$HOME/.local/share/android-sdk"
-
+# yes | sdkmanager --sdk_root="$HOME/.local/share/android-sdk" 'platform-tools'
 
 echo '== [ Go ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview go
-
+paru -S --needed --noconfirm --noupgrademenu --skipreview go
 
 echo '== [ Javascript ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview \
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
     nodejs-lts-iron \
     npm \
-    pnpm
+    bun-bin
 source "${SROOT}/asdf_node.sh"
 
-
 echo '== [ Kotlin ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview kotlin
-
+paru -S --needed --noconfirm --noupgrademenu --skipreview kotlin
 
 echo '== [ Python ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview \
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
     python \
     python-setuptools \
     python-pip \
@@ -93,15 +106,13 @@ paru -S --needed --noconfirm --noupgrademenu --skippreview \
     sqlite
 source "${SROOT}/asdf_python.sh"
 
-
-echo '== [ Rust ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview \
-    rust \
-    rust-src
-
+# echo '== [ Rust ] =='
+# paru -S --needed --noconfirm --noupgrademenu --skipreview \
+#     rust \
+#     rust-src
 
 echo '== [ LaTeX ] =='
-paru -S --needed --noconfirm --noupgrademenu --skippreview \
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
     texlive-basic \
     texlive-bibtexextra \
     texlive-bin \

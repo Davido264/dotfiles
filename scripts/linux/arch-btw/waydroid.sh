@@ -12,7 +12,7 @@ paru -S --noconfirm --noupgrademenu --skipreview --needed \
     waydroid \
     waydroid-image-gapps
 
-waydroid init -s GAPPS
+sudo waydroid init -s GAPPS
 
 case "$VENDOR" in
 "GenuineIntel") arm_trans="libhoudini" ;;
@@ -20,23 +20,24 @@ case "$VENDOR" in
 *) echo "WTF" && exit 1 ;;
 esac
 
-mkdir -p "$HOME/Source/tools/waydroid_scripts"
-git clone --depth 1 github.com:casualsnek/waydroid_script.git "$HOME/Source/tools/waydroid_scripts"
-(
-    cd "$HOME/Source/tools/waydroid_scripts" || exit 1
-    python -m venv venv
-    venv/bin/pip install -r requirements.txt
-    sudo venv/bin/python3 main.py hack hidestatusbar
-    sudo venv/bin/python3 main.py install "$arm_trans"
-)
-
+if [ ! -d "$HOME/Source/tools/waydroid_scripts" ]; then
+    mkdir -p "$HOME/Source/tools/waydroid_scripts"
+    git clone --depth 1 https://github.com/casualsnek/waydroid_script.git "$HOME/Source/tools/waydroid_scripts"
+    (
+        cd "$HOME/Source/tools/waydroid_scripts" || exit 1
+        python -m venv venv
+        venv/bin/pip install -r requirements.txt
+        sudo venv/bin/python3 main.py hack hidestatusbar
+        sudo venv/bin/python3 main.py install "$arm_trans"
+    )
+fi
 
 filenames=$(find ~/.local/share/applications/ -type f -name 'waydroid.*')
 for app in $filenames; do
-  if ! grep -q 'NoDisplay=true' "$app"; then
-    sed -i '/\[Desktop Entry\]/a NoDisplay=true' "$app"
-    echo "[*] Added NoDisplay=true to $app"
-  fi
+    if ! grep -q 'NoDisplay=true' "$app"; then
+        sed -i '/\[Desktop Entry\]/a NoDisplay=true' "$app"
+        echo "[*] Added NoDisplay=true to $app"
+    fi
 done
 
 echo '== [ Modified the selected applications ] =='

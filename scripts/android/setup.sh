@@ -10,4 +10,4 @@ pkg upgrade -y
 pkg install -y openssl openssh
 
 eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_rsa
+# ssh-add ~/.ssh/id_rsa

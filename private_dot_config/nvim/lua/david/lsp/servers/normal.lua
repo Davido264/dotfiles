@@ -42,6 +42,9 @@ M.servers = vim.tbl_deep_extend("force", minimal.servers, {
   ---- Rarely using ----
   -- Dart (Included with dart)
   "dartls",
+
+  -- Hyprland
+  -- "hyprls",
   --
   -- F#
   -- "fsautocomplete",
@@ -52,17 +55,14 @@ M.servers = vim.tbl_deep_extend("force", minimal.servers, {
   -- Powershell
   -- "powershell-editor-services",
   --
-  -- Prisma.js
-  -- "prisma-language-server",
-  --
   -- Minecraft mcfunction
   -- "spyglassmc-language-server",
   --
   -- PHP
-  "intelephense",
+  -- "intelephense",
 
   -- Gitlab CI/CD
-  "gitlab_ci_ls",
+  -- "gitlab_ci_ls",
 
   -- Not managed by lspconfig
   -- "odoo_lsp", -- Odoo language server

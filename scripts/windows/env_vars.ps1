@@ -5,6 +5,9 @@ Import-Module "$Env:SROOT/utils.psm1"
 [Environment]::SetEnvironmentVariable("XDG_DATA_HOME", "%USERPROFILE%\.local\share", [EnvironmentVariableTarget]::User)
 [Environment]::SetEnvironmentVariable("XDG_STATE_HOME", "%USERPROFILE%\.local\state", [EnvironmentVariableTarget]::User)
 
+[Environment]::SetEnvironmentVariable("FZF_DEFAULT_OPTS", "--delimiter=\t --exit-0 --select-1 --bind=ctrl-z:ignore,btab:up,tab:down --tabstop=1 --height=50% --layout=reverse --prompt '∷ ' --pointer ▶ --marker ⇒", [EnvironmentVariableTarget]::User)
+[Environment]::SetEnvironmentVariable("RCLONE_CONFIG", "$HOME\.config\rclone\config.conf", [EnvironmentVariableTarget]::User)
+
 if ($Env:WINDOWS_DEV -eq 1)
 {
     [Environment]::SetEnvironmentVariable("GOBIN", "%XDG_DATA_HOME%\go\bin", [EnvironmentVariableTarget]::User)
@@ -17,6 +20,7 @@ if ($Env:WINDOWS_DEV -eq 1)
     [Environment]::SetEnvironmentVariable("NUGET_PACKAGES", "%XDG_CACHE_HOME%\NuGetPackages", [EnvironmentVariableTarget]::User)
     [Environment]::SetEnvironmentVariable("PYTHON_HISTORY", "%XDG_STATE_HOME%\python\history", [EnvironmentVariableTarget]::User)
     [Environment]::SetEnvironmentVariable("ANDROID_USER_HOME", "%XDG_DATA_HOME%\android", [EnvironmentVariableTarget]::User)
+    [Environment]::SetEnvironmentVariable("JAVA_HOME", "$HOME\scoop\apps\openjdk\current", [EnvironmentVariableTarget]::User)
 
     [Environment]::SetEnvironmentVariable("PATH", "$Env:PATH;$Env:GOBIN", [EnvironmentVariableTarget]::User)
 }

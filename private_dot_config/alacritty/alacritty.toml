@@ -21,4 +21,4 @@ y = 5
 
 [terminal.shell]
 program = "tmux"
-# args = ["-l","welcome"]
+args = ["new-session","-A","-s","default"]

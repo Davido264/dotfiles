@@ -1,0 +1,16 @@
+{
+  "version": "0.25.0",
+  "desciption": "Your Hardcore Loop Machine.",
+  "homepage": "https://www.giadamusic.com/",
+  "license": "GPL-3.0",
+  "url": "https://www.giadamusic.com/data/giada-v0.25.0-x86_64-windows.zip",
+  "bin": [
+    "giada.exe"
+  ],
+  "shortcuts": [
+    [
+      "giada.exe",
+      "Giada"
+    ]
+  ]
+}

@@ -5,15 +5,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
       return
     end
 
-    -- set priorities for Nix highlights
-    if not vim.bo.ft == "nix" then
-      vim.highlight.priorities.semantic_tokens = 95
-    end
-
     -- set indent
     local tab_configs = require("david.lsp.tab")[client.name] or { expand = true, size = 4 }
 
-    if tab_configs then
+    -- copilot.lua sets copilot as an lsp server, in that case, I dont want to override tab settings
+    if tab_configs and client.name ~= "copilot" then
       vim.bo[ev.buf].expandtab = tab_configs.expand
       vim.bo[ev.buf].shiftwidth = tab_configs.size
       vim.bo[ev.buf].tabstop = tab_configs.size

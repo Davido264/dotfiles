@@ -1,0 +1,24 @@
+{
+  "version": "3.4.6",
+  "desciption": "Library Manager for LABS",
+  "homepage": "https://labs.spitfireaudio.com/",
+  "license": "Propietary",
+  "url": "https://www2.spitfireaudio.com/library-manager/download/win/",
+  "installer": {
+    "script": [
+      "Move-Item \"$dir\\win\" \"$dir\\SpitfireAudio-Win-3.4.6.exe\"",
+      "Start-Process -Wait \"$dir\\SpitfireAudio-Win-3.4.6.exe\" -ArgumentList @('/VERYSILENT', \"/DIR=$dir\") -Verb RunAs | Out-Null"
+    ]
+  },
+  "uninstaller": {
+    "script": [
+      "Start-Process -Wait \"$dir\\unins000.exe\" -ArgumentList '/VERYSILENT' -Verb RunAs | Out-Null"
+    ]
+  },
+  "shortcuts": [
+    [
+      "Spitfire Audio.exe",
+      "Spitfire Audio"
+    ]
+  ]
+}

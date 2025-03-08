@@ -13,4 +13,4 @@ sudo {
     Start-Service ssh-agent
 }
 
-ssh-add $(Resolve-Path "$HOME/.ssh/id_rsa")
+# ssh-add $(Resolve-Path "$HOME/.ssh/id_rsa")

@@ -3,27 +3,8 @@
 
 & Invoke-Expression (&starship init powershell)
 
-# Workspaces and J.D integration
-function wcd([string]$id) {
-    if (-not $id) {
-        $path = $(ws -p)
-    } else {
-        $path = $(ws $id -p)
-    }
-    set-location $path
-}
-
-function wls([string]$id) {
-    if (-not $id) {
-        $path = $(ws -p)
-    } else {
-        $path = $(ws $id -p)
-    }
-    get-childitem $path
-}
-
 # Modules
-Import-Module "$HOME/bin/envs.psm1"
+# TODO:
 
 # Alias
 Set-Alias grep rg

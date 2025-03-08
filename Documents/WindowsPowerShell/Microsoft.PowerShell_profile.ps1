@@ -12,14 +12,14 @@ if ($isNonInteractive) {
 & Invoke-Expression (&starship init powershell)
 
 # Modules
-Import-Module "$HOME/bin/winwal.psm1"
+# TODO
 
 # Alias
 Set-Alias grep rg
 Set-Alias touch New-Item
 Set-Alias open Start-Process
 Set-Alias bash "C:\Program Files\Git\bin\bash"
-Set-Alias which where.exe 
+Set-Alias which where.exe
 
 # Envs
 $env:HOSTS = "$env:SystemRoot\system32\drivers\etc\hosts"

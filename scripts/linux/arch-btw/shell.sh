@@ -24,28 +24,32 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     tree-sitter-cli \
     neovim
 
-"${CODESPACES}" && exit
+if ! "${CODESPACES}"; then
+    # network or advance system related. On a container I dont see too much sense
+    paru -S --needed --noconfirm --noupgrademenu --skipreview \
+        lsof \
+        traceroute \
+        whois \
+        dnsutils
 
-# network or advance system related. On a container I dont see too much sense
-paru -S --needed --noconfirm --noupgrademenu --skipreview \
-    lsof \
-    traceroute \
-    whois \
-    dnsutils
+    # TODO: See tmux, cmatrix, onefetch
+    paru -S --needed --noconfirm --noupgrademenu --skipreview \
+        zsh \
+        tmux \
+        htop \
+        btop \
+        yt-dlp \
+        p7zip \
+        pandoc-cli \
+        imagemagick \
+        eza \
+        fastfetch \
+        cmatrix \
+        onefetch \
+        starship
 
-paru -S --needed --noconfirm --noupgrademenu --skipreview \
-    zsh \
-    tmux \
-    htop \
-    btop \
-    yt-dlp \
-    p7zip \
-    pandoc-cli \
-    imagemagick \
-    eza \
-    fastfetch \
-    cmatrix \
-    onefetch \
-    starship
+    paru -S --needed --noconfirm --noupgrademenu --skipreview \
+        ffmpeg
 
-chsh -s "$(which zsh)"
+    [ ${SHELL:-} = "$(which zsh)" ] || chsh -s "$(which zsh)"
+fi

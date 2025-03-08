@@ -7,8 +7,10 @@ set -euo pipefail
 paru -S --needed --noconfirm --noupgrademenu --skipreview \
     telegram-desktop \
     thunderbird \
-    mpv \
-    alacritty \
+    bitwarden-bin \
+    ghostty \
+    zen-browser-bin \
+    brave-bin \
     libreoffice-fresh \
     libreoffice-fresh-es \
     libreoffice-fresh-en-gb \
@@ -18,11 +20,20 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     vesktop-bin \
     scrcpy \
     spotify \
+    vlc \
     universal-android-debloater
 
-    # krita
-    # inkscape
-    # blender
-    # zoom
-    # obsidian
-    # drawio-bin
+# Zen extra deps
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
+    ffmpeg \
+    networkmanager \
+    libnotify \
+    pulse-native-provider \
+    speech-dispatcher \
+    hunspell-en_US
+
+# krita
+# inkscape
+# blender
+# zoom
+# obsidian

@@ -1,6 +1,6 @@
-{{- $codespaces:= env "CODESPACES" | not | not -}}
-
-# laptop or desktop?
+{{- $codespaces := env "CODESPACES" | not | not -}}
+{{- $des := list "gnome" "kde" "hyprland" -}}
+{{- $de := promptChoiceOnce . "de" "Desktop Environment:" $des -}}
 {{- $chassisType := "desktop" }}
 {{- if (not $codespaces) -}}
 {{- if eq .chezmoi.os "darwin" }}
@@ -17,53 +17,50 @@
 {{- else -}}
 {{- $chassisType = "container" }}
 {{- end -}}
-
 sourceDir = {{ .chezmoi.sourceDir | quote }}
-
 encryption = "age"
-# mode = "symlink" dudo
+mode = "symlink"
 
 [edit]
 command = "nvim"
 
 [diff]
-# exclude scripts from diff
-exclude = ["scripts"]
-
-# nvim as diff
+exclude = [ "scripts" ]
 command = "nvim"
-args = ["-d", "{{ .Destination }}", "{{ .Target }}"]
+args = ["-d", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
 
 [merge]
 command = "nvim"
-args = ["-d", "{{ .Destination }}", "{{ .Source }}", "{{ .Target }}"]
-
+args = ["-d", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Source {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
 
 [data]
 codespaces = {{ $codespaces }}
-chassisType = {{ $chassisType }}
+chassisType = {{ $chassisType | quote }}
+de = {{ $de | quote }}
 
 [scriptEnv]
+{{ if (eq .chezmoi.os "linux") -}}
+DE = {{ $de | quote }}
+{{ end -}}
 {{ if (and (eq .chezmoi.os "windows") (not $codespaces)) -}}
 {{ $windev := promptBoolOnce . "development" "Windows development?"}}
 {{ if $windev -}}
-WINDOWS_DEV = 1
+WINDOWS_DEV = "1"
 {{ else -}}
-WINDOWS_DEV = 0
+WINDOWS_DEV = "0"
 {{ end -}}
 {{ $winmusic := promptBoolOnce . "musicProduction" "Windows Music Production?"}}
 {{ if $winmusic -}}
-WINDOWS_MUSIC = 1
+WINDOWS_MUSIC = "1"
 {{ else -}}
-WINDOWS_MUSIC = 0
+WINDOWS_MUSIC = "0"
 {{ end -}}
 {{ end -}}
 {{ if (not $codespaces) -}}
-CHASSIS = $chassisType
+CHASSIS = {{ $chassisType | quote }}
 {{ end -}}
-# WSL?
 {{ if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
-WSL = 1
+WSL = "1"
 {{ else -}}
-WSL = 0
+WSL = "0"
 {{ end -}}

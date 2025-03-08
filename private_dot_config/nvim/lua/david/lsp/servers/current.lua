@@ -1,3 +1,1 @@
--- BEGIN ANSIBLE MANAGED BLOCK --
 return "normal"
--- END ANSIBLE MANAGED BLOCK --

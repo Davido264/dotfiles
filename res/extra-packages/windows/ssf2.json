@@ -1,0 +1,14 @@
+{
+  "version": "1.3.1.2",
+  "desciption": "Super Smash Flash 2",
+  "homepage": "https://www.supersmashflash.com/news/",
+  "license": "freeware",
+  "url": "https://cdn.supersmashflash.com/ssf2/downloads/14ac5596/SSF2BetaWindows.v.1.3.1.2.portable.zip",
+  "extract_dir": "SSF2BetaWindows.v.1.3.1.2.portable",
+  "shortcuts": [
+    [
+      "SSF2.exe",
+      "Super Smash Flash 2"
+    ]
+  ]
+}

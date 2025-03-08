@@ -1,0 +1,17 @@
+{
+  "version": "2.4.3",
+  "desciption": "The best free loudness meter on the market.",
+  "homepage": "https://youlean.co/youlean-loudness-meter/",
+  "license": "Freemium",
+  "url": "https://youlean-129cf.kxcdn.com/wp-content/uploads/2021/02/Youlean-Loudness-Meter-2-V2.4.3-Windows-2.zip",
+  "installer": {
+    "script": [
+      "Start-Process -Wait \"$dir\\Youlean Loudness Meter 2 - V2.4.3 - Windows\\Youlean Loudness Meter 2 - V2.4.3 Installer.exe\" -ArgumentList @('/VERYSILENT', \"/DIR=$dir\") -Verb RunAs | Out-Null"
+    ]
+  },
+  "uninstaller": {
+    "script": [
+      "Start-Process -Wait \"$dir\\unins000.exe\" -ArgumentList '/VERYSILENT' -Verb RunAs | Out-Null"
+    ]
+  }
+}

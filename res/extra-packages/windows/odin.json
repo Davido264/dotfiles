@@ -1,0 +1,18 @@
+{
+  "version": "2.3.4",
+  "desciption": "Odin 2 Synthesizer Plugin.",
+  "homepage": "https://thewavewarden.com/pages/odin-2",
+  "license": "GPL-3.0",
+  "url": "https://github.com/TheWaveWarden/odin2/releases/download/NightlyDevel/Odin2.3.4WinInstaller.exe",
+  "installer": {
+    "script": [
+      "Start-Process -Wait \"$dir\\Odin2.3.4WinInstaller.exe\" -ArgumentList @('/VERYSILENT', \"/DIR=$dir\",'/COMPONENTS=vst3only') -Verb RunAs | Out-Null"
+    ]
+  },
+  "uninstaller": {
+    "script": [
+      "Start-Process -Wait \"$dir\\unins000.exe\" -ArgumentList '/VERYSILENT' -Verb RunAs | Out-Null"
+    ]
+  },
+  "checkver": "github"
+}

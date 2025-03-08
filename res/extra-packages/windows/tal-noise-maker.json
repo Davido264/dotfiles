@@ -1,0 +1,17 @@
+{
+  "version": "5.0.5",
+  "desciption": "Virtual modular synthesizer plugin.",
+  "homepage": "https://tal-software.com/products/tal-noisemaker",
+  "license": "Freeware",
+  "url": "https://tal-software.com//downloads/plugins/install_tal-noisemaker.zip",
+  "installer": {
+    "script": [
+      "Start-Process -Wait msiexec \"/i `\"$dir\\installer_vst3_64.msi`\" /qn\" -Verb RunAs | Out-Null"
+    ]
+  },
+  "uninstaller": {
+    "script": [
+      "Start-Process -Wait msiexec \"/x `\"$dir\\installer_vst3_64.msi`\" /qn\" -Verb RunAs | Out-Null"
+    ]
+  }
+}

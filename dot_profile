@@ -54,7 +54,7 @@ export FZF_DEFAULT_OPTS="--delimiter=\t --exit-0 --select-1 --bind=ctrl-z:ignore
 export TMUX_PLUGIN_MANAGER_PATH="$XDG_DATA_HOME/tmux/plugins"
 export TMUXIFIER="$TMUX_PLUGIN_MANAGER_PATH/tmuxifier"
 export TMUXIFIER_LAYOUT_PATH="$XDG_DATA_HOME/tmuxifier"
-export PATH="$HOME/.local/bin:$PATH:$GOBIN:$TMUXIFIER/bin"
+export PATH="$HOME/.local/bin:$PATH:$GOBIN:$TMUXIFIER/bin:$ANDROID_HOME/cmdline-tools/latest/bin"
 
 export BWS_ACCESS_TOKEN="0.240d8f44-2e2c-4d9c-901b-b21801481f8d.52NnPTYiFRPelO8amVhKk9fIejit62:B1ei4ziBbuT/zihwnojzOQ=="
 

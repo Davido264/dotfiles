@@ -72,7 +72,8 @@ return {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     local server_configs = require "david.lsp.custom_server_configs"
     local defaults = {
-      capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities),
+      -- capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities),
+      capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
     }
 
     local function setup(server)
@@ -99,6 +100,7 @@ return {
     end
   end,
   dependencies = {
+    { "saghen/blink.cmp" },
     { "Hoffs/omnisharp-extended-lsp.nvim" },
     { "b0o/schemastore.nvim" },
     {

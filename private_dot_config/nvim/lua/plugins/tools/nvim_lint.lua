@@ -19,7 +19,8 @@ return {
     events = { "BufWritePost", "BufReadPost" },
     linters_by_ft = {
       javascript = nil,
-      typescript = { "eslint_d" },
+      -- typescript = { "eslint_d" },
+      typescript = nil,
       go = { "golangcilint" },
       lua = { "selene" },
       -- python = { "pylint" },

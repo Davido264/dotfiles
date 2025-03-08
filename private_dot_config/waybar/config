@@ -1,7 +1,7 @@
 // vim: ft=jsonc
 {
   "layer": "top",
-  //"mode": "dock",
+  "mode": "dock",
   "gtk-layer-shell": true,
   "position": "top",
   "height": 15,
@@ -10,7 +10,7 @@
   "margin-left": 0,
   "margin-right": 0,
   "exclusive": true,
-  "passthrough": false,
+  "passthrough": true,
   "reload_style_on_change": true,
   "include": [
     "~/.config/waybar/modules"
@@ -28,7 +28,7 @@
   ],
   "modules-right": [
     // "custom/light_dark",
-    // "idle_inhibitor",
+    "idle_inhibitor",
     "privacy",
     "gamemode",
     "pulseaudio",

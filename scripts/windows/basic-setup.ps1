@@ -27,3 +27,4 @@ if ($Env:WINDOWS_DEV -eq 1)
 }
 
 WingetInstallPackage -Package Git.Git
+WingetInstallPackage -Package gerardog.gsudo

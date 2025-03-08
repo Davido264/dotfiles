@@ -12,15 +12,12 @@ pkg install -y \
     wget \
     jq \
     fzf \
+    lazygit \
     git \
     rclone \
     bitwarden-cli \
     zoxide \
     gum \
-    zsh \
-    yt-dlp \
-    pandoc \
-    ImageMagick \
     fastfetch \
     cmatrix
 
@@ -29,6 +26,10 @@ pkg install -y \
     tree-sitter-cli \
     neovim
 
-chsh -s "$(which zsh)"
+pkg install -y openssl python python-pip
 
-curl -sS https://starship.rs/install.sh | sh -- --yes
+pip install yt-dlp
+
+[ ${SHELL:-} = "$(which zsh)" ] || chsh -s "$(which zsh)"
+
+curl -sS https://starship.rs/install.sh | sh -s -- --yes

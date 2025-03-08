@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "sudo password: "
+read -s password
+echo "$password" | sudo -vSp ""
+
+source {{ joinPath .chezmoi.sourceDir "scripts" "vars.sh" | quote }}
+
+{{- if (eq .chezmoi.os "linux") }}
+sudo -v
+sudo pacman -Syu --noconfirm
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_setup.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_musicprod.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_virt.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_ssh.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "paru.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "desktop.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+case "$DE" in
+    "gnome") . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "gnome.sh" | quote }} ;;
+    "kde") . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "kde.sh" | quote }} ;;
+    "hyprland") . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "hyprland.sh" | quote }} ;;
+    *) echo "No valid desktop selected" ;;
+esac
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "apps.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "devel.sh" | quote }}
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "devel_ui.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "gaming.sh" | quote }}
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "waydroid.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "shell.sh" | quote }}
+{{- end }}
+
+{{- if (eq .chezmoi.os "android") -}}
+. {{ joinPath .chezmoi.sourceDir "scripts" "android" "setup.sh" | quote }}
+. {{ joinPath .chezmoi.sourceDir "scripts" "android" "shell.sh" | quote }}
+{{- end }}
+
+[ -e "$REPO_DIR/.first-time-done" ] || touch "$REPO_DIR/.first-time-done"
+run={{ joinPath .chezmoi.sourceDir "run.sh" | quote }}
+if [ -f "$run" ]; then
+    [ -x "$run" ] || chmod +x "$run"
+else
+    chezmoi execute-template <{{ joinPath .chezmoi.sourceDir ".chezmoiscripts" "run_once_before_preapply.sh.tmpl" | quote }} >"$run"
+    chmod +x "$run"
+fi

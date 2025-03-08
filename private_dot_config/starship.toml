@@ -1,5 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# ssokolow@monolith ~ [branch] %
+
 # Inserts a blank line between shell prompts
 add_newline = false
 
@@ -8,29 +10,30 @@ command_timeout = 800
 
 
 # Single Line. No Split
-format = '($container$nix_shell$python)[($username$hostname:)](bold yellow)$directory( $git_branch) $character'
+format = '($container$nix_shell$python)[($username$hostname )](bold green)$directory( $git_branch) $character'
 
 [line_break]
 disabled = true
 
 [character]
-success_symbol = '[\$](bold white)'
-error_symbol = '[\$](bold red)'
+success_symbol = '[%](bold white)'
+error_symbol = '[%](bold red)'
 vimcmd_symbol = '[:](bold yellow)'
 
 [username]
 format = '[$user]($style)'
-style_user = "bold white"
+style_user = "bold green"
 show_always = false
 
 [hostname]
 format = '[$ssh_symbol$hostname]($style)'
-style = "bold white"
+style = "bold green"
 ssh_symbol = "@"
 ssh_only = true
 
 [directory]
 format = '[$path]($style)[$read_only]($read_only_style)'
+style = 'bold blue'
 truncation_length = 1
 truncation_symbol = ''
 truncate_to_repo = true
@@ -46,8 +49,9 @@ format = '[$symbol]($style)'
 symbol = "*"
 
 [git_branch]
-format = '[\($branch\)]($style)'
+format = '[\[$branch\]]($style)'
 symbol = ""
+style = 'bold red'
 
 [python]
 format = '[$symbol]($style)'

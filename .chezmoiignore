@@ -1,9 +1,16 @@
+README.md
 install.sh
+run.sh
+run.cmd
+run.ps1
 scripts/
 res/
 selene.toml
 stylua.toml
 vim.toml
+.config/btop/btop.log
+~/.config/nvim/lua/david/lsp/servers/init.lua
+.first-time-done
 
 {{  if ne .chezmoi.os "windows"  -}}
 AppData/

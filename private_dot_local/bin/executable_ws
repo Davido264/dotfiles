@@ -8,30 +8,30 @@
 tmp=$(mktemp)
 
 find -L ~/Source \
-	~/Source/personal \
-	~/Source/UTA \
-	~/Source/Mivilsoft \
-	~/Documents \
-	~/Documents/personal \
-	~/Documents/UTA \
-	~/Documents/UTA/seguridad_ti \
-	~/Documents/UTA/auditoria_ti \
-	~/Documents/UTA/servidores \
-	~/Documents/Mivilsoft \
-	~/Documents/archived \
-	~/Documents/tmp \
-	~/Documents/notebook \
-	~/Music \
-	~/Music/Sessions \
-	~/Music/projects \
-	~/Music/Library \
-	~/Pictures/tmp \
-	~/Pictures \
-	~/Videos/tmp \
-	~/Documents/personal/backups \
-	~/Documents/archived \
-	~/Documents/tmp \
-	-mindepth 1 -maxdepth 1 -type d >>"$tmp" 2>/dev/null &
+    ~/Source/personal \
+    ~/Source/UTA \
+    ~/Source/Mivilsoft \
+    ~/Documents \
+    ~/Documents/personal \
+    ~/Documents/UTA \
+    ~/Documents/UTA/seguridad_ti \
+    ~/Documents/UTA/auditoria_ti \
+    ~/Documents/UTA/servidores \
+    ~/Documents/Mivilsoft \
+    ~/Documents/archived \
+    ~/Documents/tmp \
+    ~/Documents/notebook \
+    ~/Music \
+    ~/Music/Sessions \
+    ~/Music/projects \
+    ~/Music/Library \
+    ~/Pictures/tmp \
+    ~/Pictures \
+    ~/Videos/tmp \
+    ~/Documents/personal/backups \
+    ~/Documents/archived \
+    ~/Documents/tmp \
+    -mindepth 1 -maxdepth 1 -type d >>"$tmp" 2>/dev/null &
 
 zoxide query -l >>"$tmp" &
 
@@ -41,9 +41,10 @@ selected=$(sort -u "$tmp" | fzf +m -1 -q "$1")
 rm "$tmp"
 
 if [ -z "$selected" ]; then
-	exit 0
+    exit 0
 fi
 
+echo "$selected"
 if [ "$(basename "$(dirname "$selected")")" = "branches" ]; then
     selected_name=$(basename "$(dirname "$(dirname "$(dirname "$selected")" | tr . _)")")
 	selected_name=$selected_name/$(basename "$(dirname "$(dirname "$selected")" | tr . _)")

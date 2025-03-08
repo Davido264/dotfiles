@@ -8,30 +8,30 @@ if [ -z "$picture_path" ]; then
 fi
 
 if echo "$picture_path" | grep -E '__noresize\.[A-Za-z]+$'; then
-	if which swww 2>/dev/null 1>&2; then
-		swww img "$picture_path" \
-			--transition-type wave \
-			--transition-step 10 \
-			--transition-fps 30 \
-			--transition-bezier .43,1.19,1,.4 \
-			--transition-duration 2
-	elif which gsettings >/dev/null 2>&1; then
+	which swww 2>/dev/null 1>&2 && swww img "$picture_path" \
+		--transition-type wave \
+		--transition-step 10 \
+		--transition-fps 30 \
+		--transition-bezier .43,1.19,1,.4 \
+		--transition-duration 2
+
+	if which gsettings >/dev/null 2>&1; then
 		gsettings set org.gnome.desktop.background picture-uri "file://$picture_path"
 		gsettings set org.gnome.desktop.background picture-uri-dark "file://$picture_path"
 		gsettings set org.gnome.desktop.background picture-options "centered"
 	fi
 else
-	fill=$(matugen image "$picture_path" -m dark | jq -r '.colors.dark.background')
-	if which swww 2>/dev/null 1>&2; then
-		swww img "$picture_path" \
-			--fill-color "$fill" \
-			--resize fit \
-			--transition-type wave \
-			--transition-step 10 \
-			--transition-fps 30 \
-			--transition-bezier .43,1.19,1,.4 \
-			--transition-duration 2
-	elif which gsettings >/dev/null 2>&1; then
+	fill=$(matugen image "$picture_path" -m dark --json strip | jq -r '.colors.dark.background')
+	which swww 2>/dev/null 1>&2 && swww img "$picture_path" \
+		--fill-color "$fill" \
+		--resize fit \
+		--transition-type wave \
+		--transition-step 10 \
+		--transition-fps 30 \
+		--transition-bezier .43,1.19,1,.4 \
+		--transition-duration 2
+
+	if which gsettings >/dev/null 2>&1; then
 		gsettings set org.gnome.desktop.background picture-uri "file://$picture_path"
 		gsettings set org.gnome.desktop.background picture-uri-dark "file://$picture_path"
 		gsettings set org.gnome.desktop.background picture-options "zoom"
@@ -45,24 +45,7 @@ if which gsettings 2>/dev/null 1>&2; then
 fi
 
 sleep 0.5
-if pgrep mako 2>/dev/null 1>&2; then
-	makoctl reload
-fi
-
-if pgrep tmux 2>/dev/null 1>&2; then
-	tmux source ~/.config/tmux/tmux.conf
-fi
-
-pidof waybar >/dev/null 2>&1 && pkill waybar
+pgrep mako 2>/dev/null 1>&2 && makoctl reload
+pgrep tmux 2>/dev/null 1>&2 && tmux source ~/.config/tmux/tmux.conf
+pidof waybar >/dev/null 2>&1 && pkill -SIGUSR2 waybar
 pidof rofi >/dev/null 2>&1
-
-if which ags >/dev/null 2>&1; then
-	sass "$HOME/.config/ags/main.scss":"$HOME/.config/ags/style.css"
-	killall ags
-	ags >/dev/null 2>&1 &
-fi
-
-if [ -f ~/.config/hypr/hyprlock.conf ]; then
-	hyprlock_picture=$(echo "$picture_path" | sed 's/\//\\\//g')
-	eval "sed -i 's/__img__/$hyprlock_picture/' ~/.config/hypr/hyprlock.conf"
-fi

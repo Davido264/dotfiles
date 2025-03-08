@@ -1,0 +1,24 @@
+{
+  "version": "24.12",
+  "desciption": "Virtual modular synthesizer plugin.",
+  "homepage": "https://github.com/DISTRHO/Cardinal",
+  "license": "GPL-3.0",
+  "url": "https://github.com/DISTRHO/Cardinal/releases/download/24.05/Cardinal-win64-24.12-installer.exe",
+  "installer": {
+    "script": [
+      "Start-Process -Wait \"$dir\\Cardinal-win64-24.12-installer.exe\" -ArgumentList @('/VERYSILENT', \"/DIR=$dir\",'/COMPONENTS=resources,carla,jack,vst3') -Verb RunAs | Out-Null"
+    ]
+  },
+  "uninstaller": {
+    "script": [
+      "Start-Process -Wait \"$dir\\unins000.exe\" -ArgumentList '/VERYSILENT' -Verb RunAs | Out-Null"
+    ]
+  },
+  "shortcuts": [
+    [
+      "Cardinal.exe",
+      "Cardinal (JACK)"
+    ]
+  ],
+  "checkver": "github"
+}

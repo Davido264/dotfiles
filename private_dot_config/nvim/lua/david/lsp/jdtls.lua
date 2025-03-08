@@ -54,7 +54,8 @@ function M.setup()
           wd,
         },
 
-        capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities),
+        -- capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities),
+        capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
 
         root_dir = require("jdtls.setup").find_root {
           ".git",

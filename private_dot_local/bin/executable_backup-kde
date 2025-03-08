@@ -1,0 +1,52 @@
+#!/bin/bash
+set -euo pipefail
+
+# Every once in a while, update this to be in sync with:
+#       - https://github.com/Prayag2/konsave/blob/master/konsave/conf_kde.yaml
+#       - https://github.com/shalva97/kde-configuration-files
+
+declare -r CONFIG_DIR="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
+declare -r SHARE_DIR="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+declare -r BACKUP_DIR="${HOME}/.local/share/chezmoi/res/linux/"
+declare -r ARCHIVE_NAME="kde-configs.7z"
+declare -r ARCHIVE_TMP="${BACKUP_DIR}/${ARCHIVE_NAME}.tmp"
+
+command -v 7z &>/dev/null || paru -S --needed --noconfirm --noupgrademenu --skipreview p7zip
+
+
+tmp_dir=$(mktemp -d)
+trap 'rm -rf "$tmp_dir"' EXIT
+
+configs=(
+    'gtk-2.0' 'gtk-3.0' 'gtk-4.0' 'kate' 'Kvantum' 'latte' 'dolphinrc'
+    'katerc' 'konsolerc' 'kcminputrc' 'kdeglobals' 'kglobalshortcutsrc'
+    'klipperrc' 'krunnerrc' 'kscreenlockerrc' 'ksmserverrc' 'kwinrc'
+    'kwinrulesrc' 'plasma-org.kde.plasma.desktop-appletsrc' 'plasmarc'
+    'plasmashellrc' 'gtkrc' 'gtkrc-2.0' 'lattedockrc' 'breezerc'
+    'oxygenrc' 'lightlyrc' 'ksplashrc' 'khotkeysrc' 'kgammarc'
+    'kxkbrc' 'mimeapps.list' 'plasma-localerc' 'plasmanotifyrc'
+    'Trolltech.conf' 'baloofilerc'
+)
+
+shares=(
+    'kxmlgui5/dolphin' 'kxmlgui5/konsole' 'plasma-systemmonitor' 'user-places.xbel'
+)
+
+mkdir -p "$tmp_dir/kde-configs/.config"
+mkdir -p "$tmp_dir/kde-configs/.local/share"
+
+for file in "${configs[@]}"; do
+    [ -e "$CONFIG_DIR/$file" ] && cp -rf "$CONFIG_DIR/$file" "$tmp_dir/kde-configs/.config/"
+done
+
+for file in "${shares[@]}"; do
+    [ -e "$SHARE_DIR/$file" ] && cp -rf "$SHARE_DIR/$file" "$tmp_dir/kde-configs/.local/share/"
+done
+
+mkdir -p "$BACKUP_DIR"
+
+7z a -t7z -mx=9 "$ARCHIVE_TMP" "$tmp_dir/kde-configs"
+
+mv "$ARCHIVE_TMP" "${BACKUP_DIR}/${ARCHIVE_NAME}"
+
+echo "Respaldo completado: ${BACKUP_DIR}/${ARCHIVE_NAME}"

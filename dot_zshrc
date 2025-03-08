@@ -21,7 +21,7 @@ ZSH_COMPDUMP="${XDG_CACHE_HOME}/zsh/zcompdump-$HOST"
 
 zinit ice depth=1; zinit light zsh-users/zsh-syntax-highlighting
 zinit ice depth=1; zinit light zsh-users/zsh-completions
-zinit ice depth=1; zinit light zsh-users/zsh-autosuggestions
+# zinit ice depth=1; zinit light zsh-users/zsh-autosuggestions
 
 autoload -U compinit
 zstyle ':completion:*' menu select
@@ -51,6 +51,8 @@ bindkey -a k history-search-backward
 bindkey -a j history-search-forward
 
 alias adb='HOME="$XDG_DATA_HOME"/android adb'
+alias mvn="mvn -gs $XDG_CONFIG_HOME/maven/settings.xml"
+alias load-mivilsoft='source load-mivilsoft'
 
 if which eza &> /dev/null; then
     alias -- 'eza'='eza '\''--icons'\'''
@@ -76,16 +78,18 @@ if which eza &> /dev/null; then
     alias -- 'vi'='nvim'
 fi
 
-if which tmuxifier &> /dev/null; then
-    eval "$(tmuxifier init -)"
-fi
-
 if which fzf &> /dev/null; then
     [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
     [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 fi
 
-eval "$(direnv hook zsh)"
+if which direnv &> /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
+
+if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+    source $GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration
+fi
 
 # pnpm
 export PNPM_HOME="/home/david/.local/share/pnpm"
@@ -96,16 +100,8 @@ esac
 # pnpm end
 
 # asdf
-if [ -f ~/.local/share/asdf/asdf.sh ]; then
-    source ~/.local/share/asdf/asdf.sh
-fi
+[ -f ~/.local/share/asdf/asdf.sh ] && source ~/.local/share/asdf/asdf.sh
+[ -f ~/.local/share/asdf/plugins/java/set-java-home.zsh ] && source ~/.local/share/asdf/plugins/java/set-java-home.zsh
 # asdf end
-
-# bun
-# completions
-[ -s "/home/david/.bun/_bun" ] && source "/home/david/.bun/_bun"
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-# bun end
 
 smolfetch

@@ -1,10 +1,31 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+assert()
+{
+    if [ "$1" != "$2" ]; then
+        echo "$3" >&2
+        exit 1
+    fi
+}
+
+script_dir=$(cd "$SROOT/.." &>/dev/null && pwd)
+
 declare -r OS=${CHEZMOI_OS:-$(uname -o | tr '[:upper:]' '[:lower:]' | sed 's/gnu\///g')}
-declare -r REPO_DIR=${CHEZMOI_SOURCE_DIR:-$(dirname "$(dirname "$(realpath "${BASH_SOURCE[-1]}")")")}
+declare -r REPO_DIR=${CHEZMOI_SOURCE_DIR:-$script_dir}
 declare -r VERBOSE=${CHEZMOI_VERBOSE:-${VERBOSE:-0}}
 declare -r CODESPACES=${CODESPACES:-false}
+declare -r DE=${DE:-"gnome"}
+
+if [ -e "$REPO_DIR/.first-time-done" ]; then
+    _m=0
+else
+    _m=1
+fi
+
+declare -r INCLUDE_MANUAL=${INCLUDE_MANUAL:-${_m}}
+
+[ "${CHEZMOI:-0}" -eq 0 ] && declare -r CHEZMOI=1
 
 # if [ -z ${CHASSIS:-} ]; then
 #     case "$OS" in
@@ -27,7 +48,9 @@ if [ "$OS" = "linux" ]; then
     declare -r VENDOR=$(grep vendor_id /proc/cpuinfo | uniq | sed 's/vendor_id\s*:\s*//g')
 
     [ -f /etc/os-release ] && source /etc/os-release
-    declare -r OSID="${CHEZMOI_OS_RELEASE_ID:-$ID,,}"
+    declare -r OSID="${CHEZMOI_OS_RELEASE_ID:-${ID,,}}"
+
+    assert "$OSID" "arch" "Noooooo this is not arch D:<"
 
     case "$VENDOR" in
     "GenuineIntel") declare -r KVM_MOD="kvm_intel" ;;

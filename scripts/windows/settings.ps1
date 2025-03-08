@@ -10,8 +10,8 @@ if ($Global:VERBOSE -eq 1)
 Write-Output "== [ Importing registries ] =="
 sudo
 {
-    # TODO: include tweaks.reg here
     reg import "$Global:REPO_DIR/res/windows/tweaks.reg"
+    reg import "$Global:REPO_DIR/res/windows/editor_registry.reg"
 }
 
 Write-Output "== [ Setting Event viewer to log dropped packages ] =="

@@ -8,3 +8,8 @@ if ($Global:VERBOSE -eq 1)
 }
 
 WingetInstall-Package -Package WhatsApp.WhatsApp
+WingetInstall-Package -Package Microsoft.WindowsTerminal
+
+WingetInstall-Package -Package ripgrep
+ScoopInstall-Package -Package tree-sitter
+WingetInstall-Package -Package Neovim.Neovim

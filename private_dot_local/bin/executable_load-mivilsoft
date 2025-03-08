@@ -1,0 +1,11 @@
+#!/bin/sh
+
+export MS_TOOL_HOME="$HOME/Source/Mivilsoft/tools/bin"
+
+case ":$PATH:" in
+  *":$MS_TOOL_HOME:"*) 
+    ;;
+  *) 
+    export PATH="$MS_TOOL_HOME:$PATH"
+    ;;
+esac
