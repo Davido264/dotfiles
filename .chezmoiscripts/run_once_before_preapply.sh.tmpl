@@ -8,6 +8,9 @@ echo "$password" | sudo -vSp ""
 source {{ joinPath .chezmoi.sourceDir "scripts" "vars.sh" | quote }}
 
 {{- if (eq .chezmoi.os "linux") }}
+echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "basic.sh" | quote }}
+
 sudo -v
 sudo pacman -Syu --noconfirm
 

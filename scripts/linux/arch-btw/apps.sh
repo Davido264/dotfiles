@@ -9,7 +9,6 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     thunderbird \
     bitwarden-bin \
     ghostty \
-    zen-browser-bin \
     brave-bin \
     libreoffice-fresh \
     libreoffice-fresh-es \
@@ -23,14 +22,14 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     vlc \
     universal-android-debloater
 
-# Zen extra deps
+echo '== [ Install browsers ] =='
 paru -S --needed --noconfirm --noupgrademenu --skipreview \
-    ffmpeg \
-    networkmanager \
-    libnotify \
-    pulse-native-provider \
-    speech-dispatcher \
-    hunspell-en_US
+    zen-browser-bin \
+    $(expac -Ss '%o' zen-browser-bin) \
+
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
+    brave-browser-bin \
+    $(expac -Ss '%o' brave-browser-bin) \
 
 # krita
 # inkscape
