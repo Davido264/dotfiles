@@ -9,8 +9,8 @@ paru -S --noconfirm --noupgrademenu --skipreview --needed \
     linux-zen-headers \
     python3 \
     lzip \
-    waydroid \
-    waydroid-image-gapps
+    waydroid
+    # waydroid-image-gapps
 
 sudo waydroid init -s GAPPS
 
