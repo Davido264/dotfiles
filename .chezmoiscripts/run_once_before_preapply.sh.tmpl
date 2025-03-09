@@ -15,6 +15,9 @@ sudo -v
 sudo pacman -Syu --noconfirm
 
 echo "$password" | sudo -vSp ""
+. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "paru.sh" | quote }}
+
+echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_setup.sh" | quote }}
 
 echo "$password" | sudo -vSp ""
@@ -25,9 +28,6 @@ echo "$password" | sudo -vSp ""
 
 echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_ssh.sh" | quote }}
-
-echo "$password" | sudo -vSp ""
-. {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "paru.sh" | quote }}
 
 echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "desktop.sh" | quote }}
