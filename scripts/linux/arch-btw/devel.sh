@@ -93,11 +93,6 @@ sudo groupadd android-sdk
 sudo gpasswd -a "${USER}" android-sdk
 sudo setfacl -R -m g:android-sdk:rwx /opt/android-sdk
 sudo setfacl -d -m g:android-sdk:rwX /opt/android-sdk
-newgrp android-sdk
-
-
-yes | sdkmanager --licenses
-yes | sdkmanager 'platform-tools'
 
 echo '== [ Flutter ] =='
 paru -S --needed --noconfirm --noupgrademenu --skipreview \
