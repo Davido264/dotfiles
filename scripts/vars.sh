@@ -53,9 +53,15 @@ if [ "$OS" = "linux" ]; then
     declare -r VENDOR=$(grep vendor_id /proc/cpuinfo | uniq | sed 's/vendor_id\s*:\s*//g')
 
     [ -f /etc/os-release ] && source /etc/os-release
-    declare -r OSID="${CHEZMOI_OS_RELEASE_ID:-${ID,,}}"
+    OSID="${CHEZMOI_OS_RELEASE_ID:-${ID,,}}"
+    ID_LIKE="${ID_LIKE:-""}"
 
-    assert "$OSID" "arch" "Noooooo this is not arch D:<"
+    if ["$OSID" != "arch"]; then
+        assert "$ID_LIKE" "arch" "Noooooo this is not arch D:<"
+        declare -r OSID="arch"
+    else
+        declare -r OSID=${OSID}
+    fi
 
     case "$VENDOR" in
     "GenuineIntel") declare -r KVM_MOD="kvm_intel" ;;
