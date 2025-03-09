@@ -53,14 +53,14 @@ if [ "$OS" = "linux" ]; then
     declare -r VENDOR=$(grep vendor_id /proc/cpuinfo | uniq | sed 's/vendor_id\s*:\s*//g')
 
     [ -f /etc/os-release ] && source /etc/os-release
-    OSID="${CHEZMOI_OS_RELEASE_ID:-${ID,,}}"
-    ID_LIKE="${ID_LIKE:-""}"
+    osid="${CHEZMOI_OS_RELEASE_ID:-${ID,,}}"
+    id_like="${ID_LIKE:-""}"
 
-    if ["$OSID" != "arch"]; then
-        assert "$ID_LIKE" "arch" "Noooooo this is not arch D:<"
+    if ["$osid" != "arch"]; then
+        assert "$id_like" "arch" "Noooooo this is not arch D:<"
         declare -r OSID="arch"
     else
-        declare -r OSID=${OSID}
+        declare -r OSID=${osid}
     fi
 
     case "$VENDOR" in
