@@ -9,10 +9,14 @@ assert()
     fi
 }
 
-script_dir=$(cd "$SROOT/.." &>/dev/null && pwd)
+if [ -z "$CHEZMOI_SOURCE_DIR" ]; then
+    script_dir=$(cd "$SROOT/.." &>/dev/null && pwd)
+    declare -r REPO_DIR=${script_dir}
+else
+    declare -r REPO_DIR=${CHEZMOI_SOURCE_DIR}
+fi
 
 declare -r OS=${CHEZMOI_OS:-$(uname -o | tr '[:upper:]' '[:lower:]' | sed 's/gnu\///g')}
-declare -r REPO_DIR=${CHEZMOI_SOURCE_DIR:-$script_dir}
 declare -r VERBOSE=${CHEZMOI_VERBOSE:-${VERBOSE:-0}}
 declare -r CODESPACES=${CODESPACES:-false}
 declare -r DE=${DE:-"gnome"}
