@@ -16,7 +16,7 @@ if ! "${CODESPACES}"; then
     sudo localectl set-keymap --no-convert us-acentos
 
     grep -qxF 'NoExtract=etc/xdg/autostart/firewall-applet.desktop' /etc/pacman.conf || sudo sed -i 's/#\(NoExtract\s*=\)/#\1\n\1 etc\/xdg\/autostart\/firewall-applet.desktop/g' /etc/pacman.conf
-    [ -f /etc/xdg/autostart/firewall-applet.desktop ] && rm -f /etc/xdg/autostart/firewall-applet.desktop
+    [ -f /etc/xdg/autostart/firewall-applet.desktop ] && sudo rm -f /etc/xdg/autostart/firewall-applet.desktop
 
     paru -S --noconfirm --noupgrademenu --needed --skipreview android-udev
     for group in networkmanager power users wheel; do
