@@ -80,7 +80,7 @@ paths=(
 )
 
 for file in "${paths[@]}"; do
-    [ -e "$file" ] && source "$file"
+    [ -f "$file" ] && source "$file"
 done
 
 curl -sSLo "${tmp_dir}/sdkmanager.zip" 'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'
