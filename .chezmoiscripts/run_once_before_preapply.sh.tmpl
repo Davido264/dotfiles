@@ -1,38 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "sudo password: "
-read -s password
-echo "$password" | sudo -vSp ""
+trap "exit" INT TERM
+trap "kill 0" EXIT
 
 source {{ joinPath .chezmoi.sourceDir "scripts" "vars.sh" | quote }}
 
 {{- if (eq .chezmoi.os "linux") }}
-echo "$password" | sudo -vSp ""
+sudo -v || exit $?
+sleep 1
+
+while true; do
+    sleep 60
+    sudo -nv
+done 2> /dev/null &
+
 . {{ joinPath .chezmoi.sourceDir "scripts" "basic.sh" | quote }}
 
-sudo -v
 sudo pacman -Syu --noconfirm
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "paru.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_setup.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_musicprod.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_virt.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "sys_ssh.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "desktop.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 case "$DE" in
     "gnome") . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "gnome.sh" | quote }} ;;
     "kde") . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "kde.sh" | quote }} ;;
@@ -40,18 +38,14 @@ case "$DE" in
     *) echo "No valid desktop selected" ;;
 esac
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "apps.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "devel.sh" | quote }}
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "devel_ui.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "gaming.sh" | quote }}
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "waydroid.sh" | quote }}
 
-echo "$password" | sudo -vSp ""
 . {{ joinPath .chezmoi.sourceDir "scripts" "linux" "arch-btw" "shell.sh" | quote }}
 {{- end }}
 

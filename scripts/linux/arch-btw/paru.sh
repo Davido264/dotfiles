@@ -5,7 +5,7 @@ set -euo pipefail
 [ "${VERBOSE}" -eq 1 ] && set -x
 
 echo '== [ Remove yay if present ] =='
-command -v yay && sudo pacman -R yay
+command -v yay && sudo pacman -R yay --noconfirm
 
 echo '== [ Install paru if not present ] =='
 if ! command -v paru; then

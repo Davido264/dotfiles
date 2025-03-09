@@ -10,10 +10,10 @@ sudo groupadd realtime -f
 sudo usermod -aG realtime "$USER"
 
 echo '== [ Increase the maximum watches on files (for DAWS) ] =='
-echo 'fs.inotify.max_user_watches=60000' | sudo tee /etc/sysctl.d/10-max_user_watches.conf
+[ -f /etc/sysctl.d/10-max_user_watches.conf ] || sudo tee -a /etc/sysctl.d/10-max_user_watches.conf <<<'fs.inotify.max_user_watches=60000'
 
 echo '== [ Swappiness ] =='
-[ -f /etc/sysctl.d/90-swappiness.conf ] || sudo tee /etc/sysctl.d/90-swappiness.conf <<<'vm.swappiness = 30'
+[ -f /etc/sysctl.d/90-swappiness.conf ] || sudo tee -a /etc/sysctl.d/90-swappiness.conf <<<'vm.swappiness = 30'
 
 # it seems that in arch, this is already done with the realtime privileges package
 if [ "$OSID" != "arch" ]; then
@@ -47,4 +47,3 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     vital-synth \
     tal-noisemaker-bin \
     odin2-synthesizer
-
