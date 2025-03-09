@@ -32,7 +32,7 @@ if [ ! -d "$HOME/Source/tools/waydroid_scripts" ]; then
     )
 fi
 
-if [ -f ~/.local/share/applications/ ]; then
+if [ -d ~/.local/share/applications/ ]; then
     filenames=$(find ~/.local/share/applications/ -type f -name 'waydroid.*')
     for app in $filenames; do
         if ! grep -q 'NoDisplay=true' "$app"; then

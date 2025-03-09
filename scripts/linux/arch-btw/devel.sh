@@ -74,14 +74,21 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     android-sdk-build-tools-dummy \
     android-sdk-platform-tools-dummy
 
+paths=(
+    '/etc/profile.d/android-emulator.sh' '/etc/profile.d/android-sdk-cmdline-tools-latest.sh'
+    '/etc/profile.d/android-sdk-build-tools.sh' '/etc/profile.d/android-ndk.sh'
+)
+
+for file in "${paths[@]}"; do
+    [ -d "$file" ] && source "$file"
+done
+
 curl -sSLo "${tmp_dir}/sdkmanager.zip" 'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'
 unzip -d"${tmp_dir}" "${tmp_dir}/sdkmanager.zip"
-ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-"${HOME}/.local/share/android-sdk"}
 mkdir -p "${ANDROID_SDK_ROOT}/cmdline-tools/"
 cp -a "${tmp_dir}/cmdline-tools" "${ANDROID_SDK_ROOT}/cmdline-tools/latest"
 rm -rf "${tmp_dir}"
 
-export PATH="${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin"
 yes | sdkmanager --licenses
 yes | sdkmanager 'platform-tools'
 
