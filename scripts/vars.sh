@@ -56,7 +56,7 @@ if [ "$OS" = "linux" ]; then
     osid="${CHEZMOI_OS_RELEASE_ID:-${ID,,}}"
     id_like="${ID_LIKE:-""}"
 
-    if ["$osid" != "arch"]; then
+    if [ "$osid" != "arch" ]; then
         assert "$id_like" "arch" "Noooooo this is not arch D:<"
         declare -r OSID="arch"
     else
