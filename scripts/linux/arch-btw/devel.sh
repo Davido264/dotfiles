@@ -89,7 +89,7 @@ sudo mkdir -p "${ANDROID_SDK_ROOT}/cmdline-tools/"
 sudo cp -a "${tmp_dir}/cmdline-tools" "${ANDROID_SDK_ROOT}/cmdline-tools/latest"
 rm -rf "${tmp_dir}"
 
-sudo groupadd android-sdk
+sudo groupadd -f android-sdk
 sudo gpasswd -a "${USER}" android-sdk
 sudo setfacl -R -m g:android-sdk:rwx /opt/android-sdk
 sudo setfacl -d -m g:android-sdk:rwX /opt/android-sdk
