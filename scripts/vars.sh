@@ -13,6 +13,7 @@ if [ -z "$CHEZMOI_SOURCE_DIR" ]; then
     script_dir=$(cd "$SROOT/.." &>/dev/null && pwd)
     declare -r REPO_DIR=${script_dir}
 else
+    declare -r SROOT="${CHEZMOI_SOURCE_DIR}/scripts"
     declare -r REPO_DIR=${CHEZMOI_SOURCE_DIR}
 fi
 

@@ -9,7 +9,6 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     thunderbird \
     bitwarden-bin \
     ghostty \
-    brave-bin \
     libreoffice-fresh \
     libreoffice-fresh-es \
     libreoffice-fresh-en-gb \
@@ -28,8 +27,8 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     $(expac -Ss '%o' zen-browser-bin) \
 
 paru -S --needed --noconfirm --noupgrademenu --skipreview \
-    brave-browser-bin \
-    $(expac -Ss '%o' brave-browser-bin) \
+    brave-bin \
+    $(expac -Ss '%o' brave-bin) \
 
 # krita
 # inkscape
