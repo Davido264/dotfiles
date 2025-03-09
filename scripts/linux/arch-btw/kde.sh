@@ -138,27 +138,27 @@ if [ "$INCLUDE_MANUAL" = "1" ]; then
 
     mkdir -p "${HOME}/.config/systemd/user"
 
-    cat > "$SERVICE_FILE" <<-EOF
-        [Unit]
-        Description=KDE Backup script
-        After=network.target
-        
-        [Service]
-        Type=oneshot
-        ExecStart=${BACKUP_SCRIPT}
-    EOF
+    cat <<EOF > "$SERVICE_FILE"
+[Unit]
+Description=KDE Backup script
+After=network.target
 
-    cat > "$TIMER_FILE" <<-EOF
-        [Unit]
-        Description=Ejecutar el respaldo KDE cada mes
-        
-        [Timer]
-        OnCalendar=monthly
-        Persistent=true
-        
-        [Install]
-        WantedBy=timers.target
-    EOF
+[Service]
+Type=oneshot
+ExecStart=${BACKUP_SCRIPT}
+EOF
+
+    cat <<EOF > "$TIMER_FILE"
+[Unit]
+Description=Ejecutar el respaldo KDE cada mes
+
+[Timer]
+OnCalendar=monthly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
 
     systemctl --user daemon-reload
     systemctl --user enable --now kde-backup.timer

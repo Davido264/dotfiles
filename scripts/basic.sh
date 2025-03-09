@@ -17,7 +17,7 @@ if ! "${CODESPACES}"; then
         rm -rf "$HOME/Videos"
     fi
 
-    [ "$OS" -eq "linux" ] && LC_ALL=C.UTF-8 xdg-user-dirs-update --force
+    [ "$OS" = "linux" ] && LC_ALL=C.UTF-8 xdg-user-dirs-update --force
 
     mkdir -p "$HOME/Backups"
     mkdir -p "$HOME/Source"

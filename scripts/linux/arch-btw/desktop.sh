@@ -24,12 +24,12 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     nvtop \
     "$video_drivers"
 
-[ "$DE" -ne "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
+[ "$DE" != "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
     adw-gtk-theme-git \
     matugen-bin
 
 # TODO: test libadwaita-without-adwaita-git vs libadwaita
-# [ "$DE" -eq "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
+# [ "$DE" = "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
 #     libadwaita-without-adwaita-git
 
 paru -S --needed --noconfirm --noupgrademenu --skipreview \
@@ -76,7 +76,7 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
     qt6-declarative \
     qt6-wayland
 
-[ "$DE" -ne "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
+[ "$DE" != "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
     qt5ct \
     qt6ct
 
@@ -86,7 +86,7 @@ paru -S --needed --noconfirm --noupgrademenu --skipreview \
 
 sudo systemctl enable --now power-profiles-daemon
 
-[ "$DE" -ne "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
+[ "$DE" != "kde" ] && paru -S --needed --noconfirm --noupgrademenu --skipreview \
     upower
 
 echo "== [ Gnome dark mode ] =="
