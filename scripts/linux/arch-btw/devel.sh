@@ -64,13 +64,30 @@ source "${SROOT}/asdf_java.sh"
 # paru -S --needed --noconfirm --noupgrademenu --skipreview dotnet-sdk
 # source "${SROOT}/asdf_dotnet.sh"
 
+echo '== [ Android development ] =='
+tmp_dir=$(mktemp --directory)
+trap "rm -rf '${tmp_dir}'" EXIT
+paru -S --needed --noconfirm --noupgrademenu --skipreview \
+    android-udev \
+    jdk8-openjdk \
+    android-sdk-cmdline-tools-latest-dummy \
+    android-sdk-build-tools-dummy \
+    android-sdk-platform-tools-dummy
+
+curl -sSLo "${tmp_dir}/sdkmanager.zip" 'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'
+unzip -d"${tmp_dir}" "${tmp_dir}/sdkmanager.zip"
+ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-"${HOME}/.local/share/android-sdk"}
+mkdir -p "${ANDROID_SDK_ROOT}/cmdline-tools/"
+cp -a "${tmp_dir}/cmdline-tools" "${ANDROID_SDK_ROOT}/cmdline-tools/latest"
+rm -rf "${tmp_dir}"
+
+export PATH="${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin"
+yes | sdkmanager --licenses
+yes | sdkmanager 'platform-tools'
+
 echo '== [ Flutter ] =='
 paru -S --needed --noconfirm --noupgrademenu --skipreview \
-    flutter-bin \
-    android-sdk-build-tools \
-    android-sdk-cmdline-tools-latest \
-    android-ndk
-# yes | sdkmanager --sdk_root="$HOME/.local/share/android-sdk" 'platform-tools'
+    flutter-bin
 
 echo '== [ Go ] =='
 paru -S --needed --noconfirm --noupgrademenu --skipreview go

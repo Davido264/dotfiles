@@ -32,13 +32,15 @@ if [ ! -d "$HOME/Source/tools/waydroid_scripts" ]; then
     )
 fi
 
-filenames=$(find ~/.local/share/applications/ -type f -name 'waydroid.*')
-for app in $filenames; do
-    if ! grep -q 'NoDisplay=true' "$app"; then
-        sed -i '/\[Desktop Entry\]/a NoDisplay=true' "$app"
-        echo "[*] Added NoDisplay=true to $app"
-    fi
-done
+if [ -f ~/.local/share/applications/ ]; then
+    filenames=$(find ~/.local/share/applications/ -type f -name 'waydroid.*')
+    for app in $filenames; do
+        if ! grep -q 'NoDisplay=true' "$app"; then
+            sed -i '/\[Desktop Entry\]/a NoDisplay=true' "$app"
+            echo "[*] Added NoDisplay=true to $app"
+        fi
+    done
 
-echo '== [ Modified the selected applications ] =='
-update-desktop-database ~/.local/share/applications
+    echo '== [ Modified the selected applications ] =='
+    update-desktop-database ~/.local/share/applications
+fi
